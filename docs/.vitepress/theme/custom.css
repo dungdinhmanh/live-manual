@@ -1,15 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=DM+Sans:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap');
 
+/* ---------- Brand tokens ---------- */
+
 :root {
   --vp-c-brand-1: #d70a53;
   --vp-c-brand-2: #c0094a;
   --vp-c-brand-3: #a00840;
   --vp-c-brand-soft: rgba(215, 10, 83, 0.08);
-  --vp-sidebar-bg-color: #1c1917;
+
   --vp-font-family-base: 'Source Serif 4', Georgia, serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Sidebar background follows VitePress' light surface; overridden in .dark below. */
+  --vp-sidebar-bg-color: var(--vp-c-bg-alt);
+
   --vp-code-bg: #f5f5f5;
   --vp-code-color: #d70a53;
+
+  /* Custom scrollbar track; overridden in .dark. */
+  --ldm-scrollbar-track: var(--vp-c-bg-soft);
+  --ldm-scrollbar-thumb: #d6d3d1;
 }
 
 .dark {
@@ -17,56 +27,62 @@
   --vp-c-brand-2: #d70a53;
   --vp-c-brand-3: #b5083f;
   --vp-c-brand-soft: rgba(239, 87, 119, 0.12);
+
+  --vp-sidebar-bg-color: #1c1917;
+
   --vp-code-bg: #1e1e1e;
   --vp-code-color: #ef5777;
+
+  --ldm-scrollbar-track: #1c1917;
+  --ldm-scrollbar-thumb: #44403c;
 }
 
-html { scroll-behavior: smooth; }
-
-.VPSidebar {
-  background-color: var(--vp-sidebar-bg-color) !important;
+html {
+  scroll-behavior: smooth;
 }
 
-.VPSidebarItem .text {
-  color: #e7e5e4 !important;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-}
+/* ---------- Sidebar ---------- */
+/* VitePress already paints the sidebar with --vp-sidebar-bg-color and gives
+   sidebar text proper light/dark colors. We only add brand accents. */
 
 .VPSidebarItem.is-active > .item .text {
-  color: var(--vp-c-brand-1) !important;
+  color: var(--vp-c-brand-1);
   font-weight: 600;
 }
 
 .VPSidebarItem:hover > .item .text {
-  color: #ffffff !important;
+  color: var(--vp-c-brand-1);
 }
+
+.VPSidebarItem .text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+}
+
+/* ---------- Top nav ---------- */
+/* Let VitePress handle nav background — we only style the title font and
+   add a subtle brand-tinted bottom border. */
 
 .VPNav {
-  border-bottom: 1px solid rgba(215, 10, 83, 0.2) !important;
-  background: #1c1917 !important;
-}
-
-.VPNavBar {
-  background: #1c1917 !important;
+  border-bottom: 1px solid rgba(215, 10, 83, 0.18);
 }
 
 .VPNavBar .title,
 .VPNavBarTitle .title {
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
-  color: #ffffff !important;
 }
 
 .VPNavBarMenuLink {
-  color: #d7d3d0 !important;
   font-family: 'DM Sans', sans-serif;
 }
 
 .VPNavBarMenuLink:hover,
 .VPNavBarMenuLink.active {
-  color: var(--vp-c-brand-1) !important;
+  color: var(--vp-c-brand-1);
 }
+
+/* ---------- Doc content ---------- */
 
 .vp-doc h1,
 .vp-doc h2,
@@ -98,7 +114,7 @@ html { scroll-behavior: smooth; }
 
 .dark .vp-doc div[class*='language-'] {
   border: 1px solid rgba(239, 87, 119, 0.2);
-  background: #0f0f0f !important;
+  background: #0f0f0f;
 }
 
 .vp-doc blockquote {
@@ -145,25 +161,37 @@ html { scroll-behavior: smooth; }
   border-bottom-color: var(--vp-c-brand-1);
 }
 
+/* ---------- Home page hero ---------- */
+
 .VPHome .VPHero .name {
-  font-family: 'DM Sans', sans-serif !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #d70a53, #ef5777) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  background-clip: text !important;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  background: linear-gradient(135deg, #d70a53, #ef5777);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
+
+/* ---------- Search button ---------- */
+/* Use translucent neutral that works in both themes. */
 
 .DocSearch-Button {
-  border-radius: 8px !important;
-  background: rgba(255,255,255,0.08) !important;
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
 }
 
+/* ---------- Scrollbar (light/dark aware) ---------- */
+
 ::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #1c1917; }
-::-webkit-scrollbar-thumb { background: #44403c; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #d70a53; }
+::-webkit-scrollbar-track { background: var(--ldm-scrollbar-track); }
+::-webkit-scrollbar-thumb {
+  background: var(--ldm-scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--vp-c-brand-1); }
+
+/* ---------- Footer ---------- */
 
 .VPFooter {
-  border-top: 1px solid rgba(215, 10, 83, 0.2) !important;
+  border-top: 1px solid rgba(215, 10, 83, 0.2);
 }

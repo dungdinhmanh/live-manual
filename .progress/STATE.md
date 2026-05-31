@@ -1,21 +1,18 @@
 # Tiến độ sửa live-manual-web
 
 ```yaml
-phase: 2
-phase_name: "migrate GitHub→Salsa links"
-current_batch: links
+phase: 3
+phase_name: "fix CSS sidebar/nav light↔dark"
+current_batch: css
 files_done:
-  - .gitignore
-  - .progress/STATE.md
-  - .progress/CHANGELOG.md
-  - docs/index.md (hero action)
-  - docs/.vitepress/config.ts (nav, editLink, socialLinks)
-  - scripts/convert-to-md.ts (home template)
+  - docs/.vitepress/theme/custom.css
 files_pending: []
-last_commit_sha: "0bd4786"
+last_commit_sha: "4a596fc"
 notes: |
-  Phase 1 done. Phase 2: đổi 5 chỗ link sang Salsa. SocialLinks icon dùng SVG GitLab tanuki.
-  Tiếp theo: đợt 3 fix CSS sidebar/nav light↔dark.
+  Phase 3: refactor custom.css. Bỏ hardcode #1c1917 ngoài :root.
+  Sidebar bg, scrollbar track giờ theo biến --vp-c-bg-alt (light) / #1c1917 (dark).
+  Bỏ !important không cần. Build pass (bun run build).
+  Tiếp theo: đợt 4 sửa converter.
 ```
 
 ## Phase map
@@ -23,8 +20,8 @@ notes: |
 | # | Tên                                    | Trạng thái |
 |---|----------------------------------------|------------|
 | 1 | setup tracker + clean + gitignore      | done       |
-| 2 | migrate GitHub→Salsa links             | doing      |
-| 3 | fix CSS sidebar/nav light↔dark         | todo       |
+| 2 | migrate GitHub→Salsa links             | done       |
+| 3 | fix CSS sidebar/nav light↔dark         | doing      |
 | 4 | fix converter scripts/convert-to-md.ts | todo       |
 | 5 | manual cleanup MD chapters (3 batch)   | todo       |
 | 6 | polish (TOC, containers) + verify      | todo       |
