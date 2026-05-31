@@ -3,24 +3,16 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0",
-    "parse": "bun run scripts/parse-content.ts"
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "convert": "bun run scripts/convert-to-md.ts"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.0",
-    "@types/bun": "latest",
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
-    "tailwindcss": "^4.3.0",
-    "typescript": "^5",
-    "vite": "^8.0.14"
-  },
-  "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-router-dom": "^7.16.0"
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vueuse/core": "^14.3.0",
+    "glob": "^13.0.6",
+    "turndown": "^7.2.4",
+    "vitepress": "^1.6.4"
   }
 }

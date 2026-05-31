@@ -1,15 +1,28 @@
-# live-manual-web
+# Debian Live Manual (Web)
 
-To install dependencies:
+VitePress-powered web reader for the Debian Live Manual.
+
+## Setup
 
 ```bash
 bun install
+bun run dev      # http://localhost:5173
+bun run build    # production build
+bun run preview  # preview build
+bun run convert  # re-run HTML → MD converter
 ```
 
-To run:
+## Structure
 
-```bash
-bun run index.ts
 ```
-
-This project was created using `bun init` in bun v1.3.11. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+docs/
+  index.md              home page (layout: home)
+  chapters/             one .md per chapter (18 files)
+  .vitepress/
+    config.ts           nav, sidebar, search, Debian branding
+    theme/
+      index.ts          theme entry
+      custom.css        CSS overrides (dark sidebar, Debian red)
+scripts/
+  convert-to-md.ts      Turndown converter (strip sisu cruft → .md)
+```
