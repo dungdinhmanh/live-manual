@@ -131,7 +131,9 @@ After revising your work and making sure that everything is fine, do not use mak
 
 ### 1.4.2 Translation
 
-**Note:** For the translation of the man pages see [Translation of man pages](/chapters/contributing-to-project#translation-of-manpages)
+::: tip Note
+For the translation of the man pages see [Translation of man pages](/chapters/contributing-to-project#translation-of-manpages)
+:::
 
 In order to translate _live-manual_, follow these steps depending on whether you are starting a translation from scratch or continue working on an already existing one:
 
@@ -153,4 +155,6 @@ _live-manual_ comes with two utilities that can greatly help translators to find
 
 Keep in mind that even though these utilities might be really helpful to do translation work on the command line, the use of an specialized tool like _poedit_ is the recommended way to do the task. It is also a good idea to read the Debian localization (l10n) documentation and, specifically to _live-manual_, the [Guidelines for translators](/chapters/style-guide#guidelines-translators).
 
-**Note:** You can use make clean to clean your git tree before pushing. This step is not compulsory thanks to the .gitignore file but it is a good practice to avoid committing files involuntarily.
+::: tip Note
+You can use make clean to clean your git tree before pushing. This step is not compulsory thanks to the .gitignore file but it is a good practice to avoid committing files involuntarily.
+:::

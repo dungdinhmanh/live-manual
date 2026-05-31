@@ -25,7 +25,9 @@ Installation will proceed in an identical fashion to the "normal" installation d
 
 After this stage, the Debian Installer continues as normal, installing and configuring items such as bootloaders and local users, etc.
 
-**Note:** to support both normal and live installer entries in the bootloader of the same live medium, you must disable _live-installer_ by preseeding live-installer/enable=false.
+::: tip Note
+to support both normal and live installer entries in the bootloader of the same live medium, you must disable _live-installer_ by preseeding live-installer/enable=false.
+:::
 
 **"Desktop" Debian Installer**: Regardless of the type of Debian Installer included, d-i can be launched from the Desktop by clicking on an icon. This is user friendlier in some situations. In order to make use of this, the _debian-installer-launcher_ package needs to be included.
 

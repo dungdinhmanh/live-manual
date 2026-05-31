@@ -5,6 +5,8 @@ slug: examples
 
 # Examples
 
+[[toc]]
+
 This chapter covers example builds for specific use cases with live systems. If you are new to building your own live system images, we recommend you first look at the three tutorials in sequence, as each one teaches new techniques that will help you use and understand the remaining examples.
 
 ## 16.1 Using the examples
@@ -230,7 +232,9 @@ On the author's system at the time of writing this, the above configuration prod
 
 Leaving off APT's indices with --apt-indices false saves a fair amount of space, the tradeoff being that you need to do an apt-get update before using _apt_ in the live system. Dropping recommended packages with --apt-recommends false saves some additional space, at the expense of omitting some packages you might otherwise expect to be there. --debootstrap-options "--variant=minbase" bootstraps a minimal system from the start. Not automatically including firmware packages with --firmware-chroot false saves some space too. And finally, --memtest none prevents the installation of a memory tester.
 
-**Note:** A minimal system can also be achieved using hooks, like for example the stripped.hook.chroot hook found in /usr/share/doc/live-build/examples/hooks. It may shave off additional small amounts of space and produce an image of 277MiB. However, it does so by removal of documentation and other files from packages installed on the system. This violates the integrity of those packages and that, as the comment header warns, may have unforeseen consequences. That is why using a minimal _debootstrap_ is the recommended way of achieving this goal.
+::: tip Note
+A minimal system can also be achieved using hooks, like for example the stripped.hook.chroot hook found in /usr/share/doc/live-build/examples/hooks. It may shave off additional small amounts of space and produce an image of 277MiB. However, it does so by removal of documentation and other files from packages installed on the system. This violates the integrity of those packages and that, as the comment header warns, may have unforeseen consequences. That is why using a minimal _debootstrap_ is the recommended way of achieving this goal.
+:::
 
 ## 16.7 A localized GNOME desktop and installer
 

@@ -83,7 +83,9 @@ and uninstall it with:
 
 ## 3.3 Installing live-boot and live-config
 
-**Note:** You do not need to install _live-boot_ or _live-config_ on your system to create customized live systems. However, doing so will do no harm and is useful for reference purposes. If you only want the documentation, you may now install the _live-boot-doc_ and _live-config-doc_ packages separately.
+::: tip Note
+You do not need to install _live-boot_ or _live-config_ on your system to create customized live systems. However, doing so will do no harm and is useful for reference purposes. If you only want the documentation, you may now install the _live-boot-doc_ and _live-config-doc_ packages separately.
+:::
 
 ### 3.3.1 From the Debian repository
 

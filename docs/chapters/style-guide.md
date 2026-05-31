@@ -5,11 +5,15 @@ slug: style-guide
 
 # Style guide
 
+[[toc]]
+
 ## 17.1 Guidelines for authors
 
 This section deals with some general considerations to be taken into account when writing technical documentation for _live-manual_. They are divided into linguistic features and recommended procedures.
 
-**Note:** Authors should first read [Contributing to this document](/chapters/about-manual#how-to-contribute)
+::: tip Note
+Authors should first read [Contributing to this document](/chapters/about-manual#how-to-contribute)
+:::
 
 ### 17.1.1 Linguistic features
 
@@ -177,7 +181,9 @@ This section deals with some general considerations to be taken into account whe
 
 As a general recommendation, translators should have read and understood the translation rules that apply to their specific languages. Usually, translation groups and mailing lists provide information on how to produce translated work that complies with Debian quality standards.
 
-**Note:** Translators should also read [Contributing to this document](/chapters/about-manual#how-to-contribute). In particular the section [Translation](/chapters/about-manual#translation)
+::: tip Note
+Translators should also read [Contributing to this document](/chapters/about-manual#how-to-contribute). In particular the section [Translation](/chapters/about-manual#translation)
+:::
 
 ### 17.2.1 Translation hints
 

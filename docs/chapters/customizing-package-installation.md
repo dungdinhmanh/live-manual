@@ -5,6 +5,8 @@ slug: customizing-package-installation
 
 # Customizing package installation
 
+[[toc]]
+
 Perhaps the most basic customization of a live system is the selection of packages to be included in the image. This chapter guides you through the various build-time options to customize _live-build_'s installation of packages. The broadest choices influencing which packages are available to install in the image are the distribution and archive areas. To ensure decent download speeds, you should choose a nearby distribution mirror. You can also add your own repositories for backports, experimental or custom packages, or include packages directly as files. You can define lists of packages, including metapackages which will install many related packages at once, such as packages for a particular desktop or language. Finally, a number of options give some control over _apt_, or if you prefer, _aptitude_, at build time when packages are installed. You may find these handy if you use a proxy, want to disable installation of recommended packages to save space, or need to control which versions of packages are installed via APT pinning, to name a few possibilities.
 
 ## 8.1 Package sources
@@ -33,7 +35,9 @@ $ lb config --archive-areas "main contrib non-free"
 
 Experimental support is available for some Debian derivatives through a --mode option. By default, this option is set to debian only if you are building on a Debian or on an unknown system. If lb config is invoked on any of the supported derivatives, it will default to create an image of that derivative. If lb config is run in e.g. ubuntu mode, the distribution names and archive areas for the specified derivative are supported instead of the ones for Debian. The mode also modifies _live-build_ behaviour to suit the derivatives.
 
-**Note:** The projects for whom these modes were added are primarily responsible for supporting users of these options. The Debian Live Project, in turn, provides development support on a best-effort basis only, based on feedback from the derivative projects as we do not develop or support these derivatives ourselves.
+::: tip Note
+The projects for whom these modes were added are primarily responsible for supporting users of these options. The Debian Live Project, in turn, provides development support on a best-effort basis only, based on feedback from the derivative projects as we do not develop or support these derivatives ourselves.
+:::
 
 ### 8.1.2 Distribution mirrors
 
@@ -88,7 +92,9 @@ There are a number of ways to choose which packages _live-build_ will install in
 
 Package lists are a powerful way of expressing which packages should be installed. The list syntax supports conditional sections which makes it easy to build lists and adapt them for use in multiple configurations. Package names may also be injected into the list using shell helpers at build time.
 
-**Note:** The behaviour of _live-build_ when specifying a package that does not exist is determined by your choice of APT utility. See [Choosing apt or aptitude](/chapters/customizing-package-installation#choosing-apt-or-aptitude) for more details.
+::: tip Note
+The behaviour of _live-build_ when specifying a package that does not exist is determined by your choice of APT utility. See [Choosing apt or aptitude](/chapters/customizing-package-installation#choosing-apt-or-aptitude) for more details.
+:::
 
 ### 8.2.2 Using metapackages
 
@@ -121,7 +127,9 @@ Package lists that exist in this directory need to have a .list suffix in order 
 
 The packages in the .list.chroot_install list are present both in the live system and in the installed system.
 
-**Note:** If you don't specify the stage suffix, the list will be used for both stages. Normally, you want to specify .list.chroot so that the packages will only be installed in the live filesystem and not have an extra copy of the .deb placed on the medium.
+::: tip Note
+If you don't specify the stage suffix, the list will be used for both stages. Normally, you want to specify .list.chroot so that the packages will only be installed in the live filesystem and not have an extra copy of the .deb placed on the medium.
+:::
 
 ### 8.2.4 Local binary package lists
 

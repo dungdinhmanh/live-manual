@@ -42,9 +42,19 @@ Append-only. Mỗi commit lớn → 1 entry.
 - Verify: 0 footnote rác, 0 plain heading, 0 escape rác, 0 sisu image, 0 github link.
 - Build pass (`bun run build`, 7.73s).
 
-## [pending] Phase 5 — converter follow-up
+## [69a4aca] Phase 5 — converter follow-up
 
 - Unescape `\--` → `--` (Turndown đẹp escape long-option như `--distribution`)
 - Strip nested newlines + collapse blank line trong fenced code block (do HTML gốc đặt
   `<NL>` quanh `<br>` trong `<p class="code">`)
 - Regenerate. Build pass 7.48s.
+
+## [0b81618] Phase 6 — polish (TOC + admonition containers)
+
+- `scripts/convert-to-md.ts`:
+  - `promoteAdmonitions`: leading `**Note:**` / `**Important:**` / `**Warning:**` / `**Tip:**`
+    paragraph → VitePress container (`::: tip` / `::: info` / `::: warning`) với title.
+  - `TOC_MIN_LINES = 200`: chèn `[[toc]]` dưới H1 cho chapter dài (the-basics,
+    customizing-package-installation, examples, style-guide, customizing-installer,
+    installation, managing-a-configuration, customizing-run-time-behaviours, about-manual).
+- Regenerate 9 chapter MD bị ảnh hưởng. Build pass 8.80s.

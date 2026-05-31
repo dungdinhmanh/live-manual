@@ -5,6 +5,8 @@ slug: customizing-run-time-behaviours
 
 # Customizing run time behaviours
 
+[[toc]]
+
 All configuration that is done during run time is done by _live-config_. Here are some of the most common options of _live-config_ that users are interested in. A full list of all possibilities can be found in the man page of _live-config_.
 
 ## 10.1 Customizing the live user

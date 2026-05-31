@@ -5,6 +5,8 @@ slug: the-basics
 
 # The basics
 
+[[toc]]
+
 This chapter contains a brief overview of the build process and instructions for using the three most commonly used image types. The most versatile image type, iso-hybrid, may be used on a virtual machine, optical medium or USB portable storage device. In certain special cases, as explained later, the hdd type may be more suitable. The chapter includes detailed instructions for building and using a netboot type image, which is a bit more involved due to the setup required on the server. This is an slightly advanced topic for anyone who is not already familiar with netbooting, but it is included here because once the setup is done, it is a very convenient way to test and deploy images for booting on the local network without the hassle of dealing with image media.
 
 The section finishes with a quick introduction to [webbooting](/chapters/the-basics#webbooting) which is, perhaps, the easiest way of using different images for different purposes, switching from one to the other as needed using the internet as a means.
@@ -59,7 +61,9 @@ Now that the "config/" hierarchy exists, build the image with the lb build comma
 
 This process can take a while, depending on the speed of your computer and your network connection. When it is complete, there should be a live-image-amd64.hybrid.iso image file, ready to use, in the current directory.
 
-**Note:** If you are building on an amd64 system the name of the resulting image will be live-image-amd64.hybrid.iso. Keep in mind this naming convention throughout the manual.
+::: tip Note
+If you are building on an amd64 system the name of the resulting image will be live-image-amd64.hybrid.iso. Keep in mind this naming convention throughout the manual.
+:::
 
 ## 4.4 Using an ISO hybrid live image
 
@@ -85,7 +89,9 @@ $ cp live-image-amd64.hybrid.iso ${USBSTICK}
 $ sync
 ```
 
-**Note:** The _sync_ command is useful to ensure that all the data, which is stored in memory by the kernel while copying the image, is written to the USB stick.
+::: tip Note
+The _sync_ command is useful to ensure that all the data, which is stored in memory by the kernel while copying the image, is written to the USB stick.
+:::
 
 ### 4.4.3 Using the space left on a USB stick
 
@@ -101,7 +107,9 @@ After the partition is created, where ${PARTITION} is the name of the partition,
 # mkfs.ext4 ${PARTITION}
 ```
 
-**Note:** If you want to use the extra space with Windows, apparently that OS cannot normally access any partitions but the first. Some solutions to this problem have been discussed on our [mailing list](/chapters/about-project#contact), but it seems there are no easy answers.
+::: tip Note
+If you want to use the extra space with Windows, apparently that OS cannot normally access any partitions but the first. Some solutions to this problem have been discussed on our [mailing list](/chapters/about-project#contact), but it seems there are no easy answers.
+:::
 
 **Remember: Every time you install a new live-image-amd64.hybrid.iso on the stick, all data on the stick will be lost because the partition table is overwritten by the contents of the image, so back up your extra partition first to restore again after updating the live image.**
 
@@ -145,7 +153,9 @@ $ kvm -cdrom live-image-amd64.hybrid.iso -m 4G
 
 See the man pages for more details.
 
-**Note:** For live systems containing a desktop environment that you want to test with _qemu_, you may wish to include the _spice-vdagent_ package in your _live-build_ configuration. This will automatically adjust the resolution and enable the clipboard between the virtual machine and the host.
+::: tip Note
+For live systems containing a desktop environment that you want to test with _qemu_, you may wish to include the _spice-vdagent_ package in your _live-build_ configuration. This will automatically adjust the resolution and enable the clipboard between the virtual machine and the host.
+:::
 
 ```shell
 $ echo "spice-vdagent" >> config/package-lists/spice.list.chroot
@@ -162,7 +172,9 @@ $ virtualbox
 
 Create a new virtual machine, change the storage settings to use live-image-amd64.hybrid.iso as the CD/DVD device, and start the machine.
 
-**Note:** For live systems containing X.org that you want to test with _virtualbox_, you may wish to include the VirtualBox X.org driver package, _virtualbox-guest-dkms_ and _virtualbox-guest-x11_, in your _live-build_ configuration. Otherwise, the resolution is limited to 800x600.
+::: tip Note
+For live systems containing X.org that you want to test with _virtualbox_, you may wish to include the VirtualBox X.org driver package, _virtualbox-guest-dkms_ and _virtualbox-guest-x11_, in your _live-build_ configuration. Otherwise, the resolution is limited to 800x600.
+:::
 
 ```shell
 $ echo "virtualbox-guest-dkms virtualbox-guest-x11" >> config/package-lists/my.list.chroot
@@ -178,7 +190,9 @@ $ lb config --linux-packages "linux-image linux-headers"
 
 Building an HDD image is similar to an ISO hybrid one in all respects except you specify -b hdd and the resulting filename is live-image-amd64.img which cannot be burnt to optical media. It is suitable for booting from USB sticks, USB hard drives, and various other portable storage devices. Normally, an ISO hybrid image can be used for this purpose instead, but if you have a BIOS which does not handle hybrid images properly, you need an HDD image.
 
-**Note:** if you created an ISO hybrid image with the previous example, you will need to clean up your working directory with the lb clean command (see [The lb clean command](/chapters/overview-of-tools#lb-clean)):
+::: tip Note
+if you created an ISO hybrid image with the previous example, you will need to clean up your working directory with the lb clean command (see [The lb clean command](/chapters/overview-of-tools#lb-clean)):
+:::
 
 ```shell
 # lb clean --binary
@@ -210,7 +224,9 @@ $ kvm -hda live-image-amd64.img
 
 The following sequence of commands will create a basic netboot image containing a default live system without X.org. It is suitable for booting over the network.
 
-**Note:** if you performed any previous examples, you will need to clean up your working directory with the lb clean command:
+::: tip Note
+if you performed any previous examples, you will need to clean up your working directory with the lb clean command:
+:::
 
 ```shell
 # lb clean

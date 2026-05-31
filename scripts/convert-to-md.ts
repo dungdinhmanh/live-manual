@@ -102,6 +102,22 @@ function stripSisuCruft(html: string): string {
 }
 
 /**
+ * Promote leading "**Note:**" / "**Important:**" / "**Warning:**" paragraphs to
+ * VitePress custom containers so they get proper visual styling.
+ */
+function promoteAdmonitions(md: string): string {
+  return md.replace(
+    /^\*\*(Note|Important|Warning|Tip):\*\*\s+([^\n]+)$/gm,
+    (_m, kind: string, body: string) => {
+      const container =
+        kind === 'Warning' ? 'warning' : kind === 'Important' ? 'info' : kind === 'Tip' ? 'tip' : 'tip';
+      const title = kind;
+      return `::: ${container} ${title}\n${body.trim()}\n:::`;
+    },
+  );
+}
+
+/**
  * Cleanup pass on the Markdown produced by Turndown:
  *  - Belt-and-braces strip of any `[N](#N)` footnote refs that survived.
  *  - Unescape `\_` / `\#` / `\*` that Turndown overzealously inserts in prose
@@ -128,11 +144,16 @@ function tidyMarkdown(md: string): string {
   }
   out = parts.join('');
 
+  out = promoteAdmonitions(out);
+
   // Collapse 3+ blank lines.
   out = out.replace(/\n{3,}/g, '\n\n');
 
   return out.trim() + '\n';
 }
+
+// Chapters above this line count get a [[toc]] under the H1.
+const TOC_MIN_LINES = 200;
 
 function extractTitle(html: string): string {
   const match = html.match(/<title>\s*([\s\S]*?)\s*<\/title>/);
@@ -194,7 +215,12 @@ async function convertAll() {
     // Inject a single canonical H1 at the top so every page has consistent
     // structure regardless of whether the source contained one.
     const hasLeadingH1 = /^#\s+\S/.test(tidied);
-    const body = hasLeadingH1 ? tidied : `# ${title}\n\n${tidied}`;
+    let body = hasLeadingH1 ? tidied : `# ${title}\n\n${tidied}`;
+
+    // Long chapters get an auto-TOC right after the H1.
+    if (body.split('\n').length >= TOC_MIN_LINES) {
+      body = body.replace(/^(#\s+[^\n]+\n)/, `$1\n[[toc]]\n`);
+    }
 
     const outPath = join(OUT_DIR, `${slug}.md`);
     writeFileSync(outPath, frontmatter + body);
