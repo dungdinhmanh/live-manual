@@ -1,0 +1,17 @@
+{
+  "name": "live-manual-web",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "parse": "bun run scripts/parse-content.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5",
+    "vite": "^8.0.14"
+  }
+}
+}
