@@ -27,7 +27,7 @@ Unlike _debhelper_, _live-build_ provides the tools to generate a skeleton confi
 
 -   **lb clean**: Responsible for removing parts of a Live system build. See [The lb clean command](/chapters/overview-of-tools#lb-clean) for more information.
 
-5.1.1 The lb config command
+### 5.1.1 The lb config command
 
 As discussed in [live-build](/chapters/overview-of-tools#live-build), the scripts that make up _live-build_ read their configuration with the source command from a single directory named config/. As constructing this directory by hand would be time-consuming and error-prone, the lb config command can be used to create the initial skeleton configuration tree.
 
@@ -57,11 +57,11 @@ $ lb config --binary-images netboot --bootappend-live "boot=live components host
 
 A full list of options is available in the lb_config man page.
 
-5.1.2 The lb build command
+### 5.1.2 The lb build command
 
 The lb build command reads in your configuration from the config/ directory. It then runs the lower level commands needed to build your Live system.
 
-5.1.3 The lb clean command
+### 5.1.3 The lb clean command
 
 It is the job of the lb clean command to remove various parts of a build so subsequent builds can start from a clean state. By default, chroot, binary and source stages are cleaned, but the cache is left intact. Also, individual stages can be cleaned. For example, if you have made changes that only affect the binary stage, use lb clean --binary prior to building a new binary. If your changes invalidate the bootstrap and/or package caches, e.g. changes to --mode, --architecture, or --bootstrap, you must use lb clean --purge. See the lb_clean man page for a full list of options.
 

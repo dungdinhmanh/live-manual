@@ -50,13 +50,24 @@ function stripSisuCruft(html: string): string {
       // Redundant "N. Section title" big H1
       .replace(/<h1 class="norm"[^>]*>[\s\S]*?<\/h1>/g, '')
       // Section sub-heading paragraphs: <p class="bold" id="N">N.M.K Title</p>
-      // Use indentation hint (number of dots) to choose h2/h3.
+      // Title may contain inline tags (<tt>, <a>, …) and span multiple lines
+      // with leading anchors — strip anchors first, then match.
       .replace(
-        /<p class="bold"[^>]*>\s*((?:\d+\.)+\d+)\s+([^<]+?)\s*<\/p>/g,
-        (_m, num: string, title: string) => {
+        /<p class="bold"[^>]*>([\s\S]*?)<\/p>/g,
+        (whole, inner: string) => {
+          // Strip inline anchor tags (no useful content) before number match.
+          const cleaned = inner.replace(/<a[^>]*><\/a>/g, '').trim();
+          const numMatch = cleaned.match(/^((?:\d+\.)+\d+)\s+([\s\S]+)$/);
+          if (!numMatch) return whole;
+          const num = numMatch[1];
+          const title = numMatch[2]
+            // Strip remaining inline tags so the heading is plain text.
+            .replace(/<\/?(?:tt|code|b|i|em|strong|a)[^>]*>/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
           const depth = (num.match(/\./g) ?? []).length; // 1 → h2, 2 → h3, …
           const tag = depth >= 2 ? 'h3' : 'h2';
-          return `<${tag}>${num} ${title.trim()}</${tag}>`;
+          return `<${tag}>${num} ${title}</${tag}>`;
         },
       )
       // Code paragraphs: <p class="code" id="N">…<br>…</p> → <pre><code>…</code></pre>

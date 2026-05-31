@@ -283,7 +283,7 @@ There are two ways of installing modified custom packages:
 
 Using packages.chroot is simpler to achieve and useful for "one-off" customizations but has a number of drawbacks, while using a custom APT repository is more time-consuming to set up.
 
-8.3.1 Using packages.chroot to install custom packages
+### 8.3.1 Using packages.chroot to install custom packages
 
 To install a custom package, simply copy it to the config/packages.chroot/ directory. Packages that are inside this directory will be automatically installed into the live system during build - you do not need to specify them elsewhere.
 

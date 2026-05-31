@@ -58,3 +58,14 @@ Append-only. Mỗi commit lớn → 1 entry.
     customizing-package-installation, examples, style-guide, customizing-installer,
     installation, managing-a-configuration, customizing-run-time-behaviours, about-manual).
 - Regenerate 9 chapter MD bị ảnh hưởng. Build pass 8.80s.
+
+## [pending] Phase 6.1 — heading promote follow-up
+
+- Regex `<p class="bold">` cũ assume title plain text (`[^<]+?`) — miss khi title chứa
+  inline tag (`<tt>`, `<a>`) hoặc anchor multi-line (vd `5.1.1 The <tt>lb config</tt>`).
+- Fix: dùng `[\s\S]*?`, strip `<a></a>` empty + inline tag (tt/code/b/i/em/strong/a)
+  trong title sau khi match `N.M …` pattern.
+- 4 heading bị bỏ sót promote thành h3:
+  `5.1.1 The lb config command`, `5.1.2 The lb build command`,
+  `5.1.3 The lb clean command`, `8.3.1 Using packages.chroot to install custom packages`.
+- Build pass 7.75s. Sanity grep tất cả về 0.
