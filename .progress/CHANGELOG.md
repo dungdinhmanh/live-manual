@@ -49,7 +49,7 @@ Append-only. Mỗi commit lớn → 1 entry.
   `<NL>` quanh `<br>` trong `<p class="code">`)
 - Regenerate. Build pass 7.48s.
 
-## [0b81618] Phase 6 — polish (TOC + admonition containers)
+## [2c3ce59] Phase 6 — polish (TOC + admonition containers)
 
 - `scripts/convert-to-md.ts`:
   - `promoteAdmonitions`: leading `**Note:**` / `**Important:**` / `**Warning:**` / `**Tip:**`

@@ -8,7 +8,7 @@ files_done:
   - scripts/convert-to-md.ts (promoteAdmonitions + auto-TOC ≥200 lines)
   - docs/chapters/*.md (regenerated với TOC + ::: tip containers)
 files_pending: []
-last_commit_sha: "0b81618"
+last_commit_sha: "2c3ce59"
 verify:
   - "build pass 8.80s"
   - "the-basics.md có [[toc]] + ::: tip Note containers"
