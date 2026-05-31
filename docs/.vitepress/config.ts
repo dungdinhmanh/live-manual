@@ -23,7 +23,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'About', link: '/chapters/about-manual' },
-      { text: 'GitHub', link: 'https://github.com/debian-live/live-manual' },
+      { text: 'Salsa', link: 'https://salsa.debian.org/live-team/live-manual' },
     ],
 
     sidebar: [
@@ -88,8 +88,8 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/debian-live/live-manual/edit/main/docs/:path',
-      text: 'Edit this page on GitHub',
+      pattern: 'https://salsa.debian.org/live-team/live-manual/-/edit/master/docs/:path',
+      text: 'Edit this page on Salsa',
     },
 
     lastUpdated: {
@@ -103,7 +103,14 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/debian-live/live-manual' },
+      {
+        icon: {
+          // GitLab tanuki logo (Salsa is a GitLab instance run by Debian)
+          svg: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.955 13.587l-1.342-4.135-2.664-8.189c-.135-.423-.73-.423-.867 0L16.418 9.45H7.582L4.919 1.263c-.135-.423-.73-.423-.867 0L1.387 9.452.045 13.587a.924.924 0 0 0 .331 1.023L12 23.054l11.625-8.443a.92.92 0 0 0 .33-1.024" fill="currentColor"/></svg>',
+        },
+        link: 'https://salsa.debian.org/live-team/live-manual',
+        ariaLabel: 'Salsa (Debian GitLab)',
+      },
     ],
 
     footer: {

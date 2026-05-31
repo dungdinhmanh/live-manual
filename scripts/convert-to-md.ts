@@ -122,8 +122,8 @@ hero:
       text: Get Started
       link: /chapters/about-manual
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/debian-live/live-manual
+      text: View on Salsa
+      link: https://salsa.debian.org/live-team/live-manual
 features:
   - title: Installation
     details: Install live-build from Debian repositories or build from source.
