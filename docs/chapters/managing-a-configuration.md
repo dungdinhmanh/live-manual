@@ -22,14 +22,14 @@ For all these reasons, auto/* scripts will make your life easier. They are simpl
 For your convenience, _live-build_ comes with example auto shell scripts to copy and edit. Start a new, default configuration, then copy the examples into it:
 
 ```shell
-$ mkdir mylive && cd mylive && lb config
-$ mkdir auto
-$ cp /usr/share/doc/live-build/examples/auto/* auto/
+mkdir mylive && cd mylive && lb config
+mkdir auto
+cp /usr/share/doc/live-build/examples/auto/* auto/
 ```
 
 Edit auto/config, adding any options as you see fit. For instance:
 
-```shell
+```text
 #!/bin/sh
 lb config noauto \
      --distribution stable \
@@ -47,21 +47,21 @@ A special noauto parameter is used here to suppress another call to auto/config,
 
 ## 6.2 Clone a configuration published via Git
 
-Use the lb config --config option to clone a Git repository that contains a live system configuration. If you would like to base your configuration on one maintained by the Debian Live Project, look at ‹[https://salsa.debian.org/live-team/](https://salsa.debian.org/live-team/)› for the repository named live-images in the category Subgroups and projects. This repository contains the configurations for the live systems [prebuilt images](/chapters/the-basics#downloading-prebuilt-images).
+Use the lb config --config option to clone a Git repository that contains a live system configuration. If you would like to base your configuration on one maintained by the Debian Live Project, look at [https://salsa.debian.org/live-team/](https://salsa.debian.org/live-team/) for the repository named live-images in the category Subgroups and projects. This repository contains the configurations for the live systems [prebuilt images](/chapters/the-basics#downloading-prebuilt-images).
 
 For example, to build a standard image, use the live-images repository as follows:
 
 ```shell
-$ mkdir live-images && cd live-images
-$ lb config --config https://salsa.debian.org/live-team/live-images.git::debian
-$ cd images/standard
+mkdir live-images && cd live-images
+lb config --config https://salsa.debian.org/live-team/live-images.git::debian
+cd images/standard
 ```
 
 Edit auto/config and any other things you need in the config tree to suit your needs. For example, the unofficial non-free prebuilt images are made by simply adding --archive-areas "main contrib non-free".
 
 You may optionally define a shortcut in your Git configuration by adding the following to your ${HOME}/.gitconfig:
 
-```shell
+```text
 [url "https://salsa.debian.org/live-team/"]
          insteadOf = lso:
 ```
@@ -69,7 +69,7 @@ You may optionally define a shortcut in your Git configuration by adding the fol
 This enables you to use lso: anywhere you need to specify the address of a salsa.debian.org git repository. If you also drop the optional .git suffix, starting a new image using this configuration is as easy as:
 
 ```shell
-$ lb config --config lso:live-images::debian
+lb config --config lso:live-images::debian
 ```
 
 Cloning the entire live-images repository pulls the configurations used for several images. If you feel like building a different image after you have finished with the first one, change to another directory and again and optionally, make any changes to suit your needs.

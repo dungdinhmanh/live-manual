@@ -128,14 +128,14 @@ If you have to enumerate a series of steps or stages in your description, you ca
 And last but not least, _live-manual_ uses [SiSU](http://www.sisudoc.org/) to process the text files and produce a multiple format output. It is recommended to take a look at [SiSU's manual](http://www.sisudoc.org/manual/en/html/sisu_manual/markup.html) to get familiar with its markup, or else type:
 
 ```shell
-$ sisu --help markup
+sisu --help markup
 ```
 
 Here are some markup examples that may prove useful:
 
 - For emphasis/bold text:
 
-```shell
+```text
 *{foo}* or !{foo}!
 ```
 
@@ -143,7 +143,7 @@ produces: **foo** or **foo**. Use it to emphasize certain key words.
 
 - For italics:
 
-```shell
+```text
 /{foo}/
 ```
 
@@ -151,7 +151,7 @@ produces: _foo_. Use them e.g. for the names of Debian packages.
 
 - For monospace:
 
-```shell
+```text
 #{foo}#
 ```
 
@@ -161,16 +161,16 @@ produces: foo. Use it e.g. for the names of commands. And also to highlight some
 
 ```shell
 code{
-  $ foo
-  # bar
+foo
+bar
 }code
 ```
 
 produces:
 
 ```shell
-$ foo
-# bar
+foo
+bar
 ```
 
 Use code{ to open and }code to close the tags. It is important to remember to leave a space at the beginning of each line of code.

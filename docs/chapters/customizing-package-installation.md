@@ -18,19 +18,19 @@ The distribution you choose has the broadest impact on which packages are availa
 For example, to build against the **stable** release, with _security_, _updates_ (enabled per default) and additionally _proposed-updates_ and _backports_, specify:
 
 ```shell
-$ lb config --distribution stable --proposed-updates true --backports true
+lb config --distribution stable --proposed-updates true --backports true
 ```
 
 Similarly, for the **unstable** release, **sid**, which has neither _security_ nor _updates_, specify:
 
 ```shell
-$ lb config --distribution sid
+lb config --distribution sid
 ```
 
 Within the distribution archive, archive areas are major divisions of the archive. In Debian, these are main, contrib and non-free. Only main contains software that is part of the Debian distribution, hence that is the default. One or more values may be specified, e.g.
 
 ```shell
-$ lb config --archive-areas "main contrib non-free"
+lb config --archive-areas "main contrib non-free"
 ```
 
 Experimental support is available for some Debian derivatives through a --mode option. By default, this option is set to debian only if you are building on a Debian or on an unknown system. If lb config is invoked on any of the supported derivatives, it will default to create an image of that derivative. If lb config is run in e.g. ubuntu mode, the distribution names and archive areas for the specified derivative are supported instead of the ones for Debian. The mode also modifies _live-build_ behaviour to suit the derivatives.
@@ -48,7 +48,7 @@ The Debian archive is replicated across a large network of mirrors around the wo
 To set the distribution mirrors used at build time to point at a local mirror, it is sufficient to set --mirror-bootstrap and --mirror-chroot-security as follows.
 
 ```shell
-$ lb config --mirror-bootstrap http://localhost/debian/ \
+lb config --mirror-bootstrap http://localhost/debian/ \
           --mirror-chroot-security http://localhost/debian-security/
 ```
 
@@ -59,7 +59,7 @@ The chroot mirror, specified by --mirror-chroot, defaults to the --mirror-bootst
 The --mirror-binary* options govern the distribution mirrors placed in the binary image. These may be used to install additional packages while running the live system. The defaults employ deb.debian.org, a service that chooses a geographically close mirror based, among other things, on the user's IP family and the availability of the mirrors. This is a suitable choice when you cannot predict which mirror will be best for all of your users. Or you may specify your own values as shown in the example below. An image built from this configuration would only be suitable for users on a network where "mirror" is reachable.
 
 ```shell
-$ lb config --mirror-binary http://mirror/debian/ \
+lb config --mirror-binary http://mirror/debian/ \
           --mirror-binary-security http://mirror/debian-security/ \
           --mirror-binary-backports http://mirror/debian-backports/
 ```
@@ -70,7 +70,7 @@ You may add more repositories, broadening your package choices beyond what is av
 
 For example, config/archives/live.list.chroot allows you to install packages from the debian-live snapshot repository at live system build time.
 
-```shell
+```text
 deb http://debian-live.alioth.debian.org/ sid-snapshots main contrib non-free
 ```
 
@@ -82,7 +82,7 @@ You should also put the ASCII-armored GPG key used to sign the repository into c
 
 Should you need custom APT pinning, such APT preferences snippets can be placed in config/archives/your-repository.pref.{binary,chroot} files and will be automatically added to your live system's /etc/apt/preferences.d/ directory.
 
-Similarly, if you need custom APT_AUTH.CONF(5) authentication configuration, this can be placed in config/archives/your-repository.auth.{binary,chroot} files and will be automatically added to your live system's /etc/apt/auth.conf.d/ directory
+Similarly, if you need custom [APT_AUTH.CONF(5)](https://manpages.debian.org/apt_auth.conf.5) authentication configuration, this can be placed in config/archives/your-repository.auth.{binary,chroot} files and will be automatically added to your live system's /etc/apt/auth.conf.d/ directory
 
 ## 8.2 Choosing packages to install
 
@@ -101,8 +101,8 @@ The behaviour of _live-build_ when specifying a package that does not exist is d
 The simplest way to populate your package list is to use a task metapackage maintained by your distribution. For example:
 
 ```shell
-$ lb config
-$ echo task-gnome-desktop > config/package-lists/desktop.list.chroot
+lb config
+echo task-gnome-desktop > config/package-lists/desktop.list.chroot
 ```
 
 This supersedes the older predefined list method supported in live-build 2.x. Unlike predefined lists, task metapackages are not specific to the Live System project. Instead, they are maintained by specialist working groups within the distribution and therefore reflect the consensus of each group about which packages best serve the needs of the intended users. They also cover a much broader range of use cases than the predefined lists they replace.
@@ -110,13 +110,13 @@ This supersedes the older predefined list method supported in live-build 2.x. Un
 All task metapackages are prefixed task-, so a quick way to determine which are available (though it may contain a handful of false hits that match the name but aren't metapackages) is to match on the package name with:
 
 ```shell
-$ apt-cache search --names-only ^task-
+apt-cache search --names-only ^task-
 ```
 
 In addition to these, you will find other metapackages with various purposes. Some are subsets of broader task packages, like gnome-core, while others are individual specialized parts of a Debian Pure Blend, such as the education-* metapackages. To list all metapackages in the archive, install the debtags package and list all packages with the role::metapackage tag as follows:
 
 ```shell
-$ debtags search role::metapackage
+debtags search role::metapackage
 ```
 
 ### 8.2.3 Local package lists
@@ -142,8 +142,8 @@ It sometimes happens that the best way to compose a list is to generate it with 
 In fact, selecting packages with the grep-aptavail command (from the dctrl-tools package) is so useful that live-build provides a Packages helper script as a convenience. This script takes two arguments: field and pattern. Thus, you can create a list with the following contents:
 
 ```shell
-$ lb config
-$ echo '! Packages Priority standard' > config/package-lists/standard.list.chroot
+lb config
+echo '! Packages Priority standard' > config/package-lists/standard.list.chroot
 ```
 
 ### 8.2.6 Using conditionals inside package lists
@@ -152,7 +152,7 @@ Any of the _live-build_ configuration variables stored in config/* (minus the LB
 
 For example, to install ia32-libs if the --architectures amd64 is specified:
 
-```shell
+```text
 #if ARCHITECTURES amd64
 ia32-libs
 #endif
@@ -160,7 +160,7 @@ ia32-libs
 
 You may test for any one of a number of values, e.g. to install _memtest86+_ if either --architectures i386 or --architectures amd64 is specified:
 
-```shell
+```text
 #if ARCHITECTURES i386 amd64
 memtest86+
 #endif
@@ -168,7 +168,7 @@ memtest86+
 
 You may also test against variables that may contain more than one value, e.g. to install _vrms_ if either contrib or non-free is specified via --archive-areas:
 
-```shell
+```text
 #if ARCHIVE_AREAS contrib non-free
 vrms
 #endif
@@ -184,43 +184,11 @@ You can list packages in files with .list.chroot_live and .list.chroot_install s
 
 The table below shows which configuration files are required to achieve the desired availability of the package.
 
-X.chroot
-
-X.chroot_live
-
-X
-
-X.binary
-
-Package is installed in the live system
-
-Yes
-
-Yes
-
-Yes
-
-No
-
-Package is removed after installing the live system
-
-No
-
-Yes
-
-No
-
-N/A
-
-Package can be installed from the live system without network
-
-N/A
-
-N/A
-
-Yes *1
-
-Yes
+|  | X.chroot | X.chroot_live | X | X.binary |
+| --- | --- | --- | --- | --- |
+| Package is installed in the live system | Yes | Yes | Yes | No |
+| Package is removed after installing the live system | No | Yes | No | N/A |
+| Package can be installed from the live system without network | N/A | N/A | Yes *1 | Yes |
 
 *1: Because the installer needs this package
 
@@ -235,9 +203,9 @@ When developing a desktop live image, the image typically boots directly to a wo
 Because there is no provision made automatically for language tasks, which include such things as language-specific fonts and input-method packages, if you want them, you need to specify them in your configuration. For example, a GNOME desktop image containing support for German might include these task metapackages:
 
 ```shell
-$ lb config
-$ echo "task-gnome-desktop task-laptop" >> config/package-lists/my.list.chroot
-$ echo "task-german task-german-desktop task-german-gnome-desktop" >> config/package-lists/my.list.chroot
+lb config
+echo "task-gnome-desktop task-laptop" >> config/package-lists/my.list.chroot
+echo "task-german task-german-desktop task-german-gnome-desktop" >> config/package-lists/my.list.chroot
 ```
 
 ### 8.2.10 Kernel flavour and version
@@ -249,8 +217,8 @@ Thus by default, an amd64 architecture image will include the linux-image-amd64 
 When more than one kernel package version is available in your configured archives, you can specify a different kernel package name stub with the --linux-packages option. For example, supposing you are building an amd64 architecture image and add the experimental archive for testing purposes so you can install the linux-image-3.18.0-trunk-amd64 kernel. You would configure that image as follows:
 
 ```shell
-$ lb config --linux-packages linux-image-3.18.0-trunk
-$ echo "deb http://deb.debian.org/debian/ experimental main" > config/archives/experimental.list.chroot
+lb config --linux-packages linux-image-3.18.0-trunk
+echo "deb http://deb.debian.org/debian/ experimental main" > config/archives/experimental.list.chroot
 ```
 
 ### 8.2.11 Custom kernels
@@ -273,7 +241,7 @@ It is beyond the scope of this document to give advice on how to customize your 
 
 While it is against the philosophy of a live system, it may sometimes be necessary to build a live system with modified versions of packages that are in the Debian repository. This may be to modify or support additional features, languages and branding, or even to remove elements of existing packages that are undesirable. Similarly, "third-party" packages may be used to add bespoke and/or proprietary functionality.
 
-This section does not cover advice regarding building or maintaining modified packages. Joachim Breitner's 'How to fork privately' method from ‹[http://www.joachim-breitner.de/blog/archives/282-How-to-fork-privately.html](http://www.joachim-breitner.de/blog/archives/282-How-to-fork-privately.html)› may be of interest, however. The creation of bespoke packages is covered in the Debian New Maintainers' Guide at ‹[https://www.debian.org/doc/manuals/maint-guide/](https://www.debian.org/doc/manuals/maint-guide/)› and elsewhere.
+This section does not cover advice regarding building or maintaining modified packages. Joachim Breitner's 'How to fork privately' method from [http://www.joachim-breitner.de/blog/archives/282-How-to-fork-privately.html](http://www.joachim-breitner.de/blog/archives/282-How-to-fork-privately.html) may be of interest, however. The creation of bespoke packages is covered in the Debian New Maintainers' Guide at [https://www.debian.org/doc/manuals/maint-guide/](https://www.debian.org/doc/manuals/maint-guide/) and elsewhere.
 
 There are two ways of installing modified custom packages:
 
@@ -308,11 +276,11 @@ The APT repository does not necessarily need to be online, you can use a local r
 Example:
 
 ```shell
-$ gpg --armor --output config/archives/custom_repo.gpg.key${EXTENSION} --export-options export-minimal --export ${SIGNING_KEY}
-$ cat  config/archives/custom_repo.list${EXTENSION}
+gpg --armor --output config/archives/custom_repo.gpg.key${EXTENSION} --export-options export-minimal --export ${SIGNING_KEY}
+cat  config/archives/custom_repo.list${EXTENSION}
 deb [signed-by=/etc/apt/trusted.gpg.d/custom_repo.gpg.key${EXTENSION}.asc] ${URI} ${SUITE} ${COMPONENTS}
 EOF
-$ echo "${PACKAGES_FROM_REPOSITORY}" > config/package-lists/custom_repo.list${EXTENSION}
+echo "${PACKAGES_FROM_REPOSITORY}" > config/package-lists/custom_repo.list${EXTENSION}
 ```
 
 Where:
@@ -352,7 +320,7 @@ You can elect to use either _apt_ or _aptitude_ when installing packages at buil
 One commonly required APT configuration is to deal with building an image behind a proxy. You may specify your APT proxy with the --apt-http-proxy option as needed, e.g.
 
 ```shell
-$ lb config --apt-http-proxy http://proxy/
+lb config --apt-http-proxy http://proxy/
 ```
 
 ### 8.4.3 Tweaking APT to save space
@@ -362,7 +330,7 @@ You may find yourself needing to save some space on the image medium, in which c
 If you don't want to include APT indices in the image, you can omit those with:
 
 ```shell
-$ lb config --apt-indices false
+lb config --apt-indices false
 ```
 
 This will not influence the entries in /etc/apt/sources.list, but merely whether /var/lib/apt contains the indices files or not. The tradeoff is that APT needs those indices in order to operate in the live system, so before performing apt-cache search or apt-get install, for instance, the user must apt-get update first to create those indices.
@@ -370,7 +338,7 @@ This will not influence the entries in /etc/apt/sources.list, but merely whether
 If you find the installation of recommended packages bloats your image too much, provided you are prepared to deal with the consequences discussed below, you may disable that default option of APT with:
 
 ```shell
-$ lb config --apt-recommends false
+lb config --apt-recommends false
 ```
 
 The most important consequence of turning off recommends is that live-boot and live-config themselves recommend some packages that provide important functionality used by most Live configurations.
@@ -382,8 +350,8 @@ Two packages which you most probably will want to add again are:
 -   sudo which live-config recommends is used to obtain root access in the live-image, which is needed to shutdown the computer.
 
 ```shell
-$ lb config --apt-recommends false
-$ echo "user-setup sudo" > config/package-lists/recommends.list.chroot
+lb config --apt-recommends false
+echo "user-setup sudo" > config/package-lists/recommends.list.chroot
 ```
 
 In all but the most exceptional circumstances you need to add back at least some of these recommends to your package lists or else your image will not work as expected, if at all. Look at the recommended packages for each of the live-* packages included in your build and if you are not certain you can omit them, add them back into your package lists.
@@ -395,7 +363,7 @@ The more general consequence is that if you don't install recommended packages f
 If there is not a lb config option to alter APT's behaviour in the way you need, use --apt-options or --aptitude-options to pass any options through to your configured APT tool. See the man pages for apt and aptitude for details. Note that both options have default values that you will need to retain in addition to any overrides you may provide. So, for example, suppose you have included something from snapshot.debian.org for testing purposes and want to specify Acquire::Check-Valid-Until=false to make APT happy with the stale Release file, you would do so as per the following example, appending the new option after the default value --yes:
 
 ```shell
-$ lb config --apt-options "--yes -oAcquire::Check-Valid-Until=false"
+lb config --apt-options "--yes -oAcquire::Check-Valid-Until=false"
 ```
 
 Please check the man pages to fully understand these options and when to use them. This is an example only and should not be construed as advice to configure your image this way. This option would not be appropriate for, say, a final release of a live image.
@@ -404,13 +372,13 @@ For more complicated APT configurations involving apt.conf options you might wan
 
 ### 8.4.5 APT pinning
 
-For background, please first read the apt_preferences(5) man page. APT pinning can be configured either for build time, or else for run time. For the former, create config/archives/*.pref, config/archives/*.pref.chroot, and config/apt/preferences. For the latter, create config/includes.chroot/etc/apt/preferences.
+For background, please first read the [apt_preferences(5)](https://manpages.debian.org/apt_preferences.5) man page. APT pinning can be configured either for build time, or else for run time. For the former, create config/archives/*.pref, config/archives/*.pref.chroot, and config/apt/preferences. For the latter, create config/includes.chroot/etc/apt/preferences.
 
 Let's say you are building a **trixie** live system but need all the live packages that end up in the binary image to be installed from **sid** at build time. You need to add **sid** to your APT sources and pin the live packages from it higher, but all other packages from it lower, than the default priority. Thus, only the packages you want are installed from **sid** at build time and all others are taken from the target system distribution, **trixie**. The following will accomplish this:
 
 ```shell
-$ echo "deb http://mirror/debian/ sid main" > config/archives/sid.list.chroot
-$ cat >> config/archives/sid.pref.chroot << EOF
+echo "deb http://mirror/debian/ sid main" > config/archives/sid.list.chroot
+cat >> config/archives/sid.pref.chroot << EOF
 Package: live-*
 Pin: release n=sid
 Pin-Priority: 600
@@ -422,7 +390,7 @@ EOF
 
 Negative pin priorities will prevent a package from being installed, as in the case where you do not want a package that is recommended by another package. Suppose you are building an LXDE image using task-lxde-desktop in config/package-lists/desktop.list.chroot, but don't want the user prompted to store wifi passwords in the keyring. This metapackage depends on _lxde-core_, which recommends _gksu_, which in turn recommends _gnome-keyring_. So you want to omit the recommended _gnome-keyring_ package. This can be done by adding the following stanza to config/apt/preferences:
 
-```shell
+```text
 Package: gnome-keyring
 Pin: version *
 Pin-Priority: -1

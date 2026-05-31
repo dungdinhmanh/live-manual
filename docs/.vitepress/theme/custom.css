@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..900;1,8..60,300..900&family=DM+Sans:wght@300..700&family=JetBrains+Mono:wght@400;700&display=swap');
 
 /* ---------- Brand tokens ---------- */
+/* Design is locked in DESIGN.md. Spacing follows an 8-point grid (4px half-step
+   allowed): 4 · 8 · 16 · 24 · 32 · 48 · 64. Radius scale: 4 · 8. Keep every
+   padding/margin/radius/gap on these steps. */
 
 :root {
   --vp-c-brand-1: #d70a53;
@@ -10,6 +13,10 @@
 
   --vp-font-family-base: 'Source Serif 4', Georgia, serif;
   --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Radius scale (8-pt). */
+  --ldm-radius-sm: 4px;
+  --ldm-radius-md: 8px;
 
   /* Sidebar background follows VitePress' light surface; overridden in .dark below. */
   --vp-sidebar-bg-color: var(--vp-c-bg-alt);
@@ -103,6 +110,9 @@ html {
 .vp-doc h2 {
   font-size: 1.5rem;
   font-weight: 600;
+  border-top: none;
+  margin-top: 2rem;
+  padding-top: 0;
   border-bottom: 1px solid rgba(215, 10, 83, 0.3);
   padding-bottom: 0.25rem;
 }
@@ -120,15 +130,15 @@ html {
 .vp-doc blockquote {
   border-left: 4px solid var(--vp-c-brand-1);
   background: var(--vp-c-brand-soft);
-  border-radius: 0 6px 6px 0;
-  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  padding: 1rem 1.5rem;
 }
 
 .vp-doc table {
   border-collapse: collapse;
   width: 100%;
   border: 1px solid rgba(215, 10, 83, 0.15);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
 }
 
@@ -138,11 +148,11 @@ html {
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   text-align: left;
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .vp-doc td {
-  padding: 0.6rem 1rem;
+  padding: 0.5rem 1rem;
   border-top: 1px solid rgba(215, 10, 83, 0.08);
 }
 
@@ -163,6 +173,11 @@ html {
 
 /* ---------- Home page hero ---------- */
 
+.VPHome {
+  /* The landing page is chrome, not content — don't let stray drags select it. */
+  user-select: none;
+}
+
 .VPHome .VPHero .name {
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
@@ -170,6 +185,35 @@ html {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* ---------- Home page feature boxes ---------- */
+/* Each box links to a chapter; give it a brand-tinted hover affordance. */
+
+.VPHome .VPFeature {
+  border: 1px solid transparent;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.VPHome .VPFeature:hover {
+  border-color: var(--vp-c-brand-1);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px var(--vp-c-brand-soft);
+}
+
+/* ---------- Code block line numbers ---------- */
+/* Hide the line-number gutter when a block has a single line — the lone "1"
+   adds noise for one-liners. Multi-line blocks keep their gutter. A one-line
+   block has no second `.line-number` span in its wrapper. */
+
+.vp-doc .line-numbers-mode:not(:has(.line-numbers-wrapper span.line-number:nth-of-type(2))) {
+  padding-left: 0;
+}
+
+.vp-doc
+  .line-numbers-mode:not(:has(.line-numbers-wrapper span.line-number:nth-of-type(2)))
+  .line-numbers-wrapper {
+  display: none;
 }
 
 /* ---------- Search button ---------- */

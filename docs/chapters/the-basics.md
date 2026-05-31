@@ -31,7 +31,7 @@ You can use _live-build_ to build the system image from your specifications, set
 
 ## 4.2 Downloading prebuilt images
 
-You can download one of the prebuilt images from ‹[https://www.debian.org/CD/live/](https://www.debian.org/CD/live/)›. For many of the popular desktop environments (GNOME, Xfce, KDE, etc.) a specific live image is prepared.
+You can download one of the prebuilt images from [https://www.debian.org/CD/live/](https://www.debian.org/CD/live/). For many of the popular desktop environments (GNOME, Xfce, KDE, etc.) a specific live image is prepared.
 
 If you are unsure which file to download, use the 'Live GNOME' image from the 'stable' release. You can then skip reading the next sections and run the image in a [virtual machine](/chapters/the-basics#using-virtual-machine).
 
@@ -42,13 +42,13 @@ Regardless of the image type, you will need to perform the same basic steps to b
 The name of the working directory is absolutely up to you, but if you take a look at the examples used throughout _live-manual_, it is a good idea to use a name that helps you identify the image you are working with in each directory, especially if you are working or experimenting with different image types. In this case you are going to build a default system so let's call it, for example, live-default.
 
 ```shell
-$ mkdir live-default && cd live-default
+mkdir live-default && cd live-default
 ```
 
 Then, run the lb config command. This will create a "config/" hierarchy in the current directory for use by other commands:
 
 ```shell
-$ lb config
+lb config
 ```
 
 No parameters are passed to these commands, so defaults for all of their various options will be used. See [The lb config command](/chapters/overview-of-tools#lb-config) for more details.
@@ -56,7 +56,7 @@ No parameters are passed to these commands, so defaults for all of their various
 Now that the "config/" hierarchy exists, build the image with the lb build command:
 
 ```shell
-# lb build
+lb build
 ```
 
 This process can take a while, depending on the speed of your computer and your network connection. When it is complete, there should be a live-image-amd64.hybrid.iso image file, ready to use, in the current directory.
@@ -74,8 +74,8 @@ After either building or downloading an ISO hybrid image the usual next step is 
 Burning an ISO image is easy. Just install _xorriso_ and use it from the command-line to burn the image. For instance:
 
 ```shell
-# apt-get install xorriso
-$ xorriso -as cdrecord -v dev=/dev/sr0 blank=as_needed live-image-amd64.hybrid.iso
+apt-get install xorriso
+xorriso -as cdrecord -v dev=/dev/sr0 blank=as_needed live-image-amd64.hybrid.iso
 ```
 
 ### 4.4.2 Copying an ISO hybrid image to a USB stick
@@ -85,8 +85,8 @@ ISO images prepared with xorriso, can be simply copied to a USB stick with the c
 Once you are certain you have the correct device name, use the cp command to copy the image to the stick. **This will definitely overwrite any previous contents on your stick!**
 
 ```shell
-$ cp live-image-amd64.hybrid.iso ${USBSTICK}
-$ sync
+cp live-image-amd64.hybrid.iso ${USBSTICK}
+sync
 ```
 
 ::: tip Note
@@ -98,13 +98,13 @@ The _sync_ command is useful to ensure that all the data, which is stored in mem
 After copying the live-image-amd64.hybrid.iso to a USB stick, the first partition on the device will be filled up by the live system. To use the remaining free space, use a partitioning tool such as _gparted_ or _parted_ to create a new partition on the stick.
 
 ```shell
-# gparted ${USBSTICK}
+gparted ${USBSTICK}
 ```
 
 After the partition is created, where ${PARTITION} is the name of the partition, such as /dev/sdb2, you have to create a filesystem on it. One possible choice would be ext4.
 
 ```shell
-# mkfs.ext4 ${PARTITION}
+mkfs.ext4 ${PARTITION}
 ```
 
 ::: tip Note
@@ -142,13 +142,13 @@ The most versatile VM in Debian is QEMU. If your processor has hardware support 
 First, install _qemu-kvm_ if your processor supports it. If not, install _qemu_, in which case the program name is qemu instead of kvm in the following examples. The _qemu-utils_ package is also valuable for creating virtual disk images with qemu-img.
 
 ```shell
-# apt-get install qemu-kvm qemu-utils
+apt-get install qemu-kvm qemu-utils
 ```
 
 Booting an ISO image is simple:
 
 ```shell
-$ kvm -cdrom live-image-amd64.hybrid.iso -m 4G
+kvm -cdrom live-image-amd64.hybrid.iso -m 4G
 ```
 
 See the man pages for more details.
@@ -158,7 +158,7 @@ For live systems containing a desktop environment that you want to test with _qe
 :::
 
 ```shell
-$ echo "spice-vdagent" >> config/package-lists/spice.list.chroot
+echo "spice-vdagent" >> config/package-lists/spice.list.chroot
 ```
 
 ### 4.5.2 Testing an ISO image with VirtualBox
@@ -166,8 +166,8 @@ $ echo "spice-vdagent" >> config/package-lists/spice.list.chroot
 In order to test the ISO with _virtualbox_:
 
 ```shell
-# apt-get install virtualbox virtualbox-qt virtualbox-dkms
-$ virtualbox
+apt-get install virtualbox virtualbox-qt virtualbox-dkms
+virtualbox
 ```
 
 Create a new virtual machine, change the storage settings to use live-image-amd64.hybrid.iso as the CD/DVD device, and start the machine.
@@ -177,13 +177,13 @@ For live systems containing X.org that you want to test with _virtualbox_, you m
 :::
 
 ```shell
-$ echo "virtualbox-guest-dkms virtualbox-guest-x11" >> config/package-lists/my.list.chroot
+echo "virtualbox-guest-dkms virtualbox-guest-x11" >> config/package-lists/my.list.chroot
 ```
 
 In order to make the dkms package work, also the kernel headers for the kernel flavour used in your image need to be installed. Instead of manually listing the correct _linux-headers_ package in above created package list, the selection of the right package can be done automatically by _live-build_.
 
 ```shell
-$ lb config --linux-packages "linux-image linux-headers"
+lb config --linux-packages "linux-image linux-headers"
 ```
 
 ## 4.6 Building and using an HDD image
@@ -195,19 +195,19 @@ if you created an ISO hybrid image with the previous example, you will need to c
 :::
 
 ```shell
-# lb clean --binary
+lb clean --binary
 ```
 
 Run the lb config command as before, except this time specifying the HDD image type:
 
 ```shell
-$ lb config -b hdd
+lb config -b hdd
 ```
 
 Now build the image with the lb build command:
 
 ```shell
-# lb build
+lb build
 ```
 
 When the build finishes, a live-image-amd64.img file should be present in the current directory.
@@ -217,7 +217,7 @@ The generated binary image contains a VFAT partition and the syslinux bootloader
 Likewise, to test an HDD image with Qemu, install _qemu_ as described above in [Testing an ISO image with QEMU](/chapters/the-basics#testing-iso-with-qemu). Then run kvm or qemu, depending on which version your host system needs, specifying live-image-amd64.img as the first hard drive.
 
 ```shell
-$ kvm -hda live-image-amd64.img
+kvm -hda live-image-amd64.img
 ```
 
 ## 4.7 Building a netboot image
@@ -229,7 +229,7 @@ if you performed any previous examples, you will need to clean up your working d
 :::
 
 ```shell
-# lb clean
+lb clean
 ```
 
 In this specific case, a lb clean --binary would not be enough to clean up the necessary stages. The cause for this is that in netboot setups, a different initramfs configuration needs to be used which _live-build_ performs automatically when building netboot images. Since the initramfs creation belongs to the chroot stage, switching to netboot in an existing build directory means to rebuild the chroot stage too. Therefore, lb clean (which will remove the chroot stage, too) needs to be used.
@@ -237,7 +237,7 @@ In this specific case, a lb clean --binary would not be enough to clean up the n
 Run the lb config command as follows to configure your image for netbooting:
 
 ```shell
-$ lb config -b netboot --net-root-path "/srv/debian-live" --net-root-server "192.168.0.2"
+lb config -b netboot --net-root-path "/srv/debian-live" --net-root-server "192.168.0.2"
 ```
 
 In contrast with the ISO and HDD images, netbooting does not, itself, serve the filesystem image to the client, so the files must be served via NFS. Different network filesystems can be chosen through lb config. The --net-root-path and --net-root-server options specify the location and server, respectively, of the NFS server where the filesystem image will be located at boot time. Make sure these are set to suitable values for your network and server.
@@ -245,7 +245,7 @@ In contrast with the ISO and HDD images, netbooting does not, itself, serve the 
 Now build the image with the lb build command:
 
 ```shell
-# lb build
+lb build
 ```
 
 In a network boot, the client runs a small piece of software which usually resides on the EPROM of the Ethernet card. This program sends a DHCP request to get an IP address and information about what to do next. Typically, the next step is getting a higher level bootloader via the TFTP protocol. That could be pxelinux, GRUB, or even boot directly to an operating system like Linux.
@@ -261,7 +261,7 @@ We must configure our network's DHCP server to be sure to give an IP address to 
 Here is an example for inspiration, written for the ISC DHCP server isc-dhcp-server in the /etc/dhcp/dhcpd.conf configuration file:
 
 ```shell
-# /etc/dhcp/dhcpd.conf - configuration file for isc-dhcp-server
+/etc/dhcp/dhcpd.conf - configuration file for isc-dhcp-server
 ddns-update-style none;
 option domain-name "example.org";
 option domain-name-servers ns1.example.org, ns2.example.org;
@@ -285,7 +285,7 @@ This serves the kernel and initial ramdisk to the system at run time.
 You should install the _tftpd-hpa_ package. It can serve all files contained inside a root directory, usually /srv/tftp. To let it serve files inside /srv/debian-live/tftpboot, run as root the following command:
 
 ```shell
-# dpkg-reconfigure -plow tftpd-hpa
+dpkg-reconfigure -plow tftpd-hpa
 ```
 
 and fill in the new tftp server directory when being asked about it.
@@ -298,17 +298,17 @@ You need to install the _nfs-kernel-server_ package.
 
 Then, make the filesystem image available through NFS by adding a line like the following to /etc/exports:
 
-```shell
+```text
 /srv/debian-live *(ro,async,no_root_squash,no_subtree_check)
 ```
 
 and tell the NFS server about this new export with the following command:
 
 ```shell
-# exportfs -rv
+exportfs -rv
 ```
 
-Setting up these three services can be a little tricky. You might need some patience to get all of them working together. For more information, see the syslinux wiki at ‹[https://wiki.syslinux.org/wiki/index.php?title=PXELINUX](https://wiki.syslinux.org/wiki/index.php?title=PXELINUX)› or the Debian Installer Manual's TFTP Net Booting section at ‹[https://www.debian.org/releases/stable/amd64/ch04s05.en.html](https://www.debian.org/releases/stable/amd64/ch04s05.en.html)›. They might help, as their processes are very similar.
+Setting up these three services can be a little tricky. You might need some patience to get all of them working together. For more information, see the syslinux wiki at [https://wiki.syslinux.org/wiki/index.php?title=PXELINUX](https://wiki.syslinux.org/wiki/index.php?title=PXELINUX) or the Debian Installer Manual's TFTP Net Booting section at [https://www.debian.org/releases/stable/amd64/ch04s05.en.html](https://www.debian.org/releases/stable/amd64/ch04s05.en.html). They might help, as their processes are very similar.
 
 ### 4.7.4 Netboot testing HowTo
 
@@ -322,7 +322,7 @@ To make our life easier, we can use virtualization.
 
 Edit /etc/qemu-ifup:
 
-```shell
+```text
 #!/bin/sh
 sudo -p "Password for $0:" /sbin/ifconfig $1 172.20.0.1
 echo "Executing /etc/qemu-ifup"
@@ -348,7 +348,7 @@ As usual, you can build the images yourself or use the [prebuilt files](/chapter
 It is also possible to extract those files from an already existing iso image. In order to achieve that, loopback mount the image as follows:
 
 ```shell
-# mount -o loop image.iso /mnt
+mount -o loop image.iso /mnt
 ```
 
 The files are to be found under the live/ directory. In this specific case, it would be /mnt/live/. This method has the disadvantage that you need to be root to be able to mount the image. However, it has the advantage that it is easily scriptable and thus, easily automated.
@@ -361,7 +361,7 @@ While some users will prefer virtualization to test webbooting, we refer to real
 
 In order to boot a webboot image it is enough to have the components mentioned above, i.e. vmlinuz and initrd.img in a usb stick inside a directory named live/ and install syslinux as bootloader. Then boot from the usb stick and type fetch=URL/PATH/TO/FILE at the boot options. _live-boot_ will retrieve the squashfs file and store it into ram. This way, it is possible to use the downloaded compressed filesystem as a regular live system. For example:
 
-```shell
+```text
 append boot=live components fetch=http://192.168.2.50/images/webboot/filesystem.squashfs
 ```
 

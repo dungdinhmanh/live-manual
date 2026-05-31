@@ -15,7 +15,7 @@ One important consideration is that the live user is created by _live-boot_ at b
 
 You can specify additional groups that the live user will belong to by using any of the possibilities to configure _live-config_. For example, to add the live user to the fuse group, you can either add the following file in config/includes.chroot/etc/live/config.conf.d/10-user-setup.conf:
 
-```shell
+```text
 LIVE_USER_DEFAULT_GROUPS="audio cdrom dip floppy video plugdev netdev powerdev scanner bluetooth fuse"
 ```
 
@@ -26,7 +26,7 @@ It is also possible to change the default username "user" and the default passwo
 To change the default username you can simply specify it in your config:
 
 ```shell
-$ lb config --bootappend-live "boot=live components username=live-user"
+lb config --bootappend-live "boot=live components username=live-user"
 ```
 
 One possible way of changing the default password is by means of a hook as described in [Boot-time hooks](/chapters/customizing-contents#boot-time-hooks). In order to do that you can use the "passwd" hook from /usr/share/doc/live-config/examples/hooks, prefix it accordingly (e.g. 2000-passwd) and add it to config/includes.chroot/lib/live/config/
@@ -42,7 +42,7 @@ When the live system boots, language is involved in two steps:
 The default locale when building a Live system is locales=en_US.UTF-8. To define the locale that should be generated, use the locales parameter in the --bootappend-live option of lb config, e.g.
 
 ```shell
-$ lb config --bootappend-live "boot=live components locales=de_CH.UTF-8"
+lb config --bootappend-live "boot=live components locales=de_CH.UTF-8"
 ```
 
 Multiple locales may be specified as a comma-delimited list.
@@ -52,7 +52,7 @@ This parameter, as well as the keyboard configuration parameters indicated below
 Both the console and X keyboard configuration are performed by live-config using the console-setup package. To configure them, use the keyboard-layouts, keyboard-variants, keyboard-options and keyboard-model boot parameters via the --bootappend-live option. Valid options for these can be found in /usr/share/X11/xkb/rules/base.lst. To find layouts and variants for a given language, try searching for the English name of the language and/or the country where the language is spoken, e.g:
 
 ```shell
-$ egrep -i '(^!|german.*switzerland)' /usr/share/X11/xkb/rules/base.lst
+egrep -i '(^!|german.*switzerland)' /usr/share/X11/xkb/rules/base.lst
 ! model
 ! layout
    ch              German (Switzerland)
@@ -69,20 +69,20 @@ Note that each variant lists the layout to which it applies in the description.
 Often, only the layout needs to be configured. For example, to get the locale files for German and Swiss German keyboard layout in X use:
 
 ```shell
-$ lb config --bootappend-live "boot=live components locales=de_CH.UTF-8 keyboard-layouts=ch"
+lb config --bootappend-live "boot=live components locales=de_CH.UTF-8 keyboard-layouts=ch"
 ```
 
 However, for very specific use cases, you may wish to include other parameters. For example, to set up a French system with a French-Dvorak layout (called Bepo) on a TypeMatrix EZ-Reach 2030 USB keyboard, use:
 
 ```shell
-$ lb config --bootappend-live \
+lb config --bootappend-live \
      "boot=live components locales=fr_FR.UTF-8 keyboard-layouts=fr keyboard-variants=bepo keyboard-model=tm2030usb"
 ```
 
-Multiple values may be specified as comma-delimited lists for each of the keyboard-* options, with the exception of keyboard-model, which accepts only one value. Please see the keyboard(5) man page for details and examples of XKBMODEL, XKBLAYOUT, XKBVARIANT and XKBOPTIONS variables. If multiple keyboard-variants values are given, they will be matched one-to-one with keyboard-layouts values (see setxkbmap(1) -variant option). Empty values are allowed; e.g. to define two layouts, the default being US QWERTY and the other being US Dvorak, use:
+Multiple values may be specified as comma-delimited lists for each of the keyboard-* options, with the exception of keyboard-model, which accepts only one value. Please see the [keyboard(5)](https://manpages.debian.org/keyboard.5) man page for details and examples of XKBMODEL, XKBLAYOUT, XKBVARIANT and XKBOPTIONS variables. If multiple keyboard-variants values are given, they will be matched one-to-one with keyboard-layouts values (see [setxkbmap(1)](https://manpages.debian.org/setxkbmap.1) -variant option). Empty values are allowed; e.g. to define two layouts, the default being US QWERTY and the other being US Dvorak, use:
 
 ```shell
-$ lb config --bootappend-live \
+lb config --bootappend-live \
      "boot=live components keyboard-layouts=us,us keyboard-variants=,dvorak"
 ```
 
@@ -96,7 +96,7 @@ A live system is a generalization of this paradigm and thus supports other media
 
 The data stored on this ramdisk should be saved on a writable persistent medium like local storage media, a network share or even a session of a multisession (re)writable CD/DVD. All these media are supported in live systems in different ways, and all but the last one require a special boot parameter to be specified at boot time: persistence.
 
-If the boot parameter persistence is set (and nopersistence is not set), local storage media (e.g. hard disks, USB drives) will be probed for persistence volumes during boot. It is possible to restrict which types of persistence volumes to use by specifying certain boot parameters described in the _live-boot_(7) man page. A persistence volume is any of the following:
+If the boot parameter persistence is set (and nopersistence is not set), local storage media (e.g. hard disks, USB drives) will be probed for persistence volumes during boot. It is possible to restrict which types of persistence volumes to use by specifying certain boot parameters described in the [live-boot(7)](https://manpages.debian.org/live-boot.7) man page. A persistence volume is any of the following:
 
 -   a partition, identified by its GPT name.
 
@@ -109,7 +109,7 @@ The volume label for overlays must be persistence but it will be ignored unless 
 Here are some examples of how to prepare a volume to be used for persistence. It can be, for instance, an ext4 partition on a hard disk or on a usb key created with, e.g.:
 
 ```shell
-# mkfs.ext4 -L persistence /dev/sdb1
+mkfs.ext4 -L persistence /dev/sdb1
 ```
 
 See also [Using the space left on a USB stick](/chapters/the-basics#using-usb-extra-space).
@@ -117,28 +117,28 @@ See also [Using the space left on a USB stick](/chapters/the-basics#using-usb-ex
 If you already have a partition on your device, you could just change the label with one of the following:
 
 ```shell
-# tune2fs -L persistence /dev/sdb1 # for ext2,3,4 filesystems
+tune2fs -L persistence /dev/sdb1 # for ext2,3,4 filesystems
 ```
 
 Here's an example of how to create an ext4-based image file to be used for persistence:
 
 ```shell
-$ dd if=/dev/null of=persistence bs=1 count=0 seek=1G # for a 1GB sized image file
-$ /sbin/mkfs.ext4 -F persistence
+dd if=/dev/null of=persistence bs=1 count=0 seek=1G # for a 1GB sized image file
+/sbin/mkfs.ext4 -F persistence
 ```
 
 Once the image file is created, as an example, to make /usr persistent but only saving the changes you make to that directory and not all the contents of /usr, you can use the "union" option. If the image file is located in your home directory, copy it to the root of your hard drive's filesystem and mount it in /mnt as follows:
 
 ```shell
-# cp persistence /
-# mount -t ext4 /persistence /mnt
+cp persistence /
+mount -t ext4 /persistence /mnt
 ```
 
 Then, create the persistence.conf file adding content and unmount the image file.
 
 ```shell
-# echo "/usr union" >> /mnt/persistence.conf
-# umount /mnt
+echo "/usr union" >> /mnt/persistence.conf
+umount /mnt
 ```
 
 Now, reboot into your live medium with the boot parameter "persistence".
@@ -147,14 +147,14 @@ Now, reboot into your live medium with the boot parameter "persistence".
 
 A volume with the label persistence must be configured by means of the persistence.conf file to make arbitrary directories persistent. That file, located on the volume's filesystem root, controls which directories it makes persistent, and in which way.
 
-How custom overlay mounts are configured is described in full detail in the persistence.conf(5) man page, but a simple example should be sufficient for most uses. Let's say we want to make our home directory and APT cache persistent in an ext4 filesystem on the /dev/sdb1 partition:
+How custom overlay mounts are configured is described in full detail in the [persistence.conf(5)](https://manpages.debian.org/persistence.conf.5) man page, but a simple example should be sufficient for most uses. Let's say we want to make our home directory and APT cache persistent in an ext4 filesystem on the /dev/sdb1 partition:
 
 ```shell
-# mkfs.ext4 -L persistence /dev/sdb1
-# mount -t ext4 /dev/sdb1 /mnt
-# echo "/home" >> /mnt/persistence.conf
-# echo "/var/cache/apt" >> /mnt/persistence.conf
-# umount /mnt
+mkfs.ext4 -L persistence /dev/sdb1
+mount -t ext4 /dev/sdb1 /mnt
+echo "/home" >> /mnt/persistence.conf
+echo "/var/cache/apt" >> /mnt/persistence.conf
+umount /mnt
 ```
 
 Then we reboot. During the first boot the contents of /home and /var/cache/apt will be copied into the persistence volume, and from then on all changes to these directories will live in the persistence volume. Please note that any paths listed in the persistence.conf file cannot contain white spaces or the special . and .. path components. Also, neither /lib, /lib/live (or any of their sub-directories) nor / can be made persistent using custom mounts. As a workaround for this limitation you can add / union to your persistence.conf file to achieve full persistence.
@@ -163,7 +163,7 @@ Then we reboot. During the first boot the contents of /home and /var/cache/apt w
 
 There are different methods of using multiple persistence store for different use cases. For instance, using several volumes at the same time or selecting only one, among various, for very specific purposes.
 
-Several different custom overlay volumes (with their own persistence.conf files) can be used at the same time, but if several volumes make the same directory persistent, only one of them will be used. If any two mounts are "nested" (i.e. one is a sub-directory of the other) the parent will be mounted before the child so no mount will be hidden by the other. Nested custom mounts are problematic if they are listed in the same persistence.conf file. See the persistence.conf(5) man page for how to handle that case if you really need it (hint: you usually don't).
+Several different custom overlay volumes (with their own persistence.conf files) can be used at the same time, but if several volumes make the same directory persistent, only one of them will be used. If any two mounts are "nested" (i.e. one is a sub-directory of the other) the parent will be mounted before the child so no mount will be hidden by the other. Nested custom mounts are problematic if they are listed in the same persistence.conf file. See the [persistence.conf(5)](https://manpages.debian.org/persistence.conf.5) man page for how to handle that case if you really need it (hint: you usually don't).
 
 One possible use case: If you wish to store the user data i.e. /home and the superuser data i.e. /root in different partitions, create two partitions with the persistence label and add a persistence.conf file in each one like this, # echo "/home" > persistence.conf for the first partition that will save the user's files and # echo "/root" > persistence.conf for the second partition which will store the superuser's files. Finally, use the persistence boot parameter.
 
@@ -178,20 +178,20 @@ Using the persistence feature means that some sensible data might get exposed to
 To install _cryptsetup_ on your machine:
 
 ```shell
-# apt-get install cryptsetup
+apt-get install cryptsetup
 ```
 
 To install _cryptsetup_ in your live system, add it to your package-lists:
 
 ```shell
-$ lb config
-$ echo "cryptsetup cryptsetup-initramfs" > config/package-lists/encryption.list.chroot
+lb config
+echo "cryptsetup cryptsetup-initramfs" > config/package-lists/encryption.list.chroot
 ```
 
 Once you have your live system with _cryptsetup_, you basically only need to create a new partition, encrypt it and boot with the persistence and persistence-encryption=luks parameters. We could have already anticipated this step and added the boot parameters following the usual procedure:
 
 ```shell
-$ lb config --bootappend-live "boot=live components persistence persistence-encryption=luks"
+lb config --bootappend-live "boot=live components persistence persistence-encryption=luks"
 ```
 
 Let's go into the details for all of those who are not familiar with encryption. In the following example we are going to use a partition on a usb stick which corresponds to /dev/sdc2. Please be warned that you need to determine which partition is the one you are going to use in your specific case.
@@ -199,49 +199,49 @@ Let's go into the details for all of those who are not familiar with encryption.
 The first step is plugging in your usb stick and determine which device it is. The recommended method of listing devices in _live-manual_ is using ls -l /dev/disk/by-id. After that, create a new partition and then, encrypt it with a passphrase as follows:
 
 ```shell
-# cryptsetup --verify-passphrase luksFormat /dev/sdc2
+cryptsetup --verify-passphrase luksFormat /dev/sdc2
 ```
 
 Then open the luks partition in the virtual device mapper. Use any name you like. We use **live** here as an example:
 
 ```shell
-# cryptsetup luksOpen /dev/sdc2 live
+cryptsetup luksOpen /dev/sdc2 live
 ```
 
 The next step is filling the device with zeros before creating the filesystem:
 
 ```shell
-# dd if=/dev/zero of=/dev/mapper/live
+dd if=/dev/zero of=/dev/mapper/live
 ```
 
 Now, we are ready to create the filesystem. Notice that we are adding the label persistence so that the device is mounted as persistence store at boot time.
 
 ```shell
-# mkfs.ext4 -L persistence /dev/mapper/live
+mkfs.ext4 -L persistence /dev/mapper/live
 ```
 
 To continue with our setup, we need to mount the device, for example in /mnt.
 
 ```shell
-# mount /dev/mapper/live /mnt
+mount /dev/mapper/live /mnt
 ```
 
 And create the persistence.conf file in the root of the partition. This is, as explained before, strictly necessary. See [The persistence.conf file](/chapters/customizing-run-time-behaviours#persistence-conf).
 
 ```shell
-# echo "/ union" > /mnt/persistence.conf
+echo "/ union" > /mnt/persistence.conf
 ```
 
 Then unmount the mount point:
 
 ```shell
-# umount /mnt
+umount /mnt
 ```
 
 And optionally, although it might be a good way of securing the data we have just added to the partition, we can close the device:
 
 ```shell
-# cryptsetup luksClose live
+cryptsetup luksClose live
 ```
 
 Let's summarize the process. So far, we have created an encryption capable live system, which can be copied to a usb stick as explained in [Copying an ISO hybrid image to a USB stick](/chapters/the-basics#copying-iso-hybrid-to-usb). We have also created an encrypted partition, which can be located in the same usb stick to carry it around and we have configured the encrypted partition to be used as persistence store. So now, we only need to boot the live system. At boot time, _live-boot_ will prompt us for the passphrase and will mount the encrypted partition to be used for persistence.

@@ -34,16 +34,16 @@ to support both normal and live installer entries in the bootloader of the same 
 Note that by default, _live-build_ does not include Debian Installer images in the images, it needs to be specifically enabled with lb config. Also, please note that for the "Desktop" installer to work, the kernel of the live system must match the kernel d-i uses for the specified architecture. For example:
 
 ```shell
-$ lb config --debian-installer live
-$ echo debian-installer-launcher >> config/package-lists/my.list.chroot
+lb config --debian-installer live
+echo debian-installer-launcher >> config/package-lists/my.list.chroot
 ```
 
 ## 12.2 Customizing Debian Installer by preseeding
 
-As described in the Debian Installer Manual, Appendix B at ‹[https://www.debian.org/releases/stable/amd64/apb.en.html](https://www.debian.org/releases/stable/amd64/apb.en.html)›, "Preseeding provides a way to set answers to questions asked during the installation process, without having to manually enter the answers while the installation is running. This makes it possible to fully automate most types of installation and even offers some features not available during normal installations." This kind of customization is best accomplished with _live-build_ by placing the configuration in a preseed.cfg file included in config/includes.installer/. For example, to preseed setting the locale to en_US:
+As described in the Debian Installer Manual, Appendix B at [https://www.debian.org/releases/stable/amd64/apb.en.html](https://www.debian.org/releases/stable/amd64/apb.en.html), "Preseeding provides a way to set answers to questions asked during the installation process, without having to manually enter the answers while the installation is running. This makes it possible to fully automate most types of installation and even offers some features not available during normal installations." This kind of customization is best accomplished with _live-build_ by placing the configuration in a preseed.cfg file included in config/includes.installer/. For example, to preseed setting the locale to en_US:
 
 ```shell
-$ echo "d-i debian-installer/locale string en_US" \
+echo "d-i debian-installer/locale string en_US" \
          >> config/includes.installer/preseed.cfg
 ```
 

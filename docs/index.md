@@ -15,14 +15,20 @@ hero:
 features:
   - title: Installation
     details: Install live-build from Debian repositories or build from source.
+    link: /chapters/installation
   - title: The Basics
     details: Download prebuilt images, create ISO hybrids, and boot live systems.
+    link: /chapters/the-basics
   - title: Customization
     details: Customize packages, contents, run-time behaviours, and binary images.
+    link: /chapters/customization-overview
   - title: Examples
     details: Step-by-step tutorials from default images to VNC kiosks.
+    link: /chapters/examples
   - title: Contributing
     details: Help translate and improve the Debian Live Manual.
+    link: /chapters/contributing-to-project
   - title: Coding Style
     details: Guidelines for contributing code to the Debian Live Project.
+    link: /chapters/coding-style
 ---

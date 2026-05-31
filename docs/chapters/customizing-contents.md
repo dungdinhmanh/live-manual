@@ -24,13 +24,13 @@ Chroot local includes can be used to add or replace files in the chroot/Live fil
 To include files, simply add them to your config/includes.chroot directory. This directory corresponds to the root directory / of the live system. For example, to add a file /var/www/index.html in the live system, use:
 
 ```shell
-$ mkdir -p config/includes.chroot/var/www
-$ cp /path/to/my/index.html config/includes.chroot/var/www
+mkdir -p config/includes.chroot/var/www
+cp /path/to/my/index.html config/includes.chroot/var/www
 ```
 
 Your configuration will then have the following layout:
 
-```shell
+```text
 -- config
     [...]
      |-- includes.chroot
@@ -47,7 +47,7 @@ Chroot local includes are installed after package installation so that files ins
 To include material such as documentation or videos on the medium filesystem so that it is accessible immediately upon insertion of the medium without booting the Live system, you can use binary local includes. This works in a similar fashion to chroot local includes. For example, suppose the files ~/video_demo.* are demo videos of the live system described by and linked to by an HTML index page. Simply copy the material to config/includes.binary/ as follows:
 
 ```shell
-$ cp ~/video_demo.* config/includes.binary/
+cp ~/video_demo.* config/includes.binary/
 ```
 
 These files will now appear in the root directory of the live medium.
@@ -74,4 +74,4 @@ To execute commands at boot time, you can supply _live-config_ hooks as explaine
 
 Files in the config/preseed/ directory suffixed with .cfg followed by the stage (.chroot or .binary) are considered to be debconf preseed files and are installed by _live-build_ using debconf-set-selections during the corresponding stage.
 
-For more information about debconf, please see debconf(7) in the _debconf_ package.
+For more information about debconf, please see [debconf(7)](https://manpages.debian.org/debconf.7) in the _debconf_ package.

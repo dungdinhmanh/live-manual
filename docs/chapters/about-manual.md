@@ -5,7 +5,7 @@ slug: about-manual
 
 # About this manual
 
-This manual serves as a single access point to all documentation related to the Debian Live Project and in particular applies to the software produced by the project for the Debian "**bookworm**" release. An up-to-date version can always be found at ‹[https://live-team.pages.debian.net/live-manual/](https://live-team.pages.debian.net/live-manual/)›
+This manual serves as a single access point to all documentation related to the Debian Live Project and in particular applies to the software produced by the project for the Debian "**bookworm**" release. An up-to-date version can always be found at [https://live-team.pages.debian.net/live-manual/](https://live-team.pages.debian.net/live-manual/)
 
 While _live-manual_ is primarily focused on helping you build a live system and not on end-user topics, an end user may find some useful information in these sections: [The Basics](/chapters/the-basics#the-basics) covers downloading prebuilt images and preparing images to be booted from media or the network, either using the web builder or running _live-build_ directly on your system. [Customizing run time behaviours](/chapters/customizing-run-time-behaviours#customizing-run-time-behaviours) describes some options that may be specified at the boot prompt, such as selecting a keyboard layout and locale, and using persistence.
 
@@ -45,7 +45,7 @@ We encourage you to return to more in-depth study of the manual, perhaps next re
 
 -   **Boot parameters**: Parameters that can be entered at the bootloader prompt to influence the kernel or _live-config_.
 
--   **chroot**: The _chroot_ program, chroot(8), enables us to run different instances of the GNU/Linux environment on a single system simultaneously without rebooting.
+-   **chroot**: The _chroot_ program, [chroot(8)](https://manpages.debian.org/chroot.8), enables us to run different instances of the GNU/Linux environment on a single system simultaneously without rebooting.
 
 -   **Binary image**: A file containing the live system, such as live-image-amd64.hybrid.iso or live-image-amd64.img.
 
@@ -94,37 +94,37 @@ This manual is intended as a community project and all proposals for improvement
 In order to make changes to the English manual you have to edit the right files in manual/en/ but prior to the submission of your contribution, please preview your work. To preview the _live-manual_, ensure the packages needed for building it are installed by executing:
 
 ```shell
-# apt-get install make po4a ruby ruby-nokogiri sisu-complete
+apt-get install make po4a ruby ruby-nokogiri sisu-complete
 ```
 
 You may build the _live-manual_ from the top level directory of your Git checkout by executing:
 
 ```shell
-$ make build
+make build
 ```
 
 Since it takes a while to build the manual in all supported languages, authors may find it convenient to use one of the fast proofing shortcuts when reviewing the new documentation they have added to the English manual. Using PROOF=1 builds _live-manual_ in html format, but without the segmented html files, and using PROOF=2 builds _live-manual_ in pdf format, but only the A4 and letter portraits. That is why using either of the PROOF= possibilities can save up a considerable amount of time, e.g:
 
 ```shell
-$ make build PROOF=1
+make build PROOF=1
 ```
 
 When proofing one of the translations it is possible to build only one language by executing, e.g:
 
 ```shell
-$ make build LANGUAGES=de
+make build LANGUAGES=de
 ```
 
 It is also possible to build by document type, e.g:
 
 ```shell
-$ make build FORMATS=pdf
+make build FORMATS=pdf
 ```
 
 Or combine both, e.g:
 
 ```shell
-$ make build LANGUAGES=de FORMATS=html
+make build LANGUAGES=de FORMATS=html
 ```
 
 After revising your work and making sure that everything is fine, do not use make commit unless you are updating translations in the commit, and in that case, do not mix changes to the English manual and translations in the same commit, but use separate commits for each. See the [Translation](/chapters/about-manual#translation) section for more details.

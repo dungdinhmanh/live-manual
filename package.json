@@ -9,10 +9,12 @@
     "convert": "bun run scripts/convert-to-md.ts"
   },
   "devDependencies": {
+    "@types/turndown": "^5.0.6",
     "@vitejs/plugin-vue": "^6.0.7",
     "@vueuse/core": "^14.3.0",
     "glob": "^13.0.6",
     "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
     "vitepress": "^1.6.4"
   }
 }

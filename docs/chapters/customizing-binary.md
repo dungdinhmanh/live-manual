@@ -17,7 +17,7 @@ There are many possibilities when it comes to making changes. For instance, sysl
 
 To modify the boot timeout of a default iso-hybrid image just edit a default **isolinux.cfg** file specifying the timeout in units of 1/10 seconds. A modified **isolinux.cfg** to boot after five seconds would be similar to this:
 
-```shell
+```text
 include menu.cfg
 default vesamenu.c32
 prompt 0

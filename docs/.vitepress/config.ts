@@ -87,11 +87,6 @@ export default defineConfig({
       provider: 'local',
     },
 
-    editLink: {
-      pattern: 'https://salsa.debian.org/live-team/live-manual/-/edit/master/docs/:path',
-      text: 'Edit this page on Salsa',
-    },
-
     lastUpdated: {
       text: 'Last updated',
       formatOptions: { dateStyle: 'medium' },

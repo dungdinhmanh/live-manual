@@ -1,4 +1,5 @@
 import TurndownService from 'turndown';
+import { gfm } from 'turndown-plugin-gfm';
 import { Glob } from 'glob';
 import { writeFileSync, mkdirSync } from 'fs';
 import { basename, dirname, join } from 'path';
@@ -88,7 +89,20 @@ function stripSisuCruft(html: string): string {
           // collapse runs of blank lines inside the block
           .replace(/\n{2,}/g, '\n')
           .replace(/^\s+|\s+$/g, '');
-        return `<pre><code class="language-shell">${body
+
+        // A "command" block has lines that start with a shell prompt ($ or #).
+        // Strip the prompt so commands are copy-paste clean and `#` lines are not
+        // syntax-highlighted as comments. Blocks with no prompt (e.g. ASCII
+        // directory trees, file listings) are tagged `text` so they render as
+        // plain monospace instead of being mis-highlighted as shell.
+        const lines = body.split('\n');
+        const hasPrompt = lines.some(l => /^\s*[$#]\s+/.test(l));
+        const lang = hasPrompt ? 'shell' : 'text';
+        const stripped = hasPrompt
+          ? lines.map(l => l.replace(/^\s*[$#]\s+/, '')).join('\n')
+          : body;
+
+        return `<pre><code class="language-${lang}">${stripped
           .replace(/&/g, '&amp;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;')}</code></pre>`;
@@ -129,6 +143,48 @@ function promoteAdmonitions(md: string): string {
 }
 
 /**
+ * SiSU wraps inline links in guillemets: ‹https://…›, ‹someone@host›. Turndown
+ * leaves the guillemets as literal text around the (already-linkified) URL.
+ * Convert each to a clean Markdown link and drop the guillemets entirely.
+ * Plain bare URLs inside guillemets that Turndown did NOT linkify also get
+ * wrapped. A stray zero-width space (U+200B) sometimes trails the closing ›.
+ */
+function linkifyGuillemets(text: string): string {
+  return (
+    text
+      // ‹[label](url)›  → [label](url)   (Turndown already made the link)
+      .replace(/‹(\[[^\]]*\]\([^)]*\))›​?/g, '$1')
+      // ‹mailto:…› or ‹user@host› bare → mailto link
+      .replace(/‹([\w.+-]+@[\w.-]+\.[a-z]{2,})›​?/gi, '[$1](mailto:$1)')
+      // ‹https://…› / ‹http://…› bare URL → autolink
+      .replace(/‹(https?:\/\/[^\s›]+)›​?/g, '[$1]($1)')
+      // Any remaining guillemet pair: drop the markers, keep inner text.
+      .replace(/‹([^›]*)›​?/g, '$1')
+  );
+}
+
+/**
+ * Turn `name(N)` manpage references into links to manpages.debian.org
+ * (canonical form: https://manpages.debian.org/name.N). Names may be wrapped
+ * in Markdown emphasis from the source (e.g. _live-boot_(7)); the emphasis is
+ * unwrapped into the link text. Skips matches already inside a Markdown link.
+ */
+function linkifyManpages(text: string): string {
+  // Optional surrounding _…_ emphasis, then name(section).
+  return text.replace(
+    /(_?)([a-z][a-z0-9_.+-]*?)\1\((\d)\)/gi,
+    (whole, _emph: string, name: string, section: string, offset: number, src: string) => {
+      // Don't rewrite if this sits inside an existing ](...) link target.
+      const before = src.slice(Math.max(0, offset - 2), offset);
+      if (before.endsWith('](') || before.endsWith('/')) return whole;
+      // manpages.debian.org paths are lowercase.
+      const url = `${name.toLowerCase()}.${section}`;
+      return `[${name}(${section})](https://manpages.debian.org/${url})`;
+    },
+  );
+}
+
+/**
  * Cleanup pass on the Markdown produced by Turndown:
  *  - Belt-and-braces strip of any `[N](#N)` footnote refs that survived.
  *  - Unescape `\_` / `\#` / `\*` that Turndown overzealously inserts in prose
@@ -139,7 +195,12 @@ function tidyMarkdown(md: string): string {
   // Strip footnote ref residue: `[12](#12)`, optionally surrounded by whitespace.
   let out = md.replace(/\s*\[\d+\]\(#\d+\)\s*/g, '\n\n');
 
-  // Unescape outside fenced code blocks.
+  // Drop the empty SiSU navigation-band tables that Turndown passes through as
+  // raw HTML at the top and bottom of every chapter. They carry no content and
+  // would otherwise render as empty bordered boxes. Each is one line in the MD.
+  out = out.replace(/^<table summary="segment navigation[^\n]*<\/table>\s*$/gm, '');
+
+  // Unescape + linkify outside fenced code blocks.
   const parts = out.split(/(```[\s\S]*?```)/g);
   for (let i = 0; i < parts.length; i++) {
     if (i % 2 === 0) {
@@ -151,6 +212,8 @@ function tidyMarkdown(md: string): string {
         .replace(/\\\]/g, ']')
         .replace(/\\--/g, '--')
         .replace(/\\-/g, '-');
+      parts[i] = linkifyGuillemets(parts[i]);
+      parts[i] = linkifyManpages(parts[i]);
     }
   }
   out = parts.join('');
@@ -194,9 +257,10 @@ const td = new TurndownService({
   headingStyle: 'atx',
   codeBlockStyle: 'fenced',
   bulletListMarker: '-',
-  tableEdgeSpaces: false,
-  tables: true,
 });
+// GFM plugin gives us real Markdown tables (the manual has a config-files matrix
+// in "Customizing package installation" that otherwise flattens to a wall of text).
+td.use(gfm);
 
 async function convertAll() {
   mkdirSync(OUT_DIR, { recursive: true });
@@ -255,16 +319,22 @@ hero:
 features:
   - title: Installation
     details: Install live-build from Debian repositories or build from source.
+    link: /chapters/installation
   - title: The Basics
     details: Download prebuilt images, create ISO hybrids, and boot live systems.
+    link: /chapters/the-basics
   - title: Customization
     details: Customize packages, contents, run-time behaviours, and binary images.
+    link: /chapters/customization-overview
   - title: Examples
     details: Step-by-step tutorials from default images to VNC kiosks.
+    link: /chapters/examples
   - title: Contributing
     details: Help translate and improve the Debian Live Manual.
+    link: /chapters/contributing-to-project
   - title: Coding Style
     details: Guidelines for contributing code to the Debian Live Project.
+    link: /chapters/coding-style
 ---
 `;
   writeFileSync(join(OUT_DIR, '..', 'index.md'), homeContent);

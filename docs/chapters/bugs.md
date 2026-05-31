@@ -9,7 +9,7 @@ Live systems are far from being perfect, but we want to make it as close as poss
 
 For the impatient:
 
--   First check whether the bugs has been reported already. You can see the full list of bugs that are assigned to the live-team at ‹[https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org](https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org)›.
+-   First check whether the bugs has been reported already. You can see the full list of bugs that are assigned to the live-team at [https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org](https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org).
 
 -   Before submitting a bug report always try to reproduce the bug with the **most recent versions** of the packages of _live-build_, _live-boot_, _live-config_ and _live-tools_ that you're using.
 
@@ -17,7 +17,7 @@ For the impatient:
 
 ## 14.1 Known issues
 
-Currently known issues are listed in the BTS at ‹[https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org](https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org)›.
+Currently known issues are listed in the BTS at [https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org](https://bugs.debian.org/cgi-bin/pkgreport.cgi?maint=debian-live%40lists.debian.org).
 
 Note: Since Debian **testing** and Debian **unstable** distributions are moving targets, when you specify either of them as the target system distribution, a successful build may not always be possible.
 
@@ -68,7 +68,7 @@ To make the most out of your bug report, we require at least the following infor
 You can generate a log of the build process by using the tee command. We recommend doing this automatically with an auto/build script (see [Managing a configuration](/chapters/managing-a-configuration#managing-a-configuration) for details).
 
 ```shell
-# lb build 2>&1 | tee build.log
+lb build 2>&1 | tee build.log
 ```
 
 At boot time, _live-boot_ and _live-config_ store their logfiles in /var/log/live/. Check them for error messages.
@@ -111,6 +111,6 @@ If a package was successfully installed, but fails while actually running the Li
 
 ## 14.8 Where to report bugs
 
-The Debian Live Project keeps track of all bugs in the Bug Tracking System (BTS). For information on how to use the system, please see ‹[https://bugs.debian.org/](https://bugs.debian.org/)›. You can also submit the bugs by using the reportbug command from the package with the same name.
+The Debian Live Project keeps track of all bugs in the Bug Tracking System (BTS). For information on how to use the system, please see [https://bugs.debian.org/](https://bugs.debian.org/). You can also submit the bugs by using the reportbug command from the package with the same name.
 
 Please note that bugs found in distributions derived from Debian (such as Ubuntu and others) should **not** be reported to the Debian BTS unless they can be also reproduced on a Debian system using official Debian packages.

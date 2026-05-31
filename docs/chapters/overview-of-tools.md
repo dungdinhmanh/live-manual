@@ -34,7 +34,7 @@ As discussed in [live-build](/chapters/overview-of-tools#live-build), the script
 Issuing lb config without any arguments creates the config/ subdirectory which is populated with some default settings in configuration files, and two skeleton trees named auto/ and local/.
 
 ```shell
-$ lb config
+lb config
 [2025-02-15 12:34:56] lb config
 P: Using http proxy: http://127.0.0.1:3142
 P: Creating config tree for a debian/testing/amd64 system
@@ -46,13 +46,13 @@ Using lb config without any arguments would be suitable for users who need a ver
 Normally, you will want to specify some options. For example, to specify which package manager to use while building the image:
 
 ```shell
-$ lb config --apt aptitude
+lb config --apt aptitude
 ```
 
 It is possible to specify many options, such as:
 
 ```shell
-$ lb config --binary-images netboot --bootappend-live "boot=live components hostname=live-host username=live-user" ...
+lb config --binary-images netboot --bootappend-live "boot=live components hostname=live-host username=live-user" ...
 ```
 
 A full list of options is available in the lb_config man page.
@@ -71,7 +71,7 @@ _live-boot_ is a collection of scripts providing hooks for the _initramfs-tools_
 
 At boot time it will look for read-only media containing a /live/ directory where a root filesystem (often a compressed filesystem image like squashfs) is stored. If found, it will create a writable environment, using OverlayFS, for Debian like systems to boot from.
 
-More information on initial ramfs in Debian can be found in the Debian Linux Kernel Handbook at ‹[https://kernel-team.pages.debian.net/kernel-handbook/](https://kernel-team.pages.debian.net/kernel-handbook/)› in the chapter on initramfs.
+More information on initial ramfs in Debian can be found in the Debian Linux Kernel Handbook at [https://kernel-team.pages.debian.net/kernel-handbook/](https://kernel-team.pages.debian.net/kernel-handbook/) in the chapter on initramfs.
 
 ## 5.3 The live-config package
 

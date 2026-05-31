@@ -25,7 +25,7 @@ This chapter documents the coding style used in live systems.
 
 Good:
 
-```shell
+```text
 case "${1}" in
          foo)
                  foobar
@@ -44,7 +44,7 @@ esac
 
 Preferred:
 
-```shell
+```text
 if foo; then
          bar
 fi
@@ -64,7 +64,7 @@ fi
 
 Less ideal:
 
-```shell
+```text
 if [ "${MY_LOCATION_VARIABLE}" = "something" ] && [ -e "${MY_OUTPUT_FILE}" ]; then
          MY_OTHER_VARIABLE="$(some_bin ${FOOBAR} | awk -F_ '{ print $1 }')"
 fi
@@ -72,7 +72,7 @@ fi
 
 Horrible:
 
-```shell
+```text
 if [ "${MY_LOCATION_VARIABLE}" = "something" ] && [ -e "${MY_OUTPUT_FILE}" ] || [ "${MY_LOCATION_VARIABLE}" = "something-else" ] && [ -e "${MY_OUTPUT_FILE_2}" ]; then
          MY_OTHER_VARIABLE="$(some_bin ${FOOBAR} | awk -F_ '{ print $1 }')"
 fi
@@ -82,7 +82,7 @@ fi
 
 Good:
 
-```shell
+```text
 Foo ()
 {
          bar
@@ -91,7 +91,7 @@ Foo ()
 
 Bad (inconsistent with existing style):
 
-```shell
+```text
 Foo () {
          bar
 }
@@ -99,7 +99,7 @@ Foo () {
 
 Awful:
 
-```shell
+```text
 Foo ()
          {
          bar
@@ -126,13 +126,13 @@ Foo ()
 
 Bad:
 
-```shell
+```text
 FOO=bar
 ```
 
 Good:
 
-```shell
+```text
 FOO="bar"
 ```
 
@@ -140,7 +140,7 @@ FOO="bar"
 
 Typically bad:
 
-```shell
+```text
 if [ -f "${FOO}"/foo/"${BAR}"/bar ]; then
          foobar
 fi
@@ -148,7 +148,7 @@ fi
 
 Good:
 
-```shell
+```text
 if [ -f "${FOO}/foo/${BAR}/bar" ]; then
          foobar
 fi
