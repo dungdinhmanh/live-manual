@@ -1,64 +1,40 @@
 ---
-title: Customizing Binary
+title: Customizing the binary image
 slug: customizing-binary
 ---
+
 # Customizing the binary image
 
-[640](#640)
-
-# 11\. Customizing the binary image
-
-[641](#641)
-
-11.1 Bootloaders
-
-[642](#642)
+## 11.1 Bootloaders
 
 _live-build_ uses _syslinux_ and some of its derivatives (depending on the image type) as bootloaders by default. They can be easily customized to suit your needs.
 
-[643](#643)
-
 In order to use a full theme, copy /usr/share/live/build/bootloaders into config/bootloaders and edit the files in there. If you do not want to bother modifying all supported bootloader configurations, only providing a local customized copy of one of the bootloaders, e.g. **isolinux** in config/bootloaders/isolinux is enough too, depending on your use case.
-
-[644](#644)
 
 When modifying one of the default themes, if you want to use a personalized background image that will be displayed together with the boot menu, add a splash.png picture of 640x480 pixels. Then, remove the splash.svg file.
 
-[645](#645)
-
 There are many possibilities when it comes to making changes. For instance, syslinux derivatives are configured by default with a timeout of 0 (zero) which means that they will pause indefinitely at their splash screen until you press a key.
-
-[646](#646)
 
 To modify the boot timeout of a default iso-hybrid image just edit a default **isolinux.cfg** file specifying the timeout in units of 1/10 seconds. A modified **isolinux.cfg** to boot after five seconds would be similar to this:
 
-[647](#647)
+```shell
+include menu.cfg
 
-include menu.cfg  
-default vesamenu.c32  
-prompt 0  
-timeout 50  
+default vesamenu.c32
 
-[648](#648)
+prompt 0
 
-11.2 ISO metadata
+timeout 50
+```
 
-[649](#649)
+## 11.2 ISO metadata
 
 When creating an ISO9660 binary image, you can use the following options to add various textual metadata for your image. This can help you easily identify the version or configuration of an image without booting it.
 
-[650](#650)
+-   LB_ISO_APPLICATION/--iso-application NAME: This should describe the application that will be on the image. The maximum length for this field is 128 characters.
 
--   LB\_ISO\_APPLICATION/--iso-application NAME: This should describe the application that will be on the image. The maximum length for this field is 128 characters.
+-   LB_ISO_PREPARER/--iso-preparer NAME: This should describe the preparer of the image, usually with some contact details. The default for this option is the _live-build_ version you are using, which may help with debugging later. The maximum length for this field is 128 characters.
 
-[651](#651)
+-   LB_ISO_PUBLISHER/--iso-publisher NAME: This should describe the publisher of the image, usually with some contact details. The maximum length for this field is 128 characters.
 
--   LB\_ISO\_PREPARER/--iso-preparer NAME: This should describe the preparer of the image, usually with some contact details. The default for this option is the _live-build_ version you are using, which may help with debugging later. The maximum length for this field is 128 characters.
-
-[652](#652)
-
--   LB\_ISO\_PUBLISHER/--iso-publisher NAME: This should describe the publisher of the image, usually with some contact details. The maximum length for this field is 128 characters.
-
-[653](#653)
-
--   LB\_ISO\_VOLUME/--iso-volume NAME: This should specify the volume ID of the image. This is used as a user-visible label on some platforms such as Windows and Apple Mac OS. The maximum length for this field is 32 characters.
+-   LB_ISO_VOLUME/--iso-volume NAME: This should specify the volume ID of the image. This is used as a user-visible label on some platforms such as Windows and Apple Mac OS. The maximum length for this field is 32 characters.

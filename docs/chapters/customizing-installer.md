@@ -1,87 +1,52 @@
 ---
-title: Customizing Installer
+title: Customizing Debian Installer
 slug: customizing-installer
 ---
+
 # Customizing Debian Installer
-
-[655](#655)
-
-# 12\. Customizing Debian Installer
-
-[656](#656)
 
 Live system images can be integrated with Debian Installer. There are a number of different types of installation, varying in what is included and how the installer operates.
 
-[657](#657)
-
 Please note the careful use of capital letters when referring to the "Debian Installer" in this section - when used like this we refer explicitly to the official installer for the Debian system, not anything else. It is often seen abbreviated to "d-i".
 
-[658](#658)
-
-12.1 Types of Debian Installer
-
-[659](#659)
+## 12.1 Types of Debian Installer
 
 The three main types of installer are:
 
-[660](#660)
-
 **"Normal" Debian Installer**: This is a normal live system image with a separate kernel and initrd which (when selected from the appropriate bootloader) launches into a standard Debian Installer instance, just as if you had downloaded a CD image of Debian and booted it. Images containing a live system and such an otherwise independent installer are often referred to as "combined images".
-
-[661](#661)
 
 On such images, Debian is installed by fetching and installing .deb packages using _debootstrap_, from local media or some network-based network, resulting in a default Debian system being installed to the hard disk.
 
-[662](#662)
-
 This whole process can be preseeded and customized in a number of ways; see the relevant pages in the Debian Installer manual for more information. Once you have a working preseeding file, _live-build_ can automatically put it in the image and enable it for you.
-
-[663](#663)
 
 **"Live" Debian Installer**: This is a live system image with a separate kernel and initrd which (when selected from the appropriate bootloader) launches into an instance of the Debian Installer.
 
-[664](#664)
-
 Installation will proceed in an identical fashion to the "normal" installation described above, but at the actual package installation stage, instead of using _debootstrap_ to fetch and install packages, the live filesystem image is copied to the target. This is achieved with a special udeb called _live-installer_.
-
-[665](#665)
 
 After this stage, the Debian Installer continues as normal, installing and configuring items such as bootloaders and local users, etc.
 
-[666](#666)
-
 **Note:** to support both normal and live installer entries in the bootloader of the same live medium, you must disable _live-installer_ by preseeding live-installer/enable=false.
-
-[667](#667)
 
 **"Desktop" Debian Installer**: Regardless of the type of Debian Installer included, d-i can be launched from the Desktop by clicking on an icon. This is user friendlier in some situations. In order to make use of this, the _debian-installer-launcher_ package needs to be included.
 
-[668](#668)
-
 Note that by default, _live-build_ does not include Debian Installer images in the images, it needs to be specifically enabled with lb config. Also, please note that for the "Desktop" installer to work, the kernel of the live system must match the kernel d-i uses for the specified architecture. For example:
 
-[669](#669)
+```shell
+$ lb config --debian-installer live
 
-$ lb config --debian-installer live  
-$ echo debian-installer-launcher >> config/package-lists/my.list.chroot  
+$ echo debian-installer-launcher >> config/package-lists/my.list.chroot
+```
 
-[670](#670)
+## 12.2 Customizing Debian Installer by preseeding
 
-12.2 Customizing Debian Installer by preseeding
+As described in the Debian Installer Manual, Appendix B at ‹[https://www.debian.org/releases/stable/amd64/apb.en.html](https://www.debian.org/releases/stable/amd64/apb.en.html)›, "Preseeding provides a way to set answers to questions asked during the installation process, without having to manually enter the answers while the installation is running. This makes it possible to fully automate most types of installation and even offers some features not available during normal installations." This kind of customization is best accomplished with _live-build_ by placing the configuration in a preseed.cfg file included in config/includes.installer/. For example, to preseed setting the locale to en_US:
 
-[671](#671)
+```shell
+$ echo "d-i debian-installer/locale string en_US" \
 
-As described in the Debian Installer Manual, Appendix B at ‹›, "Preseeding provides a way to set answers to questions asked during the installation process, without having to manually enter the answers while the installation is running. This makes it possible to fully automate most types of installation and even offers some features not available during normal installations." This kind of customization is best accomplished with _live-build_ by placing the configuration in a preseed.cfg file included in config/includes.installer/. For example, to preseed setting the locale to en\_US:
+         >> config/includes.installer/preseed.cfg
+```
 
-[672](#672)
-
-$ echo "d-i debian-installer/locale string en\_US" \\  
-         >> config/includes.installer/preseed.cfg  
-
-[673](#673)
-
-12.3 Customizing Debian Installer content
-
-[674](#674)
+## 12.3 Customizing Debian Installer content
 
 For experimental or debugging purposes, you might want to include locally built d-i component udeb packages. Place these in config/packages.binary/ to include them in the image. Additional or replacement files and directories may be included in the installer initrd as well, in a similar fashion to [Live/chroot local includes](/chapters/customizing-contents#live-chroot-local-includes), by placing the material in config/includes.installer/.

@@ -11,44 +11,117 @@ function slugFromFilename(filename: string): string {
 }
 
 function rewriteLinks(html: string): string {
-  return html
-    .replace(/href="([^"]*)\.en\.html([^"]*)"/g, (_m, path, anchor) => {
-      const slug = slugFromFilename(path);
-      return `href="/chapters/${slug}${anchor}"`;
-    })
-    .replace(/name="([^"]+)"/g, 'id="$1"')
-    .replace(/id="([^"]+)"/g, (_m, id) => `id="${id}"`);
+  // Only rewrite same-directory references (no scheme, no slashes) — leave
+  // absolute URLs like https://www.debian.org/.../ch04s05.en.html alone.
+  return html.replace(/href="([^"\/\s]+)\.en\.html([^"]*)"/g, (_m, path, anchor) => {
+    const slug = slugFromFilename(path);
+    return `href="/chapters/${slug}${anchor}"`;
+  });
 }
 
+/**
+ * Strip SiSU navigation / chrome and pre-shape the body so Turndown
+ * produces clean Markdown:
+ *  - Remove <label class="ocn">…</label> footnote refs (turns into stray
+ *    `[N](#N)` otherwise).
+ *  - Drop duplicate "Debian Live Manual" + section-title <h1 class="tiny">.
+ *  - Drop redundant "N. Title" <h1 class="norm">.
+ *  - Promote "N.M Title" / "N.M.K Title" paragraphs (class="bold") to <h2>/<h3>.
+ *  - Wrap <p class="code">…</p> as <pre><code> so Turndown emits fenced blocks.
+ *  - Strip various other SiSU table/form/footer cruft.
+ */
 function stripSisuCruft(html: string): string {
-  return html
-    .replace(/<table summary="table of contents segment navigation band"[^>]*>[\s\S]*?<\/table>\s*<p>\s*/gm, '')
-    .replace(/<table summary="segment navigation available documents types:[^>]*>[\s\S]*?<\/table>/gm, '')
-    .replace(/<table summary="segment instrument cover band[^>]*>[\s\S]*?<\/table>/gm, '')
-    .replace(/<table summary="home button[^>]*>[\s\S]*?<\/table>/gm, '')
-    .replace(/<p class="tiny_left"><a[^>]*>[^<]*<\/a><\/p>/g, '')
-    .replace(/<!-- SiSU Search -->[\s\S]*?<!-- SiSU Search -->/g, '')
-    .replace(/<form method="get"[^>]*>[\s\S]*?<\/form>/g, '')
-    .replace(/<a href="[^"]*\.en\.html"[^>]*>[\s\S]*?<\/a>/g, '')
-    .replace(/<a name="\d+"><\/a>/g, '')
-    .replace(/<a name="[^"]*"\s*id="[^"]*"><\/a>/g, '')
-    .replace(/<a name="[^"]*"><\/a>/g, '')
-    .replace(/\[(\d+)\]\(#\s*\d+\s*\)/g, '')  // strip leftover footnote anchors like [4](#4)
-    .replace(/<div class="main_column">/g, '')
-    .replace(/<\/div>\s*<\/div>\s*<\/div>\s*<\/body>\s*<\/html>/g, '\n</body></html>')
-    .replace(/<\/div>\s*<\/div>\s*<\/div>\s*$/g, '')
-    .replace(/<p>\s*<\/p>/g, '')
-    .replace(/<p>&nbsp;<\/p>/g, '')
-    .replace(/<a name="(top|bottom|end)"[^>]*><\/a>/g, '')
-    .replace(/<\/?font[^>]*>/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return (
+    html
+      // SiSU nav tables
+      .replace(/<table summary="table of contents segment navigation band"[^>]*>[\s\S]*?<\/table>\s*<p>\s*/gm, '')
+      .replace(/<table summary="segment navigation available documents types:[^>]*>[\s\S]*?<\/table>/gm, '')
+      .replace(/<table summary="segment instrument cover band[^>]*>[\s\S]*?<\/table>/gm, '')
+      .replace(/<table summary="home button[^>]*>[\s\S]*?<\/table>/gm, '')
+      // OCN footnote ref labels (<label class="ocn"><a href="#N" class="lnkocn">N</a></label>)
+      .replace(/<label class="ocn">[\s\S]*?<\/label>/g, '')
+      // Internal anchor placeholders
+      .replace(/<a name="\d+"[^>]*><\/a>/g, '')
+      .replace(/<a name="[^"]*"\s*id="[^"]*"><\/a>/g, '')
+      .replace(/<a name="[^"]*"[^>]*><\/a>/g, '')
+      .replace(/<a id="h?[^"]*"[^>]*><\/a>/g, '')
+      // Duplicate top-of-file <h1 class="tiny"> blocks (book title + section title)
+      .replace(/<h1 class="tiny">[\s\S]*?<\/h1>/g, '')
+      // Redundant "N. Section title" big H1
+      .replace(/<h1 class="norm"[^>]*>[\s\S]*?<\/h1>/g, '')
+      // Section sub-heading paragraphs: <p class="bold" id="N">N.M.K Title</p>
+      // Use indentation hint (number of dots) to choose h2/h3.
+      .replace(
+        /<p class="bold"[^>]*>\s*((?:\d+\.)+\d+)\s+([^<]+?)\s*<\/p>/g,
+        (_m, num: string, title: string) => {
+          const depth = (num.match(/\./g) ?? []).length; // 1 → h2, 2 → h3, …
+          const tag = depth >= 2 ? 'h3' : 'h2';
+          return `<${tag}>${num} ${title.trim()}</${tag}>`;
+        },
+      )
+      // Code paragraphs: <p class="code" id="N">…<br>…</p> → <pre><code>…</code></pre>
+      .replace(/<p class="code"[^>]*>([\s\S]*?)<\/p>/g, (_m, inner: string) => {
+        const body = inner
+          .replace(/<br\s*\/?>/g, '\n')
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/<[^>]+>/g, '') // drop any stray inline tags
+          .replace(/^\s+|\s+$/g, '');
+        return `<pre><code class="language-shell">${body
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')}</code></pre>`;
+      })
+      // SiSU search + tiny page-nav links + arrow image links
+      .replace(/<p class="tiny_left"><a[^>]*>[^<]*<\/a><\/p>/g, '')
+      .replace(/<!-- SiSU Search -->[\s\S]*?<!-- SiSU Search -->/g, '')
+      .replace(/<form method="get"[^>]*>[\s\S]*?<\/form>/g, '')
+      // Anchor tags wrapping the SiSU TOC / next / prev arrow images
+      .replace(/<a[^>]*>\s*<img[^>]*_sisu\/image_sys\/[^>]*>\s*<\/a>/g, '')
+      .replace(/<img[^>]*_sisu\/image_sys\/[^>]*>/g, '')
+      // Wrapper divs / empty paragraphs
+      .replace(/<div class="main_column">/g, '')
+      .replace(/<\/div>\s*<\/div>\s*<\/div>\s*<\/body>\s*<\/html>/g, '\n</body></html>')
+      .replace(/<\/div>\s*<\/div>\s*<\/div>\s*$/g, '')
+      .replace(/<p>\s*<\/p>/g, '')
+      .replace(/<p>&nbsp;<\/p>/g, '')
+      .replace(/<a name="(top|bottom|end)"[^>]*><\/a>/g, '')
+      .replace(/<\/?font[^>]*>/g, '')
+      .trim()
+  );
 }
 
-function slugToTitleCase(slug: string): string {
-  return slug
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
+/**
+ * Cleanup pass on the Markdown produced by Turndown:
+ *  - Belt-and-braces strip of any `[N](#N)` footnote refs that survived.
+ *  - Unescape `\_` / `\#` / `\*` that Turndown overzealously inserts in prose
+ *    (code fences are skipped — we only touch text outside ``` blocks).
+ *  - Collapse runs of 3+ blank lines into 2.
+ */
+function tidyMarkdown(md: string): string {
+  // Strip footnote ref residue: `[12](#12)`, optionally surrounded by whitespace.
+  let out = md.replace(/\s*\[\d+\]\(#\d+\)\s*/g, '\n\n');
+
+  // Unescape outside fenced code blocks.
+  const parts = out.split(/(```[\s\S]*?```)/g);
+  for (let i = 0; i < parts.length; i++) {
+    if (i % 2 === 0) {
+      parts[i] = parts[i]
+        .replace(/\\_/g, '_')
+        .replace(/\\#/g, '#')
+        .replace(/\\\*/g, '*')
+        .replace(/\\\[/g, '[')
+        .replace(/\\\]/g, ']');
+    }
+  }
+  out = parts.join('');
+
+  // Collapse 3+ blank lines.
+  out = out.replace(/\n{3,}/g, '\n\n');
+
+  return out.trim() + '\n';
 }
 
 function extractTitle(html: string): string {
@@ -58,10 +131,21 @@ function extractTitle(html: string): string {
   const parts = full.split(/\s*-\s*Debian Live Manual\s*/i);
   const title = parts[0].trim();
   if (!title || title.toLowerCase() === 'untitled') return 'Untitled';
-  // If title looks like a raw slug (all lowercase, contains hyphens but no spaces),
-  // convert to title case
-  if (title === title.toLowerCase() && title.includes('-')) return slugToTitleCase(title);
   return title;
+}
+
+/**
+ * The HTML's <h1 class="tiny"> section title (e.g. "About this manual") is
+ * the canonical page heading; <title> may be a slugged ASCII fallback. Prefer
+ * the section <h1> if we can find one before we strip the <h1>s.
+ */
+function extractSectionH1(html: string): string | null {
+  // Match the second <h1 class="tiny"> (first is "Debian Live Manual").
+  const all = [...html.matchAll(/<h1 class="tiny">\s*([\s\S]*?)\s*<\/h1>/g)];
+  if (all.length < 2) return null;
+  const raw = all[1][1].trim();
+  if (!raw || raw.toLowerCase() === 'debian live manual') return null;
+  return raw;
 }
 
 const td = new TurndownService({
@@ -79,11 +163,12 @@ async function convertAll() {
   const files = Array.from(g);
   const chapterFiles = files.filter(f => !f.includes('/index.') && !f.includes('/toc.'));
 
-  const slugToTitle: Record<string, string> = {};
-
   for (const file of chapterFiles) {
     const slug = slugFromFilename(file);
     const raw = await Bun.file(file).text();
+
+    const sectionH1 = extractSectionH1(raw);
+    const title = sectionH1 ?? extractTitle(raw);
 
     const cleaned = stripSisuCruft(raw);
     const linked = rewriteLinks(cleaned);
@@ -91,22 +176,18 @@ async function convertAll() {
     const bodyMatch = linked.match(/<body[^>]*>([\s\S]*)<\/body>/);
     if (!bodyMatch) continue;
 
-    const bodyContent = bodyMatch[1].replace(/<h1[^>]*>\s*Debian Live Manual\s*<\/h1>/i, '');
-    const markdown = td.turndown(bodyContent);
-    const title = extractTitle(raw);
+    const markdown = td.turndown(bodyMatch[1]);
+    const tidied = tidyMarkdown(markdown);
 
-    slugToTitle[slug] = title;
+    const frontmatter = ['---', `title: ${title}`, `slug: ${slug}`, '---', '', ''].join('\n');
 
-    const frontmatter = [
-      '---',
-      `title: ${title}`,
-      `slug: ${slug}`,
-      '---',
-      '',
-    ].join('\n');
+    // Inject a single canonical H1 at the top so every page has consistent
+    // structure regardless of whether the source contained one.
+    const hasLeadingH1 = /^#\s+\S/.test(tidied);
+    const body = hasLeadingH1 ? tidied : `# ${title}\n\n${tidied}`;
 
     const outPath = join(OUT_DIR, `${slug}.md`);
-    writeFileSync(outPath, frontmatter + markdown + '\n');
+    writeFileSync(outPath, frontmatter + body);
     console.log(`✓ ${slug}.md`);
   }
 

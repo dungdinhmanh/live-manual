@@ -1,53 +1,28 @@
 ---
-title: Customization Overview
+title: Customizing contents
 slug: customization-overview
 ---
+
 # Customizing contents
-
-[354](#354)
-
-# 7\. Customization overview
-
-[355](#355)
 
 This chapter gives an overview of the various ways in which you may customize a live system.
 
-[356](#356)
-
-7.1 Build time vs. boot time configuration
-
-[357](#357)
+## 7.1 Build time vs. boot time configuration
 
 Live system configuration options are divided into build-time options which are options that are applied at build time and boot-time options which are applied at boot time. Boot-time options are further divided into those occurring early in the boot, applied by the _live-boot_ package, and those that happen later in the boot, applied by _live-config_. Any boot-time option may be modified by the user by specifying it at the boot prompt. The image may also be built with default boot parameters so users can normally just boot directly to the live system without specifying any options when all of the defaults are suitable. In particular, the argument to lb --bootappend-live consists of any default kernel command line options for the Live system, such as persistence, keyboard layouts, or timezone. See [Customizing locale and language](/chapters/customizing-run-time-behaviours#customizing-locale-and-language), for example.
 
-[358](#358)
-
 Build-time configuration options are described in the lb config man page. Boot-time options are described in the man pages for _live-boot_ and _live-config_. Although the _live-boot_ and _live-config_ packages are installed within the live system you are building, it is recommended that you also install them on your build system for easy reference when you are working on your configuration. It is safe to do so, as none of the scripts contained within them are executed unless the system is configured as a live system.
 
-[359](#359)
-
-7.2 Stages of the build
-
-[360](#360)
+## 7.2 Stages of the build
 
 The build process is divided into stages, with various customizations applied in sequence in each. The first stage to run is the **bootstrap** stage. This is the initial phase of populating the chroot directory with packages to make a barebones Debian system. This is followed by the **chroot** stage, which completes the construction of chroot directory, populating it with all of the packages listed in the configuration, along with any other materials. Most customization of content occurs in this stage. The final stage of preparing the live image is the **binary** stage, which builds a bootable image, using the contents of the chroot directory to construct the root filesystem for the Live system, and including the installer and any other additional material on the target medium outside of the Live system's filesystem. After the live image is built, if enabled, the source tarball is built in the **source** stage.
 
-[361](#361)
-
 Within each of these stages, there is a particular sequence in which commands are applied. These are arranged in such a way as to ensure customizations can be layered in a reasonable fashion. For example, within the **chroot** stage, preseeds are applied before any packages are installed, packages are installed before any locally included files are copied, and hooks are run later, after all of the materials are in place.
 
-[362](#362)
-
-7.3 Supplement lb config with files
-
-[363](#363)
+## 7.3 Supplement lb config with files
 
 Although lb config creates a skeletal configuration in the config/ directory, to accomplish your goals, you may need to provide additional files in subdirectories of config/. Depending on where the files are stored in the configuration, they may be copied into the live system's filesystem or into the binary image filesystem, or may provide build-time configurations of the system that would be cumbersome to pass as command-line options. You may include things such as custom lists of packages, custom artwork, or hook scripts to run either at build time or at boot time, boosting the already considerable flexibility of debian-live with code of your own.
 
-[364](#364)
-
-7.4 Customization tasks
-
-[365](#365)
+## 7.4 Customization tasks
 
 The following chapters are organized by the kinds of customization task users typically perform: [Customizing package installation](/chapters/customizing-package-installation#customizing-package-installation), [Customizing contents](/chapters/customizing-contents#customizing-contents) and [Customizing locale and language](/chapters/customizing-run-time-behaviours#customizing-locale-and-language) cover just a few of the things you might want to do.

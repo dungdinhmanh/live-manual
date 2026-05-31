@@ -1,431 +1,234 @@
 ---
-title: Style Guide
+title: Style guide
 slug: style-guide
 ---
+
 # Style guide
 
-[896](#896)
-
-# 17\. Style guide
-
-[897](#897)
-
-17.1 Guidelines for authors
-
-[898](#898)
+## 17.1 Guidelines for authors
 
 This section deals with some general considerations to be taken into account when writing technical documentation for _live-manual_. They are divided into linguistic features and recommended procedures.
 
-[899](#899)
-
 **Note:** Authors should first read [Contributing to this document](/chapters/about-manual#how-to-contribute)
 
-[900](#900)
-
-17.1.1 Linguistic features
-
-[901](#901)
+### 17.1.1 Linguistic features
 
 -   _Use plain English_
 
-[902](#902)
-
 Keep in mind that a high percentage of your readers are not native speakers of English. So as a general rule try to use short, meaningful sentences, followed by a full stop.
-
-[903](#903)
 
 This does not mean that you have to use a simplistic, naive style. It is a suggestion to try to avoid, as much as possible, complex subordinate sentences that make the text difficult to understand for non-native speakers of English.
 
-[904](#904)
-
 -   _Variety of English_
-
-[905](#905)
 
 The most widely spread varieties of English are British and American so it is very likely that most authors will use either one or the other. In a collaborative environment, the ideal variety would be "International English" but it is very difficult, not to say impossible, to decide on which variety among all the existing ones, is the best to use.
 
-[906](#906)
-
 We expect that different varieties may mix without creating misunderstandings but in general terms you should try to be coherent and before deciding on using British, American or any other English flavour at your discretion, please take a look at how other people write and try to imitate them.
-
-[907](#907)
 
 -   _Be balanced_
 
-[908](#908)
-
 Do not be biased. Avoid including references to ideologies completely unrelated to _live-manual_. Technical writing should be as neutral as possible. It is in the very nature of scientific writing.
-
-[909](#909)
 
 -   _Be politically correct_
 
-[910](#910)
-
 Try to avoid sexist language as much as possible. If you need to make references to the third person singular preferably use "they" rather than "he" or "she" or awkward inventions such as "s/he", "s(he)" and the like.
-
-[911](#911)
 
 -   _Be concise_
 
-[912](#912)
-
 Go straight to the point and do not wander around aimlessly. Give as much information as necessary but do not give more information than necessary, this is to say, do not explain unnecessary details. Your readers are intelligent. Presume some previous knowledge on their part.
-
-[913](#913)
 
 -   _Minimize translation work_
 
-[914](#914)
-
 Keep in mind that whatever you write will have to be translated into several other languages. This implies that a number of people will have to do an extra work if you add useless or redundant information.
-
-[915](#915)
 
 -   _Be coherent_
 
-[916](#916)
-
 As suggested before, it is almost impossible to standardize a collaborative document into a perfectly unified whole. However, every effort on your side to write in a coherent way with the rest of the authors will be appreciated.
-
-[917](#917)
 
 -   _Be cohesive_
 
-[918](#918)
-
 Use as many text-forming devices as necessary to make your text cohesive and unambiguous. (Text-forming devices are linguistic markers such as connectors).
-
-[919](#919)
 
 -   _Be descriptive_
 
-[920](#920)
-
 It is preferable to describe the point in one or several paragraphs than merely using a number of sentences in a typical "changelog" style. Describe it! Your readers will appreciate it.
-
-[921](#921)
 
 -   _Dictionary_
 
-[922](#922)
-
 Look up the meaning of words in a dictionary or encyclopedia if you do not know how to express certain concepts in English. But keep in mind that a dictionary can either be your best friend or can turn into your worst enemy if you do not know how to use it correctly.
-
-[923](#923)
 
 English has the largest vocabulary that exists (with over one million words). Many of these words are borrowings from other languages. When looking up the meaning of words in a bilingual dictionary the tendency of a non-native speaker of English is to choose the one that sounds more similar in their mother tongue. This often turns into an excessively formal discourse which does not sound quite natural in English.
 
-[924](#924)
-
 As a general rule, if a concept can be expressed using different synonyms, it is a good advice to choose the first word proposed by the dictionary. If in doubt, choosing words of Germanic origin (Usually monosyllabic words) is often the right thing to do. Be warned that these two techniques might produce a rather informal discourse but at least your choice of words will be of wide use and generally accepted.
-
-[925](#925)
 
 Using a dictionary of collocations is recommended. They are extremely helpful when it comes to know which words usually occur together.
 
-[926](#926)
-
 Again it is a good practice to learn from the work of others. Using a search engine to check how other authors use certain expressions may help a lot.
-
-[927](#927)
 
 -   _False friends, idioms and other idiomatic expressions_
 
-[928](#928)
-
 Watch out for false friends. No matter how proficient you are in a foreign language you cannot help falling from time to time in the trap of the so called "false friends", words that look similar in two languages but whose meanings or uses might be completely different.
-
-[929](#929)
 
 Try to avoid idioms as much as possible. "Idioms" are expressions that may convey a completely different meaning from what their individual words seem to mean. Sometimes, idioms might be difficult to understand even for native speakers of English!
 
-[930](#930)
-
 -   _Avoid slang, abbreviations, contractions..._
-
-[931](#931)
 
 Even though you are encouraged to use plain, everyday English, technical writing belongs to the formal register of the language.
 
-[932](#932)
-
 Try to avoid slang, unusual abbreviations that are difficult to understand and above all contractions that try to imitate the spoken language. Not to mention typical irc and family friendly expressions.
 
-[933](#933)
-
-17.1.2 Procedures
-
-[934](#934)
+### 17.1.2 Procedures
 
 -   _Test before write_
 
-[935](#935)
-
 It is important that authors test their examples before adding them to _live-manual_ to ensure that everything works as described. Testing on a clean chroot or VM can be a good starting point. Besides, it would be ideal if the tests were then carried out on different machines with different hardware to spot possible problems that may arise.
-
-[936](#936)
 
 -   _Examples_
 
-[937](#937)
-
 When providing an example try to be as specific as you can. An example is, after all, just an example.
-
-[938](#938)
 
 It is often better to use a line that only applies to a specific case than using abstractions that may confuse your readers. In this case you can provide a brief explanation of the effects of the proposed example.
 
-[939](#939)
-
 There may be some exceptions when the example suggests using some potentially dangerous commands that, if misused, may cause data loss or other similar undesirable effects. In this case you should provide a thorough explanation of the possible side effects.
-
-[940](#940)
 
 -   _External links_
 
-[941](#941)
-
 Links to external sites should only be used when the information on those sites is crucial when it comes to understanding a special point. Even so, try to use links to external sites as sparsely as possible. Internet links are likely to change from time to time resulting in broken links and leaving your arguments in an incomplete state.
-
-[942](#942)
 
 Besides, people who read the manual offline will not have the chance to follow those links.
 
-[943](#943)
-
 -   _Avoid branding and things that violate the license under which the manual is published_
-
-[944](#944)
 
 Try to avoid branding as much as possible. Keep in mind that other downstream projects might make use of the documentation you write. So you are complicating things for them if you add certain specific material.
 
-[945](#945)
-
 _live-manual_ is licensed under the GNU GPL. This has a number of implications that apply to the distribution of the material (of any kind, including copyrighted graphics or logos) that is published with it.
-
-[946](#946)
 
 -   _Write a first draft, revise, edit, improve, redo if necessary_
 
-[947](#947)
-
 \- Brainstorm!. You need to organize your ideas first in a logical sequence of events.
-
-[948](#948)
 
 \- Once you have somehow organized those ideas in your mind write a first draft.
 
-[949](#949)
-
 \- Revise grammar, syntax and spelling. Keep in mind that the proper names of the releases, such as **trixie** or **sid**, should not be capitalized when referred to as code names. In order to check the spelling you can run the "spell" target. i.e. make spell
-
-[950](#950)
 
 \- Improve your statements and redo any part if necessary.
 
-[951](#951)
-
 -   _Chapters_
-
-[952](#952)
 
 Use the conventional numbering system for chapters and subtitles. e.g. 1, 1.1, 1.1.1, 1.1.2 ... 1.2, 1.2.1, 1.2.2 ... 2, 2.1 ... and so on. See markup below.
 
-[953](#953)
-
 If you have to enumerate a series of steps or stages in your description, you can also use ordinal numbers: First, second, third ... or First, Then, After that, Finally ... Alternatively you can use bulleted items.
 
-[954](#954)
-
 -   _Markup_
-
-[955](#955)
 
 And last but not least, _live-manual_ uses [SiSU](http://www.sisudoc.org/) to process the text files and produce a multiple format output. It is recommended to take a look at [SiSU's manual](http://www.sisudoc.org/manual/en/html/sisu_manual/markup.html) to get familiar with its markup, or else type:
 
-[956](#956)
-
-$ sisu --help markup  
-
-[957](#957)
+```shell
+$ sisu --help markup
+```
 
 Here are some markup examples that may prove useful:
 
-[958](#958)
-
 \- For emphasis/bold text:
 
-[959](#959)
-
-\*{foo}\* or !{foo}!  
-
-[960](#960)
+```shell
+*{foo}* or !{foo}!
+```
 
 produces: **foo** or **foo**. Use it to emphasize certain key words.
 
-[961](#961)
-
 \- For italics:
 
-[962](#962)
-
-/{foo}/  
-
-[963](#963)
+```shell
+/{foo}/
+```
 
 produces: _foo_. Use them e.g. for the names of Debian packages.
 
-[964](#964)
-
 \- For monospace:
 
-[965](#965)
-
-#{foo}#  
-
-[966](#966)
+```shell
+#{foo}#
+```
 
 produces: foo. Use it e.g. for the names of commands. And also to highlight some key words or things like paths.
 
-[967](#967)
-
 \- For code blocks:
 
-[968](#968)
+```shell
+code{
 
-code{  
-  
-  $ foo  
-  # bar  
-  
-}code  
+  $ foo
 
-[969](#969)
+  # bar
+
+}code
+```
 
 produces:
 
-[970](#970)
+```shell
+$ foo
 
-$ foo  
-\# bar  
-
-[971](#971)
+# bar
+```
 
 Use code{ to open and }code to close the tags. It is important to remember to leave a space at the beginning of each line of code.
 
-[972](#972)
-
-17.2 Guidelines for translators
-
-[973](#973)
+## 17.2 Guidelines for translators
 
 This section deals with some general considerations to be taken into account when translating the contents of _live-manual_.
 
-[974](#974)
-
 As a general recommendation, translators should have read and understood the translation rules that apply to their specific languages. Usually, translation groups and mailing lists provide information on how to produce translated work that complies with Debian quality standards.
-
-[975](#975)
 
 **Note:** Translators should also read [Contributing to this document](/chapters/about-manual#how-to-contribute). In particular the section [Translation](/chapters/about-manual#translation)
 
-[976](#976)
-
-17.2.1 Translation hints
-
-[977](#977)
+### 17.2.1 Translation hints
 
 -   _Comments_
 
-[978](#978)
-
 The role of the translator is to convey as faithfully as possible the meaning of words, sentences, paragraphs and texts as written by the original authors into their target language.
-
-[979](#979)
 
 So they should refrain from adding personal comments or extra bits of information of their own. If they want to add a comment for other translators working on the same documents, they can leave it in the space reserved for that. That is, the header of the strings in the **po** files preceded by a number sign **#**. Most graphical translation programs can automatically handle those types of comments.
 
-[980](#980)
-
 -   _TN, Translator's Note_
-
-[981](#981)
 
 It is perfectly acceptable however, to include a word or an expression in brackets in the translated text if, and only if, that makes the meaning of a difficult word or expression clearer to the reader. Inside the brackets the translator should make evident that the addition was theirs using the abbreviation "TN" or "Translator's Note".
 
-[982](#982)
-
 -   _Impersonal sentences_
-
-[983](#983)
 
 Documents written in English make an extensive use of the impersonal form "you". In some other languages that do not share this characteristic, this might give the false impression that the original texts are directly addressing the reader when they are actually not doing so. Translators must be aware of that fact and reflect it in their language as accurately as possible.
 
-[984](#984)
-
 -   _False friends_
-
-[985](#985)
 
 The trap of "false friends" explained before especially applies to translators. Double check the meaning of suspicious false friends if in doubt.
 
-[986](#986)
-
 -   _Markup_
-
-[987](#987)
 
 Translators working initially with **pot** files and later on with **po** files will find many markup features in the strings. They can translate the text anyway, as long as it is translatable, but it is extremely important that they use exactly the same markup as the original English version.
 
-[988](#988)
-
 -   _Code blocks_
-
-[989](#989)
 
 Even though the code blocks are usually untranslatable, including them in the translation is the only way to score a 100% complete translation. And even though it means more work at first because it might require the intervention of the translators if the code changes, it is the best way, in the long run, to identify what has already been translated and what has not when checking the integrity of the .po files.
 
-[990](#990)
-
 -   _Newlines_
-
-[991](#991)
 
 The translated texts need to have the exact same newlines as the original texts. Be careful to press the "Enter" key or type **\\n** if they appear in the original files. These newlines often appear, for instance, in the code blocks.
 
-[992](#992)
-
 Make no mistake, this does not mean that the translated text needs to have the same length as the English version. That is nearly impossible.
-
-[993](#993)
 
 -   _Untranslatable strings_
 
-[994](#994)
-
 Translators should never translate:
-
-[995](#995)
 
 \- The code names of releases (which should be written in lowercase)
 
-[996](#996)
-
 \- The names of programs
-
-[997](#997)
 
 \- The commands given as examples
 
-[998](#998)
-
 \- Metadata (often between colons **:metadata:**)
 
-[999](#999)
-
 \- Links
-
-[1000](#1000)
 
 \- Paths
