@@ -71,7 +71,6 @@ Burning an ISO image is easy. Just install _xorriso_ and use it from the command
 
 ```shell
 # apt-get install xorriso
-
 $ xorriso -as cdrecord -v dev=/dev/sr0 blank=as_needed live-image-amd64.hybrid.iso
 ```
 
@@ -83,7 +82,6 @@ Once you are certain you have the correct device name, use the cp command to cop
 
 ```shell
 $ cp live-image-amd64.hybrid.iso ${USBSTICK}
-
 $ sync
 ```
 
@@ -159,7 +157,6 @@ In order to test the ISO with _virtualbox_:
 
 ```shell
 # apt-get install virtualbox virtualbox-qt virtualbox-dkms
-
 $ virtualbox
 ```
 
@@ -179,7 +176,7 @@ $ lb config --linux-packages "linux-image linux-headers"
 
 ## 4.6 Building and using an HDD image
 
-Building an HDD image is similar to an ISO hybrid one in all respects except you specify \-b hdd and the resulting filename is live-image-amd64.img which cannot be burnt to optical media. It is suitable for booting from USB sticks, USB hard drives, and various other portable storage devices. Normally, an ISO hybrid image can be used for this purpose instead, but if you have a BIOS which does not handle hybrid images properly, you need an HDD image.
+Building an HDD image is similar to an ISO hybrid one in all respects except you specify -b hdd and the resulting filename is live-image-amd64.img which cannot be burnt to optical media. It is suitable for booting from USB sticks, USB hard drives, and various other portable storage devices. Normally, an ISO hybrid image can be used for this purpose instead, but if you have a BIOS which does not handle hybrid images properly, you need an HDD image.
 
 **Note:** if you created an ISO hybrid image with the previous example, you will need to clean up your working directory with the lb clean command (see [The lb clean command](/chapters/overview-of-tools#lb-clean)):
 
@@ -227,7 +224,7 @@ Run the lb config command as follows to configure your image for netbooting:
 $ lb config -b netboot --net-root-path "/srv/debian-live" --net-root-server "192.168.0.2"
 ```
 
-In contrast with the ISO and HDD images, netbooting does not, itself, serve the filesystem image to the client, so the files must be served via NFS. Different network filesystems can be chosen through lb config. The \--net-root-path and \--net-root-server options specify the location and server, respectively, of the NFS server where the filesystem image will be located at boot time. Make sure these are set to suitable values for your network and server.
+In contrast with the ISO and HDD images, netbooting does not, itself, serve the filesystem image to the client, so the files must be served via NFS. Different network filesystems can be chosen through lb config. The --net-root-path and --net-root-server options specify the location and server, respectively, of the NFS server where the filesystem image will be located at boot time. Make sure these are set to suitable values for your network and server.
 
 Now build the image with the lb build command:
 
@@ -249,33 +246,19 @@ Here is an example for inspiration, written for the ISC DHCP server isc-dhcp-ser
 
 ```shell
 # /etc/dhcp/dhcpd.conf - configuration file for isc-dhcp-server
-
 ddns-update-style none;
-
 option domain-name "example.org";
-
 option domain-name-servers ns1.example.org, ns2.example.org;
-
 default-lease-time 600;
-
 max-lease-time 7200;
-
 log-facility local7;
-
 subnet 192.168.0.0 netmask 255.255.255.0 {
-
    range 192.168.0.1 192.168.0.254;
-
    filename "pxelinux.0";
-
    next-server 192.168.0.2;
-
    option subnet-mask 255.255.255.0;
-
    option broadcast-address 192.168.0.255;
-
    option routers 192.168.0.1;
-
 }
 ```
 
@@ -325,25 +308,18 @@ Edit /etc/qemu-ifup:
 
 ```shell
 #!/bin/sh
-
 sudo -p "Password for $0:" /sbin/ifconfig $1 172.20.0.1
-
 echo "Executing /etc/qemu-ifup"
-
 echo "Bringing up $1 for bridged mode..."
-
 sudo /sbin/ifconfig $1 0.0.0.0 promisc up
-
 echo "Adding $1 to br0..."
-
 sudo /usr/sbin/brctl addif br0 $1
-
 sleep 2
 ```
 
 Get, or build a grub-floppy-netboot.
 
-Launch qemu with "\-net nic,vlan=0 -net tap,vlan=0,ifname=tun0"
+Launch qemu with "-net nic,vlan=0 -net tap,vlan=0,ifname=tun0"
 
 ## 4.8 Webbooting
 

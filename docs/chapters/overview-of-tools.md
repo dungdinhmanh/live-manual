@@ -35,13 +35,9 @@ Issuing lb config without any arguments creates the config/ subdirectory which i
 
 ```shell
 $ lb config
-
 [2025-02-15 12:34:56] lb config
-
-P: Using http proxy: http://127.0.0.1:3142 
-
+P: Using http proxy: http://127.0.0.1:3142
 P: Creating config tree for a debian/testing/amd64 system
-
 P: Symlinking hooks...
 ```
 
@@ -67,7 +63,7 @@ The lb build command reads in your configuration from the config/ directory. It 
 
 5.1.3 The lb clean command
 
-It is the job of the lb clean command to remove various parts of a build so subsequent builds can start from a clean state. By default, chroot, binary and source stages are cleaned, but the cache is left intact. Also, individual stages can be cleaned. For example, if you have made changes that only affect the binary stage, use lb clean --binary prior to building a new binary. If your changes invalidate the bootstrap and/or package caches, e.g. changes to \--mode, \--architecture, or \--bootstrap, you must use lb clean --purge. See the lb_clean man page for a full list of options.
+It is the job of the lb clean command to remove various parts of a build so subsequent builds can start from a clean state. By default, chroot, binary and source stages are cleaned, but the cache is left intact. Also, individual stages can be cleaned. For example, if you have made changes that only affect the binary stage, use lb clean --binary prior to building a new binary. If your changes invalidate the bootstrap and/or package caches, e.g. changes to --mode, --architecture, or --bootstrap, you must use lb clean --purge. See the lb_clean man page for a full list of options.
 
 ## 5.2 The live-boot package
 

@@ -11,7 +11,7 @@ Perhaps the most basic customization of a live system is the selection of packag
 
 ### 8.1.1 Distribution, archive areas and mode
 
-The distribution you choose has the broadest impact on which packages are available to include in your live image. Specify the codename, which defaults to **testing**. Any current distribution carried in the archive may be specified by its codename here. (See [Terms](/chapters/about-manual#terms) for more details.) The \--distribution option not only influences the source of packages within the archive, but also instructs _live-build_ to enable other sources.
+The distribution you choose has the broadest impact on which packages are available to include in your live image. Specify the codename, which defaults to **testing**. Any current distribution carried in the archive may be specified by its codename here. (See [Terms](/chapters/about-manual#terms) for more details.) The --distribution option not only influences the source of packages within the archive, but also instructs _live-build_ to enable other sources.
 
 For example, to build against the **stable** release, with _security_, _updates_ (enabled per default) and additionally _proposed-updates_ and _backports_, specify:
 
@@ -31,41 +31,38 @@ Within the distribution archive, archive areas are major divisions of the archiv
 $ lb config --archive-areas "main contrib non-free"
 ```
 
-Experimental support is available for some Debian derivatives through a \--mode option. By default, this option is set to debian only if you are building on a Debian or on an unknown system. If lb config is invoked on any of the supported derivatives, it will default to create an image of that derivative. If lb config is run in e.g. ubuntu mode, the distribution names and archive areas for the specified derivative are supported instead of the ones for Debian. The mode also modifies _live-build_ behaviour to suit the derivatives.
+Experimental support is available for some Debian derivatives through a --mode option. By default, this option is set to debian only if you are building on a Debian or on an unknown system. If lb config is invoked on any of the supported derivatives, it will default to create an image of that derivative. If lb config is run in e.g. ubuntu mode, the distribution names and archive areas for the specified derivative are supported instead of the ones for Debian. The mode also modifies _live-build_ behaviour to suit the derivatives.
 
 **Note:** The projects for whom these modes were added are primarily responsible for supporting users of these options. The Debian Live Project, in turn, provides development support on a best-effort basis only, based on feedback from the derivative projects as we do not develop or support these derivatives ourselves.
 
 ### 8.1.2 Distribution mirrors
 
-The Debian archive is replicated across a large network of mirrors around the world so that people in each region can choose a nearby mirror for best download speed. Each of the \--mirror-* options governs which distribution mirror is used at various stages of the build. Recall from [Stages of the build](/chapters/customization-overview#stages-of-the-build) that the **bootstrap** stage is when the chroot is initially populated by _debootstrap_ with a minimal system, and the **chroot** stage is when the chroot used to construct the live system's filesystem is built. Thus, the corresponding mirror switches are used for those stages, and later, in the **binary** stage, the \--mirror-binary and \--mirror-binary-security values are used, superseding any mirrors used in an earlier stage.
+The Debian archive is replicated across a large network of mirrors around the world so that people in each region can choose a nearby mirror for best download speed. Each of the --mirror-* options governs which distribution mirror is used at various stages of the build. Recall from [Stages of the build](/chapters/customization-overview#stages-of-the-build) that the **bootstrap** stage is when the chroot is initially populated by _debootstrap_ with a minimal system, and the **chroot** stage is when the chroot used to construct the live system's filesystem is built. Thus, the corresponding mirror switches are used for those stages, and later, in the **binary** stage, the --mirror-binary and --mirror-binary-security values are used, superseding any mirrors used in an earlier stage.
 
 ### 8.1.3 Distribution mirrors used at build time
 
-To set the distribution mirrors used at build time to point at a local mirror, it is sufficient to set \--mirror-bootstrap and \--mirror-chroot-security as follows.
+To set the distribution mirrors used at build time to point at a local mirror, it is sufficient to set --mirror-bootstrap and --mirror-chroot-security as follows.
 
 ```shell
 $ lb config --mirror-bootstrap http://localhost/debian/ \
-
           --mirror-chroot-security http://localhost/debian-security/
 ```
 
-The chroot mirror, specified by \--mirror-chroot, defaults to the \--mirror-bootstrap value.
+The chroot mirror, specified by --mirror-chroot, defaults to the --mirror-bootstrap value.
 
 ### 8.1.4 Distribution mirrors used at run time
 
-The \--mirror-binary* options govern the distribution mirrors placed in the binary image. These may be used to install additional packages while running the live system. The defaults employ deb.debian.org, a service that chooses a geographically close mirror based, among other things, on the user's IP family and the availability of the mirrors. This is a suitable choice when you cannot predict which mirror will be best for all of your users. Or you may specify your own values as shown in the example below. An image built from this configuration would only be suitable for users on a network where "mirror" is reachable.
+The --mirror-binary* options govern the distribution mirrors placed in the binary image. These may be used to install additional packages while running the live system. The defaults employ deb.debian.org, a service that chooses a geographically close mirror based, among other things, on the user's IP family and the availability of the mirrors. This is a suitable choice when you cannot predict which mirror will be best for all of your users. Or you may specify your own values as shown in the example below. An image built from this configuration would only be suitable for users on a network where "mirror" is reachable.
 
 ```shell
 $ lb config --mirror-binary http://mirror/debian/ \
-
           --mirror-binary-security http://mirror/debian-security/ \
-
           --mirror-binary-backports http://mirror/debian-backports/
 ```
 
 ### 8.1.5 Additional repositories
 
-You may add more repositories, broadening your package choices beyond what is available in your target distribution. These may be, for example, for backports, experimental or custom packages. To configure additional repositories, create config/archives/your-repository.list.chroot, and/or config/archives/your-repository.list.binary files. As with the \--mirror-* options, these govern the repositories used in the **chroot** stage when building the image, and in the **binary** stage, i.e. for use when running the live system.
+You may add more repositories, broadening your package choices beyond what is available in your target distribution. These may be, for example, for backports, experimental or custom packages. To configure additional repositories, create config/archives/your-repository.list.chroot, and/or config/archives/your-repository.list.binary files. As with the --mirror-* options, these govern the repositories used in the **chroot** stage when building the image, and in the **binary** stage, i.e. for use when running the live system.
 
 For example, config/archives/live.list.chroot allows you to install packages from the debian-live snapshot repository at live system build time.
 
@@ -99,7 +96,6 @@ The simplest way to populate your package list is to use a task metapackage main
 
 ```shell
 $ lb config
-
 $ echo task-gnome-desktop > config/package-lists/desktop.list.chroot
 ```
 
@@ -139,7 +135,6 @@ In fact, selecting packages with the grep-aptavail command (from the dctrl-tools
 
 ```shell
 $ lb config
-
 $ echo '! Packages Priority standard' > config/package-lists/standard.list.chroot
 ```
 
@@ -147,33 +142,27 @@ $ echo '! Packages Priority standard' > config/package-lists/standard.list.chroo
 
 Any of the _live-build_ configuration variables stored in config/* (minus the LB_ prefix) may be used in conditional statements in package lists. Generally, this means any lb config option uppercased and with dashes changed to underscores. But in practice, it is only the ones that influence package selection that make sense, such as DISTRIBUTION, ARCHITECTURES or ARCHIVE_AREAS.
 
-For example, to install ia32-libs if the \--architectures amd64 is specified:
+For example, to install ia32-libs if the --architectures amd64 is specified:
 
 ```shell
 #if ARCHITECTURES amd64
-
 ia32-libs
-
 #endif
 ```
 
-You may test for any one of a number of values, e.g. to install _memtest86+_ if either \--architectures i386 or \--architectures amd64 is specified:
+You may test for any one of a number of values, e.g. to install _memtest86+_ if either --architectures i386 or --architectures amd64 is specified:
 
 ```shell
 #if ARCHITECTURES i386 amd64
-
 memtest86+
-
 #endif
 ```
 
-You may also test against variables that may contain more than one value, e.g. to install _vrms_ if either contrib or non-free is specified via \--archive-areas:
+You may also test against variables that may contain more than one value, e.g. to install _vrms_ if either contrib or non-free is specified via --archive-areas:
 
 ```shell
 #if ARCHIVE_AREAS contrib non-free
-
 vrms
-
 #endif
 ```
 
@@ -181,7 +170,7 @@ The nesting of conditionals is not supported.
 
 ### 8.2.7 Removing packages at install time
 
-You can list packages in files with .list.chroot_live and .list.chroot_install suffixes inside the config/package-lists directory. If both a live and an install list exist, the packages in the .list.chroot_live list are removed with a hook after the installation (if the user uses the installer). The packages in the .list.chroot_install list are present both in the live system and in the installed system. This is a special tweak for the installer and may be useful if you have \--debian-installer live set in your config, and wish to remove live system-specific packages at install time.
+You can list packages in files with .list.chroot_live and .list.chroot_install suffixes inside the config/package-lists directory. If both a live and an install list exist, the packages in the .list.chroot_live list are removed with a hook after the installation (if the user uses the installer). The packages in the .list.chroot_install list are present both in the live system and in the installed system. This is a special tweak for the installer and may be useful if you have --debian-installer live set in your config, and wish to remove live system-specific packages at install time.
 
 ### 8.2.8 Summary
 
@@ -239,23 +228,20 @@ Because there is no provision made automatically for language tasks, which inclu
 
 ```shell
 $ lb config
-
 $ echo "task-gnome-desktop task-laptop" >> config/package-lists/my.list.chroot
-
 $ echo "task-german task-german-desktop task-german-gnome-desktop" >> config/package-lists/my.list.chroot
 ```
 
 ### 8.2.10 Kernel flavour and version
 
-One or more kernel flavours will be included in your image by default, depending on the architecture. You can choose different flavours via the \--linux-flavours option. Each flavour is suffixed to the default stub linux-image to form each metapackage name which in turn depends on an exact kernel package to be included in your image.
+One or more kernel flavours will be included in your image by default, depending on the architecture. You can choose different flavours via the --linux-flavours option. Each flavour is suffixed to the default stub linux-image to form each metapackage name which in turn depends on an exact kernel package to be included in your image.
 
 Thus by default, an amd64 architecture image will include the linux-image-amd64 flavour metapackage, and an i386 architecture image will include the linux-image-586 metapackage.
 
-When more than one kernel package version is available in your configured archives, you can specify a different kernel package name stub with the \--linux-packages option. For example, supposing you are building an amd64 architecture image and add the experimental archive for testing purposes so you can install the linux-image-3.18.0-trunk-amd64 kernel. You would configure that image as follows:
+When more than one kernel package version is available in your configured archives, you can specify a different kernel package name stub with the --linux-packages option. For example, supposing you are building an amd64 architecture image and add the experimental archive for testing purposes so you can install the linux-image-3.18.0-trunk-amd64 kernel. You would configure that image as follows:
 
 ```shell
 $ lb config --linux-packages linux-image-3.18.0-trunk
-
 $ echo "deb http://deb.debian.org/debian/ experimental main" > config/archives/experimental.list.chroot
 ```
 
@@ -265,7 +251,7 @@ You can build and include your own custom kernels, so long as they are integrate
 
 The proper and recommended way to deploy your own kernel packages is to follow the instructions in the kernel-handbook. Remember to modify the ABI and flavour suffixes appropriately, then include a complete build of the linux and matching linux-latest packages in your repository.
 
-If you opt to build the kernel packages without the matching metapackages, you need to specify an appropriate \--linux-packages stub as discussed in [Kernel flavour and version](/chapters/customizing-package-installation#kernel-flavour-and-version). As we explain in [Installing modified or third-party packages](/chapters/customizing-package-installation#installing-modified-or-third-party-packages), it is best if you include your custom kernel packages in your own repository, though the alternatives discussed in that section work as well.
+If you opt to build the kernel packages without the matching metapackages, you need to specify an appropriate --linux-packages stub as discussed in [Kernel flavour and version](/chapters/customizing-package-installation#kernel-flavour-and-version). As we explain in [Installing modified or third-party packages](/chapters/customizing-package-installation#installing-modified-or-third-party-packages), it is best if you include your custom kernel packages in your own repository, though the alternatives discussed in that section work as well.
 
 It is beyond the scope of this document to give advice on how to customize your kernel. However, you must at least ensure your configuration satisfies these minimum requirements:
 
@@ -315,13 +301,9 @@ Example:
 
 ```shell
 $ gpg --armor --output config/archives/custom_repo.gpg.key${EXTENSION} --export-options export-minimal --export ${SIGNING_KEY}
-
 $ cat  config/archives/custom_repo.list${EXTENSION}
-
 deb [signed-by=/etc/apt/trusted.gpg.d/custom_repo.gpg.key${EXTENSION}.asc] ${URI} ${SUITE} ${COMPONENTS}
-
 EOF
-
 $ echo "${PACKAGES_FROM_REPOSITORY}" > config/package-lists/custom_repo.list${EXTENSION}
 ```
 
@@ -351,7 +333,7 @@ You can configure APT through a number of options applied only at build time. (A
 
 ### 8.4.1 Choosing apt or aptitude
 
-You can elect to use either _apt_ or _aptitude_ when installing packages at build time. Which utility is used is governed by the \--apt argument to lb config. Choose the method implementing the preferred behaviour for package installation, the notable difference being how missing packages are handled.
+You can elect to use either _apt_ or _aptitude_ when installing packages at build time. Which utility is used is governed by the --apt argument to lb config. Choose the method implementing the preferred behaviour for package installation, the notable difference being how missing packages are handled.
 
 -   apt: With this method, if a missing package is specified, the package installation will fail. This is the default setting.
 
@@ -359,7 +341,7 @@ You can elect to use either _apt_ or _aptitude_ when installing packages at buil
 
 ### 8.4.2 Using a proxy with APT
 
-One commonly required APT configuration is to deal with building an image behind a proxy. You may specify your APT proxy with the \--apt-http-proxy option as needed, e.g.
+One commonly required APT configuration is to deal with building an image behind a proxy. You may specify your APT proxy with the --apt-http-proxy option as needed, e.g.
 
 ```shell
 $ lb config --apt-http-proxy http://proxy/
@@ -393,7 +375,6 @@ Two packages which you most probably will want to add again are:
 
 ```shell
 $ lb config --apt-recommends false
-
 $ echo "user-setup sudo" > config/package-lists/recommends.list.chroot
 ```
 
@@ -403,7 +384,7 @@ The more general consequence is that if you don't install recommended packages f
 
 ### 8.4.4 Passing options to apt or aptitude
 
-If there is not a lb config option to alter APT's behaviour in the way you need, use \--apt-options or \--aptitude-options to pass any options through to your configured APT tool. See the man pages for apt and aptitude for details. Note that both options have default values that you will need to retain in addition to any overrides you may provide. So, for example, suppose you have included something from snapshot.debian.org for testing purposes and want to specify Acquire::Check-Valid-Until=false to make APT happy with the stale Release file, you would do so as per the following example, appending the new option after the default value \--yes:
+If there is not a lb config option to alter APT's behaviour in the way you need, use --apt-options or --aptitude-options to pass any options through to your configured APT tool. See the man pages for apt and aptitude for details. Note that both options have default values that you will need to retain in addition to any overrides you may provide. So, for example, suppose you have included something from snapshot.debian.org for testing purposes and want to specify Acquire::Check-Valid-Until=false to make APT happy with the stale Release file, you would do so as per the following example, appending the new option after the default value --yes:
 
 ```shell
 $ lb config --apt-options "--yes -oAcquire::Check-Valid-Until=false"
@@ -421,21 +402,13 @@ Let's say you are building a **trixie** live system but need all the live packag
 
 ```shell
 $ echo "deb http://mirror/debian/ sid main" > config/archives/sid.list.chroot
-
 $ cat >> config/archives/sid.pref.chroot << EOF
-
 Package: live-*
-
 Pin: release n=sid
-
 Pin-Priority: 600
-
 Package: *
-
 Pin: release n=sid
-
 Pin-Priority: 1
-
 EOF
 ```
 
@@ -443,8 +416,6 @@ Negative pin priorities will prevent a package from being installed, as in the c
 
 ```shell
 Package: gnome-keyring
-
 Pin: version *
-
 Pin-Priority: -1
 ```

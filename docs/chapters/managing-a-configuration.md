@@ -13,7 +13,7 @@ Live configurations rarely are perfect on the first try. It may be fine to pass 
 
 ### 6.1.1 Why use auto scripts? What do they do?
 
-The lb config command stores the options you pass to it in config/* files along with many other options set to default values. If you run lb config again, it will not reset any option that was defaulted based on your initial options. So, for example, if you run lb config again with a new value for \--binary-images, any dependent options that were defaulted for the old image type may no longer work with the new ones. Nor are these files intended to be read or edited. They store values for over a hundred options, so nobody, let alone yourself, will be able to see in these which options you actually specified. And finally, if you run lb config, then upgrade _live-build_ and it happens to rename an option, config/* would still contain variables named after the old option that are no longer valid.
+The lb config command stores the options you pass to it in config/* files along with many other options set to default values. If you run lb config again, it will not reset any option that was defaulted based on your initial options. So, for example, if you run lb config again with a new value for --binary-images, any dependent options that were defaulted for the old image type may no longer work with the new ones. Nor are these files intended to be read or edited. They store values for over a hundred options, so nobody, let alone yourself, will be able to see in these which options you actually specified. And finally, if you run lb config, then upgrade _live-build_ and it happens to rename an option, config/* would still contain variables named after the old option that are no longer valid.
 
 For all these reasons, auto/* scripts will make your life easier. They are simple wrappers to the lb config, lb build and lb clean commands that are designed to help you manage your configuration. The auto/config script stores your lb config command with all desired options, the auto/clean script removes the files containing configuration variable values, and the auto/build script keeps a build.log of each build. Each of these scripts is run automatically every time you run the corresponding lb command. By using these scripts, your configuration is easier to read and is kept internally consistent from one revision to the next. Also, it will be much easier for you identify and fix options which need to change when you upgrade _live-build_ after reading the updated documentation.
 
@@ -23,9 +23,7 @@ For your convenience, _live-build_ comes with example auto shell scripts to copy
 
 ```shell
 $ mkdir mylive && cd mylive && lb config
-
 $ mkdir auto
-
 $ cp /usr/share/doc/live-build/examples/auto/* auto/
 ```
 
@@ -33,17 +31,11 @@ Edit auto/config, adding any options as you see fit. For instance:
 
 ```shell
 #!/bin/sh
-
 lb config noauto \
-
      --distribution stable \
-
      --binary-images hdd \
-
      --mirror-bootstrap http://ftp.ch.debian.org/debian/ \
-
      --mirror-binary http://ftp.ch.debian.org/debian/ \
-
      "${@}"
 ```
 
@@ -59,19 +51,16 @@ For example, to build a standard image, use the live-images repository as follow
 
 ```shell
 $ mkdir live-images && cd live-images
-
-$ lb config --config https://salsa.debian.org/live-team/live-images.git::debian 
-
+$ lb config --config https://salsa.debian.org/live-team/live-images.git::debian
 $ cd images/standard
 ```
 
-Edit auto/config and any other things you need in the config tree to suit your needs. For example, the unofficial non-free prebuilt images are made by simply adding \--archive-areas "main contrib non-free".
+Edit auto/config and any other things you need in the config tree to suit your needs. For example, the unofficial non-free prebuilt images are made by simply adding --archive-areas "main contrib non-free".
 
 You may optionally define a shortcut in your Git configuration by adding the following to your ${HOME}/.gitconfig:
 
 ```shell
-[url "https://salsa.debian.org/live-team/"] 
-
+[url "https://salsa.debian.org/live-team/"]
          insteadOf = lso:
 ```
 

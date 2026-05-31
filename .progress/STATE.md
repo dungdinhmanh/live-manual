@@ -1,15 +1,14 @@
 # Tiến độ sửa live-manual-web
 
 ```yaml
-phase: 4
-phase_name: "fix converter scripts/convert-to-md.ts"
-current_batch: converter
+phase: 5
+phase_name: "post-converter cleanup (mostly handled by phase 4 + 2 follow-ups)"
+current_batch: cleanup
 files_done:
-  - scripts/convert-to-md.ts (rewrite)
-  - docs/chapters/*.md (18 file, regenerated)
-  - docs/index.md (regenerated)
+  - scripts/convert-to-md.ts (2 follow-up fixes)
+  - docs/chapters/*.md (regenerated again)
 files_pending: []
-last_commit_sha: "dab8b0b"
+last_commit_sha: "c86435d"
 verify_grep_zeros:
   - "[N](#N) footnotes: 0"
   - "plain N.M heading: 0"
@@ -17,16 +16,12 @@ verify_grep_zeros:
   - "sisu image arrows: 0"
   - "github.com/debian-live: 0"
 notes: |
-  Converter giờ:
-  - strip <label class="ocn"> (footnote)
-  - drop dup <h1 class="tiny"> + <h1 class="norm">
-  - promote <p class="bold">N.M Title → <h2>/<h3> theo độ sâu dấu chấm
-  - <p class="code"> → <pre><code lang=shell> bao code fence
-  - tidy pass unescape \_ \# \* ngoài fenced block, collapse blank line
-  - rewriteLinks giờ chỉ đụng same-dir .en.html, không phá link external
-  - dùng <h1 class="tiny"> làm canonical title (đẹp hơn slug-case)
-  Build pass 7.73s.
-  Tiếp theo: đợt 5 hậu kiểm + sửa tay (nhưng đợt 4 đã giải quyết hầu hết).
+  Phase 5 cleanup — 2 follow-up fixes vào converter:
+  1. Unescape \-- → -- và \- → - (option như --distribution)
+  2. Collapse blank line trong code fence (do <NL> ngoài <br> trong HTML gốc)
+  Hậu kiểm grep: bare shell line 0, HTML entity 0, suspicious heading 0.
+  Build pass 7.48s.
+  Tiếp theo: đợt 6 polish (TOC, ::: containers) + verify mắt.
 ```
 
 ## Phase map
@@ -36,8 +31,8 @@ notes: |
 | 1 | setup tracker + clean + gitignore      | done       |
 | 2 | migrate GitHub→Salsa links             | done       |
 | 3 | fix CSS sidebar/nav light↔dark         | done       |
-| 4 | fix converter scripts/convert-to-md.ts | doing      |
-| 5 | manual cleanup MD chapters (3 batch)   | todo       |
+| 4 | fix converter scripts/convert-to-md.ts | done       |
+| 5 | manual cleanup MD chapters (3 batch)   | doing      |
 | 6 | polish (TOC, containers) + verify      | todo       |
 
 ## File then chốt

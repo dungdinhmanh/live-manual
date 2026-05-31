@@ -33,7 +33,6 @@ Note that by default, _live-build_ does not include Debian Installer images in t
 
 ```shell
 $ lb config --debian-installer live
-
 $ echo debian-installer-launcher >> config/package-lists/my.list.chroot
 ```
 
@@ -43,7 +42,6 @@ As described in the Debian Installer Manual, Appendix B at ‹[https://www.debia
 
 ```shell
 $ echo "d-i debian-installer/locale string en_US" \
-
          >> config/includes.installer/preseed.cfg
 ```
 

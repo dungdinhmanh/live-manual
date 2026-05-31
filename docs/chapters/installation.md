@@ -59,9 +59,7 @@ You can build and install your own Debian package by executing:
 
 ```shell
 $ cd live-build
-
 $ dpkg-buildpackage -b -uc -us
-
 $ cd ..
 ```
 
@@ -98,8 +96,7 @@ To use the latest source from git, you can follow the process below. Please ensu
 -   Checkout the _live-boot_ and _live-config_ sources
 
 ```shell
-$ git clone https://salsa.debian.org/live-team/live-boot.git 
-
+$ git clone https://salsa.debian.org/live-team/live-boot.git
 $ git clone https://salsa.debian.org/live-team/live-config.git
 ```
 
@@ -113,11 +110,8 @@ Use a personal builder such as _pbuilder_ or _sbuild_ if you need to build _live
 
 ```shell
 $ cd live-boot
-
 $ dpkg-buildpackage -b -uc -us
-
 $ cd ../live-config
-
 $ dpkg-buildpackage -b -uc -us
 ```
 
@@ -127,6 +121,5 @@ As _live-boot_ and _live-config_ are installed by _live-build_ system, installin
 
 ```shell
 $ cp ../live-boot{_,-initramfs-tools,-doc}*.deb  config/packages.chroot/
-
 $ cp ../live-config{_,-sysvinit,-doc}*.deb  config/packages.chroot/
 ```

@@ -25,7 +25,6 @@ To include files, simply add them to your config/includes.chroot directory. This
 
 ```shell
 $ mkdir -p config/includes.chroot/var/www
-
 $ cp /path/to/my/index.html config/includes.chroot/var/www
 ```
 
@@ -33,17 +32,11 @@ Your configuration will then have the following layout:
 
 ```shell
 -- config
-
     [...]
-
      |-- includes.chroot
-
      |   `-- var
-
      |       `-- www
-
      |           `-- index.html
-
     [...]
 ```
 

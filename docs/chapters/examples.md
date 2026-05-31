@@ -14,10 +14,8 @@ To use these examples you need a system to build them on that meets the requirem
 Note that, for the sake of brevity, in these examples we do not specify a local mirror to use for the build. You can speed up downloads considerably if you use a local mirror. You may specify the options when you use lb config, as described in [Distribution mirrors used at build time](/chapters/customizing-package-installation#distribution-mirrors-build-time), or for more convenience, set the default for your build system in /etc/live/build.conf. Simply create this file and in it, set the corresponding LB_MIRROR_* variables to your preferred mirror. All other mirrors used in the build will be defaulted from these values. For example:
 
 ```shell
-LB_MIRROR_BOOTSTRAP="http://mirror/debian/" 
-
-LB_MIRROR_CHROOT_SECURITY="http://mirror/debian-security/" 
-
+LB_MIRROR_BOOTSTRAP="http://mirror/debian/"
+LB_MIRROR_CHROOT_SECURITY="http://mirror/debian-security/"
 LB_MIRROR_CHROOT_BACKPORTS="http://mirror/debian-backports/"
 ```
 
@@ -51,11 +49,8 @@ In this tutorial, we will create an image suitable for use as a web browser util
 
 ```shell
 $ mkdir tutorial2
-
 $ cd tutorial2
-
 $ lb config
-
 $ echo "task-lxde-desktop firefox-esr" >> config/package-lists/my.list.chroot
 ```
 
@@ -79,9 +74,7 @@ Since we will be changing our personalized image over a number of revisions, and
 
 ```shell
 $ mkdir -p tutorial3/auto
-
 $ cp /usr/share/doc/live-build/examples/auto/* tutorial3/auto/
-
 $ cd tutorial3
 ```
 
@@ -89,11 +82,8 @@ Edit auto/config to read as follows:
 
 ```shell
 #!/bin/sh
-
 lb config noauto \
-
      --distribution stable \
-
      "${@}"
 ```
 
@@ -109,7 +99,7 @@ Now populate your local package list:
 $ echo "task-lxde-desktop spice-vdagent hexchat" >> config/package-lists/my.list.chroot
 ```
 
-First, \--distribution stable ensures that ⌠stable} is used instead of the default {testing⌡. Second, we have added _spice-vdagent_ for easier testing the image in _qemu_. And finally, we have added an initial favourite package: _hexchat_.
+First, --distribution stable ensures that ⌠stable} is used instead of the default {testing⌡. Second, we have added _spice-vdagent_ for easier testing the image in _qemu_. And finally, we have added an initial favourite package: _hexchat_.
 
 Now, build the image:
 
@@ -123,11 +113,8 @@ Once you've tested the image (as in [Tutorial 1](/chapters/examples#tutorial-1))
 
 ```shell
 $ git init
-
 $ cp /usr/share/doc/live-build/examples/gitignore .gitignore
-
 $ git add .gitignore auto config
-
 $ git commit -m "Initial import."
 ```
 
@@ -171,13 +158,9 @@ Make a build directory and create an skeletal configuration inside it, disabling
 
 ```shell
 $ mkdir vnc-kiosk-client
-
 $ cd vnc-kiosk-client
-
 $ lb config --apt-recommends false
-
 $ echo '! Packages Priority standard' > config/package-lists/standard.list.chroot
-
 $ echo "xorg gdm3 metacity xtightvncviewer" > config/package-lists/my.list.chroot
 ```
 
@@ -199,17 +182,11 @@ After that, create the directory /etc/skel in config/includes.chroot and put a c
 
 ```shell
 $ mkdir -p config/includes.chroot/etc/skel
-
 $ cat > config/includes.chroot/etc/skel/.xsession << EOF
-
 #!/bin/sh
-
 /usr/bin/metacity &
-
 /usr/bin/xvncviewer 192.168.1.2:1
-
 exit
-
 EOF
 ```
 
@@ -225,13 +202,13 @@ Enjoy.
 
 **Use case:** Create a default image with some components removed in order to fit on a 512MB USB key with a little space left over to use as you see fit.
 
-When optimizing an image to fit a certain media size, you need to understand the tradeoffs you are making between size and functionality. In this example, we trim only so much as to make room for additional material within a 512MB media size, but without doing anything to destroy the integrity of the packages contained within, such as the purging of locale data via the _localepurge_ package, or other such "intrusive" optimizations. Of particular note, we use \--debootstrap-options to create a minimal system from scratch and \--binary image hdd to create an image that can be copied to a USB key.
+When optimizing an image to fit a certain media size, you need to understand the tradeoffs you are making between size and functionality. In this example, we trim only so much as to make room for additional material within a 512MB media size, but without doing anything to destroy the integrity of the packages contained within, such as the purging of locale data via the _localepurge_ package, or other such "intrusive" optimizations. Of particular note, we use --debootstrap-options to create a minimal system from scratch and --binary image hdd to create an image that can be copied to a USB key.
 
 ```shell
 $ lb config --binary-image hdd --apt-indices false --apt-recommends false --debootstrap-options "--variant=minbase" --firmware-chroot false --memtest none
 ```
 
-To make the image work properly, we must re-add, at least, two recommended packages which are left out by the \--apt-recommends false option. See [Tweaking APT to save space](/chapters/customizing-package-installation#tweaking-apt-to-save-space)
+To make the image work properly, we must re-add, at least, two recommended packages which are left out by the --apt-recommends false option. See [Tweaking APT to save space](/chapters/customizing-package-installation#tweaking-apt-to-save-space)
 
 ```shell
 $ echo "user-setup sudo" > config/package-lists/recommends.list.chroot
@@ -249,9 +226,9 @@ Now, build the image in the usual way:
 # lb build 2>&1 | tee build.log
 ```
 
-On the author's system at the time of writing this, the above configuration produced a 298MiB image. This compares favourably with the 380MiB image produced by the default configuration in [Tutorial 1](/chapters/examples#tutorial-1), when \--binary-image hdd is added.
+On the author's system at the time of writing this, the above configuration produced a 298MiB image. This compares favourably with the 380MiB image produced by the default configuration in [Tutorial 1](/chapters/examples#tutorial-1), when --binary-image hdd is added.
 
-Leaving off APT's indices with \--apt-indices false saves a fair amount of space, the tradeoff being that you need to do an apt-get update before using _apt_ in the live system. Dropping recommended packages with \--apt-recommends false saves some additional space, at the expense of omitting some packages you might otherwise expect to be there. \--debootstrap-options "--variant=minbase" bootstraps a minimal system from the start. Not automatically including firmware packages with \--firmware-chroot false saves some space too. And finally, \--memtest none prevents the installation of a memory tester.
+Leaving off APT's indices with --apt-indices false saves a fair amount of space, the tradeoff being that you need to do an apt-get update before using _apt_ in the live system. Dropping recommended packages with --apt-recommends false saves some additional space, at the expense of omitting some packages you might otherwise expect to be there. --debootstrap-options "--variant=minbase" bootstraps a minimal system from the start. Not automatically including firmware packages with --firmware-chroot false saves some space too. And finally, --memtest none prevents the installation of a memory tester.
 
 **Note:** A minimal system can also be achieved using hooks, like for example the stripped.hook.chroot hook found in /usr/share/doc/live-build/examples/hooks. It may shave off additional small amounts of space and produce an image of 277MiB. However, it does so by removal of documentation and other files from packages installed on the system. This violates the integrity of those packages and that, as the comment header warns, may have unforeseen consequences. That is why using a minimal _debootstrap_ is the recommended way of achieving this goal.
 
@@ -271,7 +248,6 @@ Now we can search for the appropriate tasks, first with:
 
 ```shell
 $ grep-dctrl -FTest-lang de /usr/share/tasksel/descs/debian-tasks.desc -sTask
-
 Task: german
 ```
 
@@ -279,9 +255,7 @@ By this command, we discover the task is called, plainly enough, german. Now to 
 
 ```shell
 $ grep-dctrl -FEnhances german /usr/share/tasksel/descs/debian-tasks.desc -sTask
-
 Task: german-desktop
-
 Task: german-kde-desktop
 ```
 
@@ -289,19 +263,12 @@ At boot time we will generate the **de_CH.UTF-8** locale and select the **ch** k
 
 ```shell
 $ mkdir live-gnome-ch
-
 $ cd live-gnome-ch
-
 $ lb config \
-
      --bootappend-live "boot=live components locales=de_CH.UTF-8 keyboard-layouts=ch" \
-
      --debian-installer live
-
 $ echo '! Packages Priority standard' > config/package-lists/standard.list.chroot
-
 $ echo task-gnome-desktop task-german task-german-desktop >> config/package-lists/desktop.list.chroot
-
 $ echo debian-installer-launcher >> config/package-lists/installer.list.chroot
 ```
 

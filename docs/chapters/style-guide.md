@@ -105,13 +105,13 @@ _live-manual_ is licensed under the GNU GPL. This has a number of implications t
 
 -   _Write a first draft, revise, edit, improve, redo if necessary_
 
-\- Brainstorm!. You need to organize your ideas first in a logical sequence of events.
+- Brainstorm!. You need to organize your ideas first in a logical sequence of events.
 
-\- Once you have somehow organized those ideas in your mind write a first draft.
+- Once you have somehow organized those ideas in your mind write a first draft.
 
-\- Revise grammar, syntax and spelling. Keep in mind that the proper names of the releases, such as **trixie** or **sid**, should not be capitalized when referred to as code names. In order to check the spelling you can run the "spell" target. i.e. make spell
+- Revise grammar, syntax and spelling. Keep in mind that the proper names of the releases, such as **trixie** or **sid**, should not be capitalized when referred to as code names. In order to check the spelling you can run the "spell" target. i.e. make spell
 
-\- Improve your statements and redo any part if necessary.
+- Improve your statements and redo any part if necessary.
 
 -   _Chapters_
 
@@ -129,7 +129,7 @@ $ sisu --help markup
 
 Here are some markup examples that may prove useful:
 
-\- For emphasis/bold text:
+- For emphasis/bold text:
 
 ```shell
 *{foo}* or !{foo}!
@@ -137,7 +137,7 @@ Here are some markup examples that may prove useful:
 
 produces: **foo** or **foo**. Use it to emphasize certain key words.
 
-\- For italics:
+- For italics:
 
 ```shell
 /{foo}/
@@ -145,7 +145,7 @@ produces: **foo** or **foo**. Use it to emphasize certain key words.
 
 produces: _foo_. Use them e.g. for the names of Debian packages.
 
-\- For monospace:
+- For monospace:
 
 ```shell
 #{foo}#
@@ -153,15 +153,12 @@ produces: _foo_. Use them e.g. for the names of Debian packages.
 
 produces: foo. Use it e.g. for the names of commands. And also to highlight some key words or things like paths.
 
-\- For code blocks:
+- For code blocks:
 
 ```shell
 code{
-
   $ foo
-
   # bar
-
 }code
 ```
 
@@ -169,7 +166,6 @@ produces:
 
 ```shell
 $ foo
-
 # bar
 ```
 
@@ -221,14 +217,14 @@ Make no mistake, this does not mean that the translated text needs to have the s
 
 Translators should never translate:
 
-\- The code names of releases (which should be written in lowercase)
+- The code names of releases (which should be written in lowercase)
 
-\- The names of programs
+- The names of programs
 
-\- The commands given as examples
+- The commands given as examples
 
-\- Metadata (often between colons **:metadata:**)
+- Metadata (often between colons **:metadata:**)
 
-\- Links
+- Links
 
-\- Paths
+- Paths

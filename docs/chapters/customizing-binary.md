@@ -19,11 +19,8 @@ To modify the boot timeout of a default iso-hybrid image just edit a default **i
 
 ```shell
 include menu.cfg
-
 default vesamenu.c32
-
 prompt 0
-
 timeout 50
 ```
 

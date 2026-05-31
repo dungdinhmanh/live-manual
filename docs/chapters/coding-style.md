@@ -27,19 +27,12 @@ Good:
 
 ```shell
 case "${1}" in
-
          foo)
-
                  foobar
-
                  ;;
-
          bar)
-
                  foobar
-
                  ;;
-
 esac
 ```
 
@@ -53,33 +46,19 @@ Preferred:
 
 ```shell
 if foo; then
-
          bar
-
 fi
-
 for FOO in $ITEMS; do
-
          bar
-
 done
-
 if [ "${MY_LOCATION_VARIABLE}" = "something" ] && [ -e "${MY_OUTPUT_FILE}" ]
-
 then
-
          MY_OTHER_VARIABLE="$(some_bin ${FOOBAR} | awk -F_ '{ print $1 }')"
-
 fi
-
 if [ "${MY_FOO}" = "something" ] && [ -e "path/${FILE_1}" ] ||
-
    [ "${MY_BAR}" = "something_else" ] && [ ${ALLOW} = "true" ]
-
 then
-
          foobar
-
 fi
 ```
 
@@ -87,9 +66,7 @@ Less ideal:
 
 ```shell
 if [ "${MY_LOCATION_VARIABLE}" = "something" ] && [ -e "${MY_OUTPUT_FILE}" ]; then
-
          MY_OTHER_VARIABLE="$(some_bin ${FOOBAR} | awk -F_ '{ print $1 }')"
-
 fi
 ```
 
@@ -97,9 +74,7 @@ Horrible:
 
 ```shell
 if [ "${MY_LOCATION_VARIABLE}" = "something" ] && [ -e "${MY_OUTPUT_FILE}" ] || [ "${MY_LOCATION_VARIABLE}" = "something-else" ] && [ -e "${MY_OUTPUT_FILE_2}" ]; then
-
          MY_OTHER_VARIABLE="$(some_bin ${FOOBAR} | awk -F_ '{ print $1 }')"
-
 fi
 ```
 
@@ -109,11 +84,8 @@ Good:
 
 ```shell
 Foo ()
-
 {
-
          bar
-
 }
 ```
 
@@ -121,9 +93,7 @@ Bad (inconsistent with existing style):
 
 ```shell
 Foo () {
-
          bar
-
 }
 ```
 
@@ -131,11 +101,8 @@ Awful:
 
 ```shell
 Foo ()
-
          {
-
          bar
-
          }
 ```
 
@@ -175,9 +142,7 @@ Typically bad:
 
 ```shell
 if [ -f "${FOO}"/foo/"${BAR}"/bar ]; then
-
          foobar
-
 fi
 ```
 
@@ -185,9 +150,7 @@ Good:
 
 ```shell
 if [ -f "${FOO}/foo/${BAR}/bar" ]; then
-
          foobar
-
 fi
 ```
 

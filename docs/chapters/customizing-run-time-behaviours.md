@@ -37,7 +37,7 @@ When the live system boots, language is involved in two steps:
 
 -   setting the keyboard configuration
 
-The default locale when building a Live system is locales=en_US.UTF-8. To define the locale that should be generated, use the locales parameter in the \--bootappend-live option of lb config, e.g.
+The default locale when building a Live system is locales=en_US.UTF-8. To define the locale that should be generated, use the locales parameter in the --bootappend-live option of lb config, e.g.
 
 ```shell
 $ lb config --bootappend-live "boot=live components locales=de_CH.UTF-8"
@@ -47,27 +47,18 @@ Multiple locales may be specified as a comma-delimited list.
 
 This parameter, as well as the keyboard configuration parameters indicated below, can also be used at the kernel command line. You can specify a locale by language_country (in which case the default encoding is used) or the full language_country.encoding word. A list of supported locales and the encoding for each can be found in /usr/share/i18n/SUPPORTED.
 
-Both the console and X keyboard configuration are performed by live-config using the console-setup package. To configure them, use the keyboard-layouts, keyboard-variants, keyboard-options and keyboard-model boot parameters via the \--bootappend-live option. Valid options for these can be found in /usr/share/X11/xkb/rules/base.lst. To find layouts and variants for a given language, try searching for the English name of the language and/or the country where the language is spoken, e.g:
+Both the console and X keyboard configuration are performed by live-config using the console-setup package. To configure them, use the keyboard-layouts, keyboard-variants, keyboard-options and keyboard-model boot parameters via the --bootappend-live option. Valid options for these can be found in /usr/share/X11/xkb/rules/base.lst. To find layouts and variants for a given language, try searching for the English name of the language and/or the country where the language is spoken, e.g:
 
 ```shell
 $ egrep -i '(^!|german.*switzerland)' /usr/share/X11/xkb/rules/base.lst
-
 ! model
-
 ! layout
-
    ch              German (Switzerland)
-
 ! variant
-
    legacy          ch: German (Switzerland, legacy)
-
    de_nodeadkeys   ch: German (Switzerland, eliminate dead keys)
-
    de_sundeadkeys  ch: German (Switzerland, Sun dead keys)
-
    de_mac          ch: German (Switzerland, Macintosh)
-
 ! option
 ```
 
@@ -83,15 +74,13 @@ However, for very specific use cases, you may wish to include other parameters. 
 
 ```shell
 $ lb config --bootappend-live \
-
      "boot=live components locales=fr_FR.UTF-8 keyboard-layouts=fr keyboard-variants=bepo keyboard-model=tm2030usb"
 ```
 
-Multiple values may be specified as comma-delimited lists for each of the keyboard-* options, with the exception of keyboard-model, which accepts only one value. Please see the keyboard(5) man page for details and examples of XKBMODEL, XKBLAYOUT, XKBVARIANT and XKBOPTIONS variables. If multiple keyboard-variants values are given, they will be matched one-to-one with keyboard-layouts values (see setxkbmap(1) \-variant option). Empty values are allowed; e.g. to define two layouts, the default being US QWERTY and the other being US Dvorak, use:
+Multiple values may be specified as comma-delimited lists for each of the keyboard-* options, with the exception of keyboard-model, which accepts only one value. Please see the keyboard(5) man page for details and examples of XKBMODEL, XKBLAYOUT, XKBVARIANT and XKBOPTIONS variables. If multiple keyboard-variants values are given, they will be matched one-to-one with keyboard-layouts values (see setxkbmap(1) -variant option). Empty values are allowed; e.g. to define two layouts, the default being US QWERTY and the other being US Dvorak, use:
 
 ```shell
 $ lb config --bootappend-live \
-
      "boot=live components keyboard-layouts=us,us keyboard-variants=,dvorak"
 ```
 
@@ -133,7 +122,6 @@ Here's an example of how to create an ext4-based image file to be used for persi
 
 ```shell
 $ dd if=/dev/null of=persistence bs=1 count=0 seek=1G # for a 1GB sized image file
-
 $ /sbin/mkfs.ext4 -F persistence
 ```
 
@@ -141,7 +129,6 @@ Once the image file is created, as an example, to make /usr persistent but only 
 
 ```shell
 # cp persistence /
-
 # mount -t ext4 /persistence /mnt
 ```
 
@@ -149,7 +136,6 @@ Then, create the persistence.conf file adding content and unmount the image file
 
 ```shell
 # echo "/usr union" >> /mnt/persistence.conf
-
 # umount /mnt
 ```
 
@@ -163,13 +149,9 @@ How custom overlay mounts are configured is described in full detail in the pers
 
 ```shell
 # mkfs.ext4 -L persistence /dev/sdb1
-
 # mount -t ext4 /dev/sdb1 /mnt
-
 # echo "/home" >> /mnt/persistence.conf
-
 # echo "/var/cache/apt" >> /mnt/persistence.conf
-
 # umount /mnt
 ```
 
@@ -201,7 +183,6 @@ To install _cryptsetup_ in your live system, add it to your package-lists:
 
 ```shell
 $ lb config
-
 $ echo "cryptsetup cryptsetup-initramfs" > config/package-lists/encryption.list.chroot
 ```
 

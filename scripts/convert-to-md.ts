@@ -68,6 +68,14 @@ function stripSisuCruft(html: string): string {
           .replace(/&gt;/g, '>')
           .replace(/&nbsp;/g, ' ')
           .replace(/<[^>]+>/g, '') // drop any stray inline tags
+          // Collapse the literal HTML-source newlines that surround <br>s but
+          // keep meaningful blank-line separation only when authored.
+          .split('\n')
+          .map(l => l.replace(/\s+$/, ''))
+          .filter((l, i, arr) => !(l.trim() === '' && (i === 0 || i === arr.length - 1)))
+          .join('\n')
+          // collapse runs of blank lines inside the block
+          .replace(/\n{2,}/g, '\n')
           .replace(/^\s+|\s+$/g, '');
         return `<pre><code class="language-shell">${body
           .replace(/&/g, '&amp;')
@@ -113,7 +121,9 @@ function tidyMarkdown(md: string): string {
         .replace(/\\#/g, '#')
         .replace(/\\\*/g, '*')
         .replace(/\\\[/g, '[')
-        .replace(/\\\]/g, ']');
+        .replace(/\\\]/g, ']')
+        .replace(/\\--/g, '--')
+        .replace(/\\-/g, '-');
     }
   }
   out = parts.join('');

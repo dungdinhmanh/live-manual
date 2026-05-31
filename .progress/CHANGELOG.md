@@ -26,7 +26,7 @@ Append-only. Mỗi commit lớn → 1 entry.
   - Bỏ `!important` không cần thiết
 - Build pass (`bun run build`, 7.18s).
 
-## [pending] Phase 4 — converter rewrite + regenerate
+## [c86435d] Phase 4 — converter rewrite + regenerate
 
 - `scripts/convert-to-md.ts`: viết lại từ đầu để fix tận gốc các lỗi format:
   - Strip `<label class="ocn">` → diệt `[N](#N)` footnote rác
@@ -41,3 +41,10 @@ Append-only. Mỗi commit lớn → 1 entry.
 - Regenerate 18 MD chapter + `docs/index.md` từ HTML SiSU gốc.
 - Verify: 0 footnote rác, 0 plain heading, 0 escape rác, 0 sisu image, 0 github link.
 - Build pass (`bun run build`, 7.73s).
+
+## [pending] Phase 5 — converter follow-up
+
+- Unescape `\--` → `--` (Turndown đẹp escape long-option như `--distribution`)
+- Strip nested newlines + collapse blank line trong fenced code block (do HTML gốc đặt
+  `<NL>` quanh `<br>` trong `<p class="code">`)
+- Regenerate. Build pass 7.48s.
