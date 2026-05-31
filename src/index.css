@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #faf8f5;
+  --color-foreground: #1a1a1a;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a1a1a;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1a1a1a;
+  --color-primary: #d70a53;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #f0ece6;
+  --color-secondary-foreground: #1a1a1a;
+  --color-muted: #f0ece6;
+  --color-muted-foreground: #6b6b6b;
+  --color-accent: #f0ece6;
+  --color-accent-foreground: #1a1a1a;
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #e0dbd3;
+  --color-input: #e0dbd3;
+  --color-ring: #d70a53;
+  --color-sidebar: #1c1917;
+  --color-sidebar-foreground: #e7e5e4;
+  --color-sidebar-primary: #d70a53;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #292524;
+  --color-sidebar-accent-foreground: #e7e5e4;
+  --color-sidebar-border: #292524;
+  --color-sidebar-ring: #d70a53;
+  --radius: 0.5rem;
+
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.dark {
+  --color-background: #0f0f0f;
+  --color-foreground: #e7e5e4;
+  --color-card: #1c1917;
+  --color-card-foreground: #e7e5e4;
+  --color-popover: #1c1917;
+  --color-popover-foreground: #e7e5e4;
+  --color-primary: #ef5777;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #292524;
+  --color-secondary-foreground: #e7e5e4;
+  --color-muted: #292524;
+  --color-muted-foreground: #a8a29e;
+  --color-accent: #292524;
+  --color-accent-foreground: #e7e5e4;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-border: #292524;
+  --color-input: #292524;
+  --color-ring: #ef5777;
+  --color-sidebar: #0c0a09;
+  --color-sidebar-foreground: #e7e5e4;
+  --color-sidebar-primary: #ef5777;
+  --color-sidebar-primary-foreground: #ffffff;
+  --color-sidebar-accent: #1c1917;
+  --color-sidebar-accent-foreground: #e7e5e4;
+  --color-sidebar-border: #1c1917;
+  --color-sidebar-ring: #ef5777;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* Content typography for rendered manual HTML */
+.manual-content {
+  @apply font-serif text-foreground leading-relaxed;
+}
+
+.manual-content h1 {
+  @apply font-serif text-3xl font-900 tracking-tight mt-8 mb-4 text-foreground;
+}
+
+.manual-content p.bold {
+  @apply font-serif text-xl font-600 mt-6 mb-3 text-foreground;
+}
+
+.manual-content p.i0 {
+  @apply font-serif text-base leading-7 mb-4;
+}
+
+.manual-content p.i1 {
+  @apply font-serif text-base leading-7 mb-4 pl-6;
+}
+
+.manual-content p.i2 {
+  @apply font-serif text-base leading-7 mb-4 pl-12;
+}
+
+.manual-content pre {
+  @apply font-mono text-sm bg-muted rounded-lg p-4 my-4 overflow-x-auto border border-border;
+}
+
+.manual-content tt {
+  @apply font-mono text-sm bg-muted px-1.5 py-0.5 rounded;
+}
+
+.manual-content a {
+  @apply text-primary underline decoration-primary/30 hover:decoration-primary transition-colors;
+}
+
+.manual-content ul,
+.manual-content ol {
+  @apply pl-6 mb-4 space-y-1;
+}
+
+.manual-content li {
+  @apply font-serif text-base leading-7;
+}
+
+.manual-content table {
+  @apply w-full border-collapse my-4;
+}
+
+.manual-content td,
+.manual-content th {
+  @apply border border-border px-3 py-2 text-left font-sans text-sm;
+}
+
+.manual-content th {
+  @apply bg-muted font-600;
+}
+
+.manual-content hr {
+  @apply border-border my-8;
+}
