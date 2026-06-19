@@ -1,6 +1,6 @@
 # Debian Live Manual (Web)
 
-VitePress-powered web reader for the Debian Live Manual.
+VitePress-powered web reader for the [Debian Live Manual](https://live-team.pages.debian.net/live-manual/html/live-manual/index.en.html).
 
 ## Setup
 
