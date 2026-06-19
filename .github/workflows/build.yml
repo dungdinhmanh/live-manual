@@ -1,0 +1,75 @@
+name: build
+
+# Full chain gate: SiSU source -> HTML -> Markdown -> drift check -> site build.
+# Runs the upstream half (sisu-html) that can't run locally, so a converter
+# change or an upstream markup change is caught against the committed golden.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      live_manual_ref:
+        description: 'live-manual git ref to build (branch or tag)'
+        required: false
+        default: ''
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout web repo
+        uses: actions/checkout@v4
+
+      - name: Install SiSU (Debian/Ubuntu package — canonical manual toolchain)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends sisu
+
+      - name: Show SiSU version (recorded so golden drift can be traced to it)
+        run: sisu --version || sisu-html --version || true
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      # Canonical source per CLAUDE.md. A specific ref can be forced via the
+      # workflow_dispatch input (e.g. to test a not-yet-released upstream tag).
+      - name: Clone live-manual source (Salsa upstream)
+        run: |
+          git clone --depth 1 \
+            ${{ inputs.live_manual_ref && format('--branch {0}', inputs.live_manual_ref) || '' }} \
+            https://salsa.debian.org/live-team/live-manual.git \
+            "$RUNNER_TEMP/live-manual"
+
+      # build-from-sisu.sh: sisu-html -> convert (SOURCE_DIR) -> verify.
+      # Exit 1 = drift from golden (intended upstream/converter change needs the
+      # regenerated output committed, OR a regression). Exit 2 = missing prereq.
+      - name: SiSU -> HTML -> Markdown -> verify
+        run: ./scripts/build-from-sisu.sh "$RUNNER_TEMP/live-manual"
+
+      - name: Unit + golden tests
+        run: bun test
+
+      - name: VitePress production build
+        run: bun run build
+
+      - name: Upload built site
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: docs/.vitepress/dist
+          retention-days: 7

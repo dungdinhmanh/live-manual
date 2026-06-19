@@ -1,0 +1,89 @@
+name: check-upstream
+
+# Polls Salsa for a newer live-manual release tag. The chapter Markdown here is
+# generated from upstream, so a new upstream release means the site is stale.
+# When a newer tag appears than the one recorded in .github/upstream-tag.txt,
+# this opens (or updates) a tracking issue so a human can run the build workflow
+# against it and commit the regenerated golden.
+on:
+  schedule:
+    # Daily at 06:17 UTC. Off the :00 mark to avoid the cron rush.
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Salsa is GitLab. The tags API with order_by=updated returns the newest
+      # release first without cloning the repo. URL-encoded project path.
+      - name: Fetch newest upstream tag
+        id: upstream
+        run: |
+          latest=$(curl -fsSL \
+            "https://salsa.debian.org/api/v4/projects/live-team%2Flive-manual/repository/tags?per_page=1&order_by=updated" \
+            | jq -r '.[0].name')
+          if [ -z "$latest" ] || [ "$latest" = "null" ]; then
+            echo "::error::Could not read latest tag from Salsa API."
+            exit 1
+          fi
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          echo "I: newest upstream tag: $latest"
+
+      - name: Read recorded tag
+        id: recorded
+        run: echo "tag=$(cat .github/upstream-tag.txt | tr -d '[:space:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Compare
+        id: cmp
+        run: |
+          if [ "${{ steps.upstream.outputs.latest }}" = "${{ steps.recorded.outputs.tag }}" ]; then
+            echo "I: up to date (${{ steps.recorded.outputs.tag }})."
+            echo "stale=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "I: NEW upstream release detected."
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # One open tracking issue at a time, keyed by the `upstream` label. If one
+      # is already open we leave it; otherwise we open a fresh one. This avoids a
+      # new issue every day while a release sits un-synced.
+      - name: Open tracking issue
+        if: steps.cmp.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LATEST: ${{ steps.upstream.outputs.latest }}
+          RECORDED: ${{ steps.recorded.outputs.tag }}
+        run: |
+          existing=$(gh issue list --label upstream --state open --json number --jq 'length')
+          if [ "$existing" != "0" ]; then
+            echo "I: an upstream tracking issue is already open; skipping."
+            exit 0
+          fi
+          gh label create upstream --color BFD4F2 --description "Upstream live-manual sync" 2>/dev/null || true
+          # Build the body via printf (no heredoc — keeps the YAML block scalar
+          # clean) into a file, then --body-file.
+          {
+            printf '%s\n\n' "A newer \`live-manual\` release is available on Salsa."
+            printf '| | tag |\n|---|---|\n'
+            printf '| recorded | \`%s\` |\n' "$RECORDED"
+            printf '| upstream | \`%s\` |\n\n' "$LATEST"
+            printf '**To sync:**\n'
+            printf '1. Run the **build** workflow (\`workflow_dispatch\`) with \`live_manual_ref\` = \`%s\`.\n' "$LATEST"
+            printf '2. If \`build-from-sisu.sh\` reports drift, review the regenerated \`docs/chapters/*.md\` + \`sidebar.generated.json\` diff — confirm it is a faithful upstream change, not a converter regression.\n'
+            printf '3. Commit the regenerated output as the new golden.\n'
+            printf '4. Update \`.github/upstream-tag.txt\` to \`%s\`.\n\n' "$LATEST"
+            printf '_Opened automatically by check-upstream.yml._\n'
+          } > "$RUNNER_TEMP/issue-body.md"
+          gh issue create \
+            --label upstream \
+            --title "Upstream live-manual release: $LATEST" \
+            --body-file "$RUNNER_TEMP/issue-body.md"
+          echo "I: tracking issue opened for $LATEST."
