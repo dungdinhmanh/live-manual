@@ -42,7 +42,13 @@ const porcelain = run('git', ['status', '--porcelain', '--', ...GENERATED]).stdo
 if (porcelain) {
   console.error('\n✗ Converter output drifted from the committed golden:\n');
   console.error(porcelain);
-  console.error(`\n  Inspect:  git diff -- ${GENERATED.join(' ')}`);
+  // Print the actual diff too — on CI there is no shell to run it afterwards,
+  // and the drift content is what tells you regression vs. faithful change.
+  const diff = run('git', ['diff', '--', ...GENERATED]).stdout;
+  if (diff.trim()) {
+    console.error('\n--- diff ---');
+    console.error(diff);
+  }
   console.error('  If intended, commit the regenerated output as the new golden.');
   console.error('  If not, the converter regressed — fix it before committing.\n');
   process.exit(1);

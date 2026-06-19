@@ -61,6 +61,19 @@ jobs:
       - name: SiSU -> HTML -> Markdown -> verify
         run: ./scripts/build-from-sisu.sh "$RUNNER_TEMP/live-manual"
 
+      # Upload the regenerated output even on failure, so a drift run lets you
+      # download the CI-built chapters and bless them as the new golden.
+      - name: Upload regenerated chapters (for blessing on drift)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: regenerated-output
+          path: |
+            docs/chapters
+            docs/index.md
+            docs/.vitepress/sidebar.generated.json
+          retention-days: 7
+
       - name: Unit + golden tests
         run: bun test
 

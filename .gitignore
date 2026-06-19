@@ -9,3 +9,9 @@ dist/
 .agents/
 .claude/
 skills-lock.json
+.codegraph/
+.remember/
+.progress/
+thoughts/
+# local screenshots / scratch
+*-the-basics.png
