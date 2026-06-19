@@ -6,7 +6,9 @@
     "dev": "vitepress dev docs --port 5173 --host 0.0.0.0",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs --port 5173 --host 0.0.0.0",
-    "convert": "bun run scripts/convert-to-md.ts"
+    "convert": "bun run scripts/convert-to-md.ts",
+    "verify": "bun run scripts/verify.ts",
+    "test": "bun test"
   },
   "devDependencies": {
     "@types/turndown": "^5.0.6",

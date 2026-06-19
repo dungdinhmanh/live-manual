@@ -1,17 +1,21 @@
 import TurndownService from 'turndown';
 import { gfm } from 'turndown-plugin-gfm';
 import { Glob } from 'glob';
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, readdirSync, rmSync } from 'fs';
 import { basename, dirname, join } from 'path';
 
-const SOURCE_DIR = '/home/kazukisatou/Documents/Codespace/live-manual-html-extracted/manual/html/live-manual';
+// Source HTML directory. CI sets SOURCE_DIR to the freshly built `*.en.html`
+// output; falls back to a positional arg, then the local extracted snapshot.
+const DEFAULT_SOURCE_DIR =
+  '/home/kazukisatou/Documents/Codespace/live-manual-html-extracted/manual/html/live-manual';
+const SOURCE_DIR = process.env.SOURCE_DIR ?? process.argv[2] ?? DEFAULT_SOURCE_DIR;
 const OUT_DIR = join(dirname(process.argv[1] ?? import.meta.filename), '..', 'docs', 'chapters');
 
-function slugFromFilename(filename: string): string {
+export function slugFromFilename(filename: string): string {
   return basename(filename, '.en.html');
 }
 
-function rewriteLinks(html: string): string {
+export function rewriteLinks(html: string): string {
   // Only rewrite same-directory references (no scheme, no slashes) — leave
   // absolute URLs like https://www.debian.org/.../ch04s05.en.html alone.
   return html.replace(/href="([^"\/\s]+)\.en\.html([^"]*)"/g, (_m, path, anchor) => {
@@ -31,7 +35,7 @@ function rewriteLinks(html: string): string {
  *  - Wrap <p class="code">…</p> as <pre><code> so Turndown emits fenced blocks.
  *  - Strip various other SiSU table/form/footer cruft.
  */
-function stripSisuCruft(html: string): string {
+export function stripSisuCruft(html: string): string {
   return (
     html
       // SiSU nav tables
@@ -130,7 +134,7 @@ function stripSisuCruft(html: string): string {
  * Promote leading "**Note:**" / "**Important:**" / "**Warning:**" paragraphs to
  * VitePress custom containers so they get proper visual styling.
  */
-function promoteAdmonitions(md: string): string {
+export function promoteAdmonitions(md: string): string {
   return md.replace(
     /^\*\*(Note|Important|Warning|Tip):\*\*\s+([^\n]+)$/gm,
     (_m, kind: string, body: string) => {
@@ -149,7 +153,7 @@ function promoteAdmonitions(md: string): string {
  * Plain bare URLs inside guillemets that Turndown did NOT linkify also get
  * wrapped. A stray zero-width space (U+200B) sometimes trails the closing ›.
  */
-function linkifyGuillemets(text: string): string {
+export function linkifyGuillemets(text: string): string {
   return (
     text
       // ‹[label](url)›  → [label](url)   (Turndown already made the link)
@@ -169,7 +173,7 @@ function linkifyGuillemets(text: string): string {
  * in Markdown emphasis from the source (e.g. _live-boot_(7)); the emphasis is
  * unwrapped into the link text. Skips matches already inside a Markdown link.
  */
-function linkifyManpages(text: string): string {
+export function linkifyManpages(text: string): string {
   // Optional surrounding _…_ emphasis, then name(section).
   return text.replace(
     /(_?)([a-z][a-z0-9_.+-]*?)\1\((\d)\)/gi,
@@ -191,7 +195,7 @@ function linkifyManpages(text: string): string {
  *    (code fences are skipped — we only touch text outside ``` blocks).
  *  - Collapse runs of 3+ blank lines into 2.
  */
-function tidyMarkdown(md: string): string {
+export function tidyMarkdown(md: string): string {
   // Strip footnote ref residue: `[12](#12)`, optionally surrounded by whitespace.
   let out = md.replace(/\s*\[\d+\]\(#\d+\)\s*/g, '\n\n');
 
@@ -229,7 +233,84 @@ function tidyMarkdown(md: string): string {
 // Chapters above this line count get a [[toc]] under the H1.
 const TOC_MIN_LINES = 200;
 
-function extractTitle(html: string): string {
+// Sidebar grouping. Slugs are placed under these section headings in this order;
+// within a group, items follow the upstream `toc.en.html` editorial order. Any
+// converted chapter not listed here falls into a trailing "More" group so new
+// upstream chapters still appear in the nav instead of becoming orphans.
+const SIDEBAR_GROUPS: { title: string; slugs: string[] }[] = [
+  { title: 'About', slugs: ['about-manual', 'about-project'] },
+  { title: 'User', slugs: ['installation', 'the-basics', 'overview-of-tools', 'managing-a-configuration'] },
+  {
+    title: 'Customization',
+    slugs: [
+      'customization-overview',
+      'customizing-package-installation',
+      'customizing-contents',
+      'customizing-run-time-behaviours',
+      'customizing-binary',
+      'customizing-installer',
+    ],
+  },
+  { title: 'Project', slugs: ['contributing-to-project', 'bugs', 'coding-style'] },
+  { title: 'Examples', slugs: ['examples'] },
+  { title: 'Appendix', slugs: ['style-guide', 'metadata'] },
+];
+
+/**
+ * Extract the upstream chapter order from `toc.en.html` (the SiSU table of
+ * contents). Returns slugs in first-appearance order, excluding toc/index.
+ * Returns [] if the file is missing or unparseable — callers fall back to the
+ * SIDEBAR_GROUPS declaration order.
+ */
+export function parseTocOrder(html: string): string[] {
+  const slugs: string[] = [];
+  const seen = new Set<string>();
+  const re = /href="([a-z][a-z0-9-]+)\.en\.html"/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(html))) {
+    const slug = m[1];
+    if (slug === 'toc' || slug === 'index' || seen.has(slug)) continue;
+    seen.add(slug);
+    slugs.push(slug);
+  }
+  return slugs;
+}
+
+/**
+ * Build the VitePress sidebar tree from the converted chapters, grouped by
+ * SIDEBAR_GROUPS and ordered within each group by the upstream TOC.
+ */
+type SidebarGroup = { text: string; collapsed: false; items: { text: string; link: string }[] };
+
+export function buildSidebar(titles: Map<string, string>, tocOrder: string[]): SidebarGroup[] {
+  const tocIndex = (slug: string) => {
+    const i = tocOrder.indexOf(slug);
+    return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+  };
+  const link = (slug: string) => ({ text: titles.get(slug) ?? slug, link: `/chapters/${slug}` });
+
+  const grouped = new Set<string>();
+  const sidebar: SidebarGroup[] = SIDEBAR_GROUPS.map(group => {
+    const items = group.slugs
+      .filter(slug => titles.has(slug))
+      .sort((a, b) => tocIndex(a) - tocIndex(b));
+    items.forEach(slug => grouped.add(slug));
+    return { text: group.title, collapsed: false as const, items: items.map(link) };
+  }).filter(g => g.items.length > 0);
+
+  // Any converted chapter not assigned to a declared group (e.g. a brand-new
+  // upstream chapter) lands in "More", ordered by the TOC.
+  const leftovers = [...titles.keys()]
+    .filter(slug => !grouped.has(slug))
+    .sort((a, b) => tocIndex(a) - tocIndex(b));
+  if (leftovers.length > 0) {
+    sidebar.push({ text: 'More', collapsed: false as const, items: leftovers.map(link) });
+  }
+
+  return sidebar;
+}
+
+export function extractTitle(html: string): string {
   const match = html.match(/<title>\s*([\s\S]*?)\s*<\/title>/);
   if (!match) return 'Untitled';
   const full = match[1].trim();
@@ -244,13 +325,15 @@ function extractTitle(html: string): string {
  * the canonical page heading; <title> may be a slugged ASCII fallback. Prefer
  * the section <h1> if we can find one before we strip the <h1>s.
  */
-function extractSectionH1(html: string): string | null {
-  // Match the second <h1 class="tiny"> (first is "Debian Live Manual").
-  const all = [...html.matchAll(/<h1 class="tiny">\s*([\s\S]*?)\s*<\/h1>/g)];
-  if (all.length < 2) return null;
-  const raw = all[1][1].trim();
-  if (!raw || raw.toLowerCase() === 'debian live manual') return null;
-  return raw;
+export function extractSectionH1(html: string): string | null {
+  // Pages carry a "Debian Live Manual" banner <h1 class="tiny"> plus the section
+  // title in another. Drop the banner and take the last remaining one. Most pages
+  // have two (banner + title); the metadata page has only the title, so requiring
+  // two would wrongly fall back to the lowercased <title> slug.
+  const titles = [...html.matchAll(/<h1 class="tiny">\s*([\s\S]*?)\s*<\/h1>/g)]
+    .map(m => m[1].trim())
+    .filter(t => t && t.toLowerCase() !== 'debian live manual');
+  return titles.length ? titles[titles.length - 1] : null;
 }
 
 const td = new TurndownService({
@@ -262,45 +345,81 @@ const td = new TurndownService({
 // in "Customizing package installation" that otherwise flattens to a wall of text).
 td.use(gfm);
 
+/**
+ * Convert one source HTML chapter into its final Markdown file contents
+ * (frontmatter + H1 + body + optional TOC). Pure: no filesystem access, so it
+ * can be golden-tested directly. Returns the resolved `title` always (used for
+ * the sidebar) and `content` = the full `.md` payload, or null when the page
+ * has no usable <body> (the chapter is then skipped by the writer).
+ */
+export function renderChapter(raw: string, slug: string): { title: string; content: string | null } {
+  const sectionH1 = extractSectionH1(raw);
+  const title = sectionH1 ?? extractTitle(raw);
+
+  const cleaned = stripSisuCruft(raw);
+  const linked = rewriteLinks(cleaned);
+
+  // Prefer the well-formed `<body>…</body>` span; fall back to capturing to EOF
+  // for pages that ship without a closing tag (the metadata page is malformed
+  // upstream — it ends at a stray `</div>` with no `</body></html>`).
+  const bodyMatch =
+    linked.match(/<body[^>]*>([\s\S]*)<\/body>/) ?? linked.match(/<body[^>]*>([\s\S]*)$/);
+  if (!bodyMatch) return { title, content: null };
+
+  const markdown = td.turndown(bodyMatch[1]);
+  const tidied = tidyMarkdown(markdown);
+
+  const frontmatter = ['---', `title: ${title}`, `slug: ${slug}`, '---', '', ''].join('\n');
+
+  // Inject a single canonical H1 at the top so every page has consistent
+  // structure regardless of whether the source contained one.
+  const hasLeadingH1 = /^#\s+\S/.test(tidied);
+  let body = hasLeadingH1 ? tidied : `# ${title}\n\n${tidied}`;
+
+  // Long chapters get an auto-TOC right after the H1.
+  if (body.split('\n').length >= TOC_MIN_LINES) {
+    body = body.replace(/^(#\s+[^\n]+\n)/, `$1\n[[toc]]\n`);
+  }
+
+  return { title, content: frontmatter + body };
+}
+
 async function convertAll() {
   mkdirSync(OUT_DIR, { recursive: true });
+
+  // Prune stale chapter Markdown so renamed/removed upstream chapters don't leave
+  // orphan files behind. OUT_DIR holds only generated `*.md` — safe to wipe.
+  for (const f of readdirSync(OUT_DIR)) {
+    if (f.endsWith('.md')) rmSync(join(OUT_DIR, f));
+  }
 
   const g = new Glob('*.en.html', { cwd: SOURCE_DIR, absolute: true });
   const files = Array.from(g);
   const chapterFiles = files.filter(f => !f.includes('/index.') && !f.includes('/toc.'));
 
+  const titles = new Map<string, string>();
+
   for (const file of chapterFiles) {
     const slug = slugFromFilename(file);
     const raw = await Bun.file(file).text();
 
-    const sectionH1 = extractSectionH1(raw);
-    const title = sectionH1 ?? extractTitle(raw);
-
-    const cleaned = stripSisuCruft(raw);
-    const linked = rewriteLinks(cleaned);
-
-    const bodyMatch = linked.match(/<body[^>]*>([\s\S]*)<\/body>/);
-    if (!bodyMatch) continue;
-
-    const markdown = td.turndown(bodyMatch[1]);
-    const tidied = tidyMarkdown(markdown);
-
-    const frontmatter = ['---', `title: ${title}`, `slug: ${slug}`, '---', '', ''].join('\n');
-
-    // Inject a single canonical H1 at the top so every page has consistent
-    // structure regardless of whether the source contained one.
-    const hasLeadingH1 = /^#\s+\S/.test(tidied);
-    let body = hasLeadingH1 ? tidied : `# ${title}\n\n${tidied}`;
-
-    // Long chapters get an auto-TOC right after the H1.
-    if (body.split('\n').length >= TOC_MIN_LINES) {
-      body = body.replace(/^(#\s+[^\n]+\n)/, `$1\n[[toc]]\n`);
-    }
+    const { title, content } = renderChapter(raw, slug);
+    titles.set(slug, title);
+    if (content === null) continue;
 
     const outPath = join(OUT_DIR, `${slug}.md`);
-    writeFileSync(outPath, frontmatter + body);
+    writeFileSync(outPath, content);
     console.log(`✓ ${slug}.md`);
   }
+
+  // Generate the sidebar from the upstream TOC order so new/renamed chapters are
+  // reflected in the nav without hand-editing config.ts.
+  const tocFile = Bun.file(join(SOURCE_DIR, 'toc.en.html'));
+  const tocOrder = (await tocFile.exists()) ? parseTocOrder(await tocFile.text()) : [];
+  const sidebar = buildSidebar(titles, tocOrder);
+  const sidebarPath = join(OUT_DIR, '..', '.vitepress', 'sidebar.generated.json');
+  writeFileSync(sidebarPath, JSON.stringify(sidebar, null, 2) + '\n');
+  console.log('✓ docs/.vitepress/sidebar.generated.json');
 
   const homeContent = `---
 layout: home
@@ -341,4 +460,6 @@ features:
   console.log('✓ docs/index.md (home page)');
 }
 
-convertAll().catch(console.error);
+if (import.meta.main) {
+  convertAll().catch(console.error);
+}
