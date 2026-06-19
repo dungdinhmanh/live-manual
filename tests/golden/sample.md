@@ -25,4 +25,11 @@ config/
 config/package-lists/
 ```
 
+## 1.2 Configuration file
+
+```text
+# /etc/foo.conf - sample config
+key value
+```
+
 See also [the basics](/chapters/the-basics#foo).

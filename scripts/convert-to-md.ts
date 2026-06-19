@@ -100,7 +100,16 @@ export function stripSisuCruft(html: string): string {
         // directory trees, file listings) are tagged `text` so they render as
         // plain monospace instead of being mis-highlighted as shell.
         const lines = body.split('\n');
-        const hasPrompt = lines.some(l => /^\s*[$#]\s+/.test(l));
+        const nonEmpty = lines.filter(l => l.trim() !== '');
+        // `$` is an unambiguous user prompt. `#` is ambiguous — a root prompt in
+        // a command block, but also a comment line in a config-file listing. So
+        // only treat the block as shell when there is a `$` prompt, or when every
+        // non-empty line is a prompt (a pure command block). A mixed listing with
+        // `#` comments stays `text` and keeps its `#` verbatim instead of having
+        // it stripped as if it were a prompt.
+        const hasDollar = nonEmpty.some(l => /^\s*\$\s+/.test(l));
+        const allPrompt = nonEmpty.length > 0 && nonEmpty.every(l => /^\s*[$#]\s+/.test(l));
+        const hasPrompt = hasDollar || allPrompt;
         const lang = hasPrompt ? 'shell' : 'text';
         const stripped = hasPrompt
           ? lines.map(l => l.replace(/^\s*[$#]\s+/, '')).join('\n')
@@ -178,9 +187,13 @@ export function linkifyManpages(text: string): string {
   return text.replace(
     /(_?)([a-z][a-z0-9_.+-]*?)\1\((\d)\)/gi,
     (whole, _emph: string, name: string, section: string, offset: number, src: string) => {
-      // Don't rewrite if this sits inside an existing ](...) link target.
+      // Don't rewrite if this sits inside an existing link — either as the URL
+      // target (preceded by `](` or a `/` path char) or as the link TEXT
+      // (immediately followed by `](`, e.g. `[live-boot(7)](…)`). Without the
+      // trailing check the ref in link text gets double-linked.
       const before = src.slice(Math.max(0, offset - 2), offset);
-      if (before.endsWith('](') || before.endsWith('/')) return whole;
+      const after = src.slice(offset + whole.length, offset + whole.length + 2);
+      if (before.endsWith('](') || before.endsWith('/') || after === '](') return whole;
       // manpages.debian.org paths are lowercase.
       const url = `${name.toLowerCase()}.${section}`;
       return `[${name}(${section})](https://manpages.debian.org/${url})`;
@@ -204,8 +217,10 @@ export function tidyMarkdown(md: string): string {
   // would otherwise render as empty bordered boxes. Each is one line in the MD.
   out = out.replace(/^<table summary="segment navigation[^\n]*<\/table>\s*$/gm, '');
 
-  // Unescape + linkify outside fenced code blocks.
-  const parts = out.split(/(```[\s\S]*?```)/g);
+  // Unescape + linkify outside code. Protect BOTH fenced blocks (```…```) and
+  // inline spans (`…`): a manpage ref or guillemet URL inside inline code (e.g.
+  // `tar(1)`) must stay verbatim, not get linkified into a broken code span.
+  const parts = out.split(/(```[\s\S]*?```|`[^`\n]+`)/g);
   for (let i = 0; i < parts.length; i++) {
     if (i % 2 === 0) {
       parts[i] = parts[i]

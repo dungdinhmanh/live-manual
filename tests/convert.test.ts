@@ -19,6 +19,7 @@ import { join } from 'node:path';
 import { Glob } from 'glob';
 import {
   renderChapter,
+  stripSisuCruft,
   linkifyManpages,
   linkifyGuillemets,
   promoteAdmonitions,
@@ -92,6 +93,51 @@ test('tidyMarkdown: unescapes prose but never touches code fences', () => {
   const out = tidyMarkdown('```shell\na\\_b\n```\n\ntext a\\_b\n');
   expect(out).toContain('a\\_b\n```'); // inside the fence: backslash preserved
   expect(out).toContain('text a_b'); // outside the fence: unescaped
+});
+
+// ---- Layer 2b: regression tests for fixed converter bugs ----
+
+// Bug A — a manpage ref in link *text* must not be double-linked.
+test('linkifyManpages: ref inside link text is left alone', () => {
+  const s = '[live-boot(7)](https://manpages.debian.org/live-boot.7)';
+  expect(linkifyManpages(s)).toBe(s);
+});
+
+// Bug F — manpage ref inside an inline code span must stay verbatim.
+test('tidyMarkdown: manpage ref inside inline code is not linkified', () => {
+  expect(tidyMarkdown('use `tar(1)` here').trim()).toBe('use `tar(1)` here');
+});
+
+// Bug F2 — guillemet URL inside inline code must stay verbatim.
+test('tidyMarkdown: guillemet url inside inline code is left verbatim', () => {
+  expect(tidyMarkdown('run `‹https://x.org›`').trim()).toBe('run `‹https://x.org›`');
+});
+
+// Bug G — backslash escapes inside inline code must be preserved, prose unescaped.
+test('tidyMarkdown: escapes inside inline code preserved, prose unescaped', () => {
+  expect(tidyMarkdown('`a\\_b` and a\\_b').trim()).toBe('`a\\_b` and a_b');
+});
+
+// Bug B — a config-file listing whose first line is a `#` comment must be tagged
+// `text` with the `#` preserved, not mis-detected as a shell prompt and stripped.
+test('code block: config listing with # comment stays text, # preserved', () => {
+  const out = stripSisuCruft('<p class="code" id="1"># /etc/foo.conf\nkey value</p>');
+  expect(out).toContain('language-text');
+  expect(out).toContain('# /etc/foo.conf');
+});
+
+// …but a genuine command block (a `$` prompt, or all-`#` root prompts) is still
+// `shell` with the prompt stripped.
+test('code block: $ command block is shell with prompt stripped', () => {
+  const out = stripSisuCruft('<p class="code" id="1">$ lb config\n$ lb build</p>');
+  expect(out).toContain('language-shell');
+  expect(out).not.toContain('$ lb');
+});
+
+test('code block: all-# root command block is shell with prompt stripped', () => {
+  const out = stripSisuCruft('<p class="code" id="1"># apt-get update\n# apt-get install foo</p>');
+  expect(out).toContain('language-shell');
+  expect(out).not.toContain('# apt-get');
 });
 
 test('buildSidebar: declared groups keep order, unknown chapter lands in More', () => {
