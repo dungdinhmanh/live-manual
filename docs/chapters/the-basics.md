@@ -260,8 +260,8 @@ We must configure our network's DHCP server to be sure to give an IP address to 
 
 Here is an example for inspiration, written for the ISC DHCP server isc-dhcp-server in the /etc/dhcp/dhcpd.conf configuration file:
 
-```shell
-/etc/dhcp/dhcpd.conf - configuration file for isc-dhcp-server
+```text
+# /etc/dhcp/dhcpd.conf - configuration file for isc-dhcp-server
 ddns-update-style none;
 option domain-name "example.org";
 option domain-name-servers ns1.example.org, ns2.example.org;
