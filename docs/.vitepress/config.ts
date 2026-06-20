@@ -31,7 +31,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'About', link: '/chapters/about-manual' },
-      { text: 'Salsa', link: 'https://salsa.debian.org/live-team/live-manual' },
+      { text: 'Github', link: 'https://github.com/dungdinhmanh/live-manual' },
     ],
 
     sidebar,
