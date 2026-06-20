@@ -8,6 +8,10 @@ export default defineConfig({
   titleTemplate: ':title',
   description: 'The official guide to Debian Live systems — build and customize Debian-based live systems.',
   srcDir: '.',
+  
+  sitemap: {
+    hostname: 'https://netlify.app'
+  },
 
   head: [
     ['meta', { name: 'google-site-verification', content: 'tDvACm_e_Zv56uBvQ2M53jfhumaA1EjkEwkyJU0Ri9Q' }],
