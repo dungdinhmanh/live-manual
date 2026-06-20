@@ -10,7 +10,7 @@ export default defineConfig({
   srcDir: '.',
   
   sitemap: {
-    hostname: 'https://netlify.app'
+    hostname: 'https://live-manual.netlify.app'
   },
 
   head: [
