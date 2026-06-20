@@ -10,8 +10,9 @@ export default defineConfig({
   srcDir: '.',
 
   head: [
+    <meta name="google-site-verification" content="tDvACm_e_Zv56uBvQ2M53jfhumaA1EjkEwkyJU0Ri9Q" />
     ['link', { rel: 'icon', type: 'image/x-icon', href: 'https://www.debian.org/favicon.ico' }],
-    ['meta', { name: 'theme-color', content: '#d70a53' }],
+    ['meta', { name: 'theme-color', content: '#d70a53' }, { name: 'google-site-verification', content: 'tDvACm_e_Zv56uBvQ2M53jfhumaA1EjkEwkyJU0Ri9Q' }],
   ],
 
   themeConfig: {
