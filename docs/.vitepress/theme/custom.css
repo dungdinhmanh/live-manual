@@ -27,8 +27,6 @@
   /* Custom scrollbar track; overridden in .dark. */
   --ldm-scrollbar-track: var(--vp-c-bg-soft);
   --ldm-scrollbar-thumb: #d6d3d1;
-  --ldm-card-border: rgba(215, 10, 83, 0.12);
-  --ldm-card-shadow: 0 12px 32px rgba(35, 19, 25, 0.06);
 }
 
 .dark {
@@ -44,8 +42,6 @@
 
   --ldm-scrollbar-track: #1c1917;
   --ldm-scrollbar-thumb: #44403c;
-  --ldm-card-border: rgba(239, 87, 119, 0.18);
-  --ldm-card-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
 }
 
 html {
@@ -58,7 +54,7 @@ html {
 
 .VPSidebarItem.is-active > .item .text {
   color: var(--vp-c-brand-1);
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .VPSidebarItem:hover > .item .text {
@@ -68,20 +64,6 @@ html {
 .VPSidebarItem .text {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
-}
-
-.VPSidebarGroup .title {
-  letter-spacing: 0.02em;
-}
-
-.VPSidebarItem.level-1 > .item {
-  border-radius: var(--ldm-radius-sm);
-  transition: background-color 0.18s ease, color 0.18s ease;
-}
-
-.VPSidebarItem.level-1:hover > .item,
-.VPSidebarItem.level-1.is-active > .item {
-  background: var(--vp-c-brand-soft);
 }
 
 /* ---------- Top nav ---------- */
@@ -196,14 +178,6 @@ html {
   user-select: none;
 }
 
-.VPHome .VPHero {
-  padding-top: 88px;
-}
-
-.VPHome .VPHero .main {
-  max-width: 680px;
-}
-
 .VPHome .VPHero .name {
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
@@ -213,93 +187,18 @@ html {
   background-clip: text;
 }
 
-.VPHome .VPHero .text {
-  letter-spacing: 0;
-}
-
 /* ---------- Home page feature boxes ---------- */
 /* Each box links to a chapter; give it a brand-tinted hover affordance. */
 
 .VPHome .VPFeature {
-  border: 1px solid var(--ldm-card-border);
-  border-radius: var(--ldm-radius-md);
+  border: 1px solid transparent;
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.VPHome .VPFeature .box {
-  min-height: 132px;
-  background:
-    linear-gradient(90deg, var(--vp-c-brand-soft), transparent 46%),
-    var(--vp-c-bg-soft);
-}
-
-.VPHome .VPFeature .title {
-  font-family: 'DM Sans', sans-serif;
-}
-
-.VPHome .VPFeature .details {
-  color: var(--vp-c-text-2);
 }
 
 .VPHome .VPFeature:hover {
   border-color: var(--vp-c-brand-1);
   transform: translateY(-4px);
   box-shadow: 0 8px 16px var(--vp-c-brand-soft);
-}
-
-.VPHome .vp-doc {
-  padding-top: 16px;
-}
-
-.VPHome .vp-doc h2 {
-  margin-top: 16px;
-}
-
-.VPHome .vp-doc ul {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-  padding-left: 0;
-  list-style: none;
-}
-
-.VPHome .vp-doc li {
-  margin: 0;
-}
-
-.VPHome .vp-doc li a {
-  display: block;
-  min-height: 72px;
-  padding: 16px;
-  border: 1px solid var(--ldm-card-border);
-  border-radius: var(--ldm-radius-md);
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  border-bottom: 0;
-}
-
-.VPHome .vp-doc li a:hover {
-  color: var(--vp-c-brand-1);
-  border-color: var(--vp-c-brand-1);
-}
-
-@media (max-width: 960px) {
-  .VPHome .vp-doc ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .VPHome .VPHero {
-    padding-top: 48px;
-  }
-
-  .VPHome .vp-doc ul {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* ---------- Code block line numbers ---------- */
