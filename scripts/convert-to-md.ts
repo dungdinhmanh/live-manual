@@ -288,6 +288,10 @@ const SIDEBAR_GROUPS: { title: string; slugs: string[] }[] = [
   { title: 'Appendix', slugs: ['style-guide', 'metadata'] },
 ];
 
+const SIDEBAR_TITLE_OVERRIDES = new Map<string, string>([
+  ['customization-overview', 'Customization overview'],
+]);
+
 /**
  * Extract the upstream chapter order from `toc.en.html` (the SiSU table of
  * contents). Returns slugs in first-appearance order, excluding toc/index.
@@ -319,7 +323,10 @@ export function buildSidebar(titles: Map<string, string>, tocOrder: string[]): S
     const i = tocOrder.indexOf(slug);
     return i === -1 ? Number.MAX_SAFE_INTEGER : i;
   };
-  const link = (slug: string) => ({ text: titles.get(slug) ?? slug, link: `/chapters/${slug}` });
+  const link = (slug: string) => ({
+    text: SIDEBAR_TITLE_OVERRIDES.get(slug) ?? titles.get(slug) ?? slug,
+    link: `/chapters/${slug}`,
+  });
 
   const grouped = new Set<string>();
   const sidebar: SidebarGroup[] = SIDEBAR_GROUPS.map(group => {
@@ -487,6 +494,14 @@ features:
     details: Guidelines for contributing code to the Debian Live Project.
     link: /chapters/coding-style
 ---
+
+## Common tasks
+
+- [Install live-build](/chapters/installation)
+- [Create an ISO hybrid image](/chapters/the-basics)
+- [Customize package installation](/chapters/customizing-package-installation)
+- [Add files to the live system](/chapters/customizing-contents)
+- [Report a documentation issue](/chapters/bugs)
 `;
   writeFileSync(join(OUT_DIR, '..', 'index.md'), homeContent);
   console.log('✓ docs/index.md (home page)');

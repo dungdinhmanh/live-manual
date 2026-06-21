@@ -32,3 +32,11 @@ features:
     details: Guidelines for contributing code to the Debian Live Project.
     link: /chapters/coding-style
 ---
+
+## Common tasks
+
+- [Install live-build](/chapters/installation)
+- [Create an ISO hybrid image](/chapters/the-basics)
+- [Customize package installation](/chapters/customizing-package-installation)
+- [Add files to the live system](/chapters/customizing-contents)
+- [Report a documentation issue](/chapters/bugs)
