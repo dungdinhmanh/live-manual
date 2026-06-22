@@ -96,11 +96,15 @@ both on any change.
   the converter from `**Note:** / **Important:** / **Warning:** / **Tip:**`.
 - **Links (content)** — brand color, no underline at rest, brand bottom-border
   on hover (`0.2s`).
-- **Home feature box** — links to a chapter; rest border transparent, hover =
-  brand border + `4px` lift + `0 8px 16px` brand-soft shadow. Home page is
-  `user-select: none`.
+- **Home feature box** — links to a chapter; rest state uses a low-alpha brand
+  border on the card body, hover = brand border + `4px` lift + `0 8px 16px`
+  brand-soft shadow. Home page is `user-select: none`.
+- **Home common tasks** — short functional link cards after the feature grid.
+  No icons or decorative media; use the existing brand-soft surface, `8px`
+  radius, `16px` gap, and `16px` padding.
 - **Nav / sidebar / footer** — brand-tinted `1px` separators; active + hover
-  items brand-colored; DM Sans labels.
+  items brand-colored; sidebar rows may use brand-soft background with `4px`
+  radius; DM Sans labels.
 
 ## 6. Rules of engagement
 

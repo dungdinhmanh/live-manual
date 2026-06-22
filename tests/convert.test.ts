@@ -26,6 +26,7 @@ import {
   tidyMarkdown,
   rewriteLinks,
   buildSidebar,
+  buildHomeContent,
 } from '../scripts/convert-to-md';
 
 const FIXTURES = join(import.meta.dir, 'fixtures');
@@ -148,4 +149,13 @@ test('buildSidebar: declared groups keep order, unknown chapter lands in More', 
   ]);
   const sb = buildSidebar(titles, ['about-manual', 'installation', 'novel-chapter']);
   expect(sb.find(g => g.text === 'More')?.items[0]?.link).toBe('/chapters/novel-chapter');
+});
+
+test('buildHomeContent: includes common task shortcuts after frontmatter', () => {
+  const home = buildHomeContent();
+
+  expect(home).toContain('## Common tasks');
+  expect(home).toContain('- [Install live-build](/chapters/installation)');
+  expect(home).toContain('- [Create an ISO hybrid image](/chapters/the-basics)');
+  expect(home).toContain('- [Report a documentation issue](/chapters/bugs)');
 });

@@ -9,20 +9,20 @@ slug: installation
 
 Building live system images has very few system requirements for the host system:
 
-- Superuser (root) access
+-   Superuser (root) access
 
-- An up-to-date version of _live-build_
+-   An up-to-date version of _live-build_
 
-- A POSIX-compliant shell, such as _bash_ or _dash_
+-   A POSIX-compliant shell, such as _bash_ or _dash_
 
-- _debootstrap_
+-   _debootstrap_
 
-- Linux 2.6 or newer
+-   Linux 2.6 or newer
 
-- A mount point with _dev_ and _exec_ rights.
+-   A mount point with _dev_ and _exec_ rights.
 
 ```shell
-mount -odev,exec,remount
+mount  -odev,exec,remount
 ```
 
 Note that using Debian or a Debian-derived distribution is not required - _live-build_ will run on almost any distribution with the above requirements.
@@ -31,11 +31,11 @@ Note that using Debian or a Debian-derived distribution is not required - _live-
 
 You can install _live-build_ in a number of different ways:
 
-- From the Debian repository
+-   From the Debian repository
 
-- From source
+-   From source
 
-- From snapshots
+-   From snapshots
 
 If you are using Debian, the recommended way is to install _live-build_ via the Debian repository.
 
@@ -95,7 +95,7 @@ Both _live-boot_ and _live-config_ are available from the Debian repository as p
 
 To use the latest source from git, you can follow the process below. Please ensure you are familiar with the terms mentioned in [Terms](/chapters/about-manual#terms).
 
-- Checkout the _live-boot_ and _live-config_ sources
+-   Checkout the _live-boot_ and _live-config_ sources
 
 ```shell
 git clone https://salsa.debian.org/live-team/live-boot.git
@@ -104,7 +104,7 @@ git clone https://salsa.debian.org/live-team/live-config.git
 
 Consult the _live-boot_ and _live-config_ man pages for details on customizing if that is your reason for building these packages from source.
 
-- Build _live-boot_ and _live-config_ .deb files
+-   Build _live-boot_ and _live-config_ .deb files
 
 You must build either on your target distribution or in a chroot containing your target platform: this means if your target is **trixie** then you should build against **trixie**.
 
@@ -117,11 +117,11 @@ cd ../live-config
 dpkg-buildpackage -b -uc -us
 ```
 
-- Use applicable generated .deb files
+-   Use applicable generated .deb files
 
 As _live-boot_ and _live-config_ are installed by _live-build_ system, installing the packages in the host system is not sufficient: you should treat the generated .deb files like any other custom packages. Since your purpose for building from source is likely to test new things over the short term before the official release, follow [Installing modified or third-party packages](/chapters/customizing-package-installation#installing-modified-or-third-party-packages) to temporarily include the relevant files in your configuration. In particular, notice that both packages are divided into a generic part, a documentation part and one or more back-ends. Include the generic part, only one back-end matching your configuration, and optionally the documentation. Assuming you are building a live image in the current directory and have generated all .deb files for a single version of both packages in the directory above, these bash commands would copy all of the relevant packages including default back-ends:
 
 ```shell
-cp ../live-boot{_,-initramfs-tools,-doc}*.deb config/packages.chroot/
-cp ../live-config{_,-sysvinit,-doc}*.deb config/packages.chroot/
+cp ../live-boot{_,-initramfs-tools,-doc}*.deb  config/packages.chroot/
+cp ../live-config{_,-sysvinit,-doc}*.deb  config/packages.chroot/
 ```

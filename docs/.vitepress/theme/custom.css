@@ -54,7 +54,7 @@ html {
 
 .VPSidebarItem.is-active > .item .text {
   color: var(--vp-c-brand-1);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .VPSidebarItem:hover > .item .text {
@@ -64,6 +64,20 @@ html {
 .VPSidebarItem .text {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
+}
+
+.VPSidebarGroup .title {
+  letter-spacing: 0.02em;
+}
+
+.VPSidebarItem.level-1 > .item {
+  border-radius: var(--ldm-radius-sm);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.VPSidebarItem.level-1:hover > .item,
+.VPSidebarItem.level-1.is-active > .item {
+  background: var(--vp-c-brand-soft);
 }
 
 /* ---------- Top nav ---------- */
@@ -187,18 +201,111 @@ html {
   background-clip: text;
 }
 
+.VPHome .VPHero .container {
+  max-width: 1152px;
+}
+
+.VPHome .VPHero .main {
+  max-width: 768px;
+}
+
+.VPHome .VPHero .text {
+  max-width: 768px;
+  letter-spacing: 0;
+}
+
+.VPHome .VPHero .tagline {
+  max-width: 640px;
+}
+
 /* ---------- Home page feature boxes ---------- */
 /* Each box links to a chapter; give it a brand-tinted hover affordance. */
 
 .VPHome .VPFeature {
-  border: 1px solid transparent;
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.VPHome .VPFeature .box {
+  min-height: 128px;
+  border: 1px solid var(--vp-c-brand-soft);
+  border-radius: var(--ldm-radius-md);
+}
+
+.VPHome .VPFeature .title {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.VPHome .VPFeature .details {
+  color: var(--vp-c-text-2);
 }
 
 .VPHome .VPFeature:hover {
   border-color: var(--vp-c-brand-1);
   transform: translateY(-4px);
   box-shadow: 0 8px 16px var(--vp-c-brand-soft);
+}
+
+.VPHome .VPFeature:hover .box {
+  border-color: var(--vp-c-brand-1);
+}
+
+.VPHome .vp-doc {
+  padding-top: 16px;
+}
+
+.VPHome .vp-doc h2 {
+  margin-top: 16px;
+}
+
+.VPHome .vp-doc ul {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.VPHome .vp-doc li {
+  margin: 0;
+}
+
+.VPHome .vp-doc li a {
+  display: block;
+  min-height: 64px;
+  padding: 16px;
+  border: 1px solid var(--vp-c-brand-soft);
+  border-radius: var(--ldm-radius-md);
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-bottom: 0;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.VPHome .vp-doc li a:hover {
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-brand-soft);
+}
+
+@media (max-width: 960px) {
+  .VPHome .VPHero .main,
+  .VPHome .VPHero .text,
+  .VPHome .VPHero .tagline {
+    max-width: none;
+  }
+
+  .VPHome .vp-doc ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .VPHome .vp-doc ul {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ---------- Code block line numbers ---------- */
