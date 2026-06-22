@@ -1,5 +1,7 @@
 ---
-layout: home
+layout: page
+sidebar: false
+
 title: Debian Live Manual
 hero:
   name: Debian Live Manual
@@ -33,6 +35,8 @@ features:
     link: /chapters/coding-style
 ---
 
+<HomePage>
+
 ## Common tasks
 
 - [Install live-build](/chapters/installation)
@@ -40,3 +44,5 @@ features:
 - [Customize package installation](/chapters/customizing-package-installation)
 - [Add files to the live system](/chapters/customizing-contents)
 - [Report a documentation issue](/chapters/bugs)
+
+</HomePage>

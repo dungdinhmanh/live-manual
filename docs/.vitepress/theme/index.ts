@@ -3,6 +3,8 @@ import { h } from 'vue';
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import './custom.css';
+import DebianNews from '../components/debian-news.vue'
+import HomePage from '../components/HomePage.vue'
 
 export default {
   extends: DefaultTheme,
@@ -10,6 +12,8 @@ export default {
     return h(DefaultTheme.Layout, null, {});
   },
   enhanceApp({ app, router, siteData }) {
-    // Additional Vue app enhancements if needed
+    app.component('DebianNews', DebianNews)
+    app.component('HomePage', HomePage)
   },
+
 } satisfies Theme;
