@@ -80,6 +80,10 @@ html {
   background: var(--vp-c-brand-soft);
 }
 
+.VPSidebarItem .text {
+  padding: 4px 8px;
+}
+
 /* ---------- Top nav ---------- */
 /* Let VitePress handle nav background — we only style the title font and
    add a subtle brand-tinted bottom border. */
@@ -280,7 +284,6 @@ html {
   font-family: 'DM Sans', sans-serif;
   font-size: 0.875rem;
   font-weight: 600;
-  border-bottom: 0;
   transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
 }
 
