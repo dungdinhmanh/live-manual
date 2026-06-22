@@ -21,8 +21,8 @@ export default defineConfig({
 
   themeConfig: {
     logo: {
-      light: 'https://www.debian.org/Pics/debian.png',
-      dark: 'https://www.debian.org/Pics/debian.png',
+      light: 'https://www.debian.org/logos/openlogo-nd.svg',
+      dark: 'https://www.debian.org/logos/openlogo-nd.svg',
       alt: 'Debian',
     },
 
