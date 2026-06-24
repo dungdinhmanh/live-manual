@@ -191,12 +191,12 @@ html {
 
 /* ---------- Home page hero ---------- */
 
-.VPHome {
+.home-page {
   /* The landing page is chrome, not content — don't let stray drags select it. */
   user-select: none;
 }
 
-.VPHome .VPHero .name {
+.home-page .VPHero .name {
   font-family: 'DM Sans', sans-serif;
   font-weight: 700;
   background: linear-gradient(135deg, #d70a53, #ef5777);
@@ -205,109 +205,64 @@ html {
   background-clip: text;
 }
 
-.VPHome .VPHero .container {
+/* Tighten the default hero padding (VitePress ships `… 64px 64px`). */
+.home-page .VPHero {
+  padding: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 80px) 16px 32px;
+}
+
+.home-page .VPHero .container {
   max-width: 1152px;
 }
 
-.VPHome .VPHero .main {
+.home-page .VPHero .main {
   max-width: 768px;
 }
 
-.VPHome .VPHero .text {
+.home-page .VPHero .text {
   max-width: 768px;
   letter-spacing: 0;
 }
 
-.VPHome .VPHero .tagline {
+.home-page .VPHero .tagline {
   max-width: 640px;
 }
 
 /* ---------- Home page feature boxes ---------- */
 /* Each box links to a chapter; give it a brand-tinted hover affordance. */
 
-.VPHome .VPFeature {
+.home-page .VPFeature {
   transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.VPHome .VPFeature .box {
+.home-page .VPFeature .box {
   min-height: 128px;
   border: 1px solid var(--vp-c-brand-soft);
   border-radius: var(--ldm-radius-md);
 }
 
-.VPHome .VPFeature .title {
+.home-page .VPFeature .title {
   font-family: 'DM Sans', sans-serif;
 }
 
-.VPHome .VPFeature .details {
+.home-page .VPFeature .details {
   color: var(--vp-c-text-2);
 }
 
-.VPHome .VPFeature:hover {
+.home-page .VPFeature:hover {
   border-color: var(--vp-c-brand-1);
   transform: translateY(-4px);
   box-shadow: 0 8px 16px var(--vp-c-brand-soft);
 }
 
-.VPHome .VPFeature:hover .box {
+.home-page .VPFeature:hover .box {
   border-color: var(--vp-c-brand-1);
-}
-
-.VPHome .vp-doc {
-  padding-top: 16px;
-}
-
-.VPHome .vp-doc h2 {
-  margin-top: 16px;
-}
-
-.VPHome .vp-doc ul {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
-  padding-left: 0;
-  list-style: none;
-}
-
-.VPHome .vp-doc li {
-  margin: 0;
-}
-
-.VPHome .vp-doc li a {
-  display: block;
-  min-height: 64px;
-  padding: 16px;
-  border: 1px solid var(--vp-c-brand-soft);
-  border-radius: var(--ldm-radius-md);
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-}
-
-.VPHome .vp-doc li a:hover {
-  color: var(--vp-c-brand-1);
-  border-color: var(--vp-c-brand-1);
-  background: var(--vp-c-brand-soft);
 }
 
 @media (max-width: 960px) {
-  .VPHome .VPHero .main,
-  .VPHome .VPHero .text,
-  .VPHome .VPHero .tagline {
+  .home-page .VPHero .main,
+  .home-page .VPHero .text,
+  .home-page .VPHero .tagline {
     max-width: none;
-  }
-
-  .VPHome .vp-doc ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .VPHome .vp-doc ul {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -348,56 +303,4 @@ html {
 
 .VPFooter {
   border-top: 1px solid rgba(215, 10, 83, 0.2);
-}
-
-/* HomePage*/
-/* Thêm vào custom.css — giữ cái cũ, thêm cái mới cho HomePage */
-.home-page .common-tasks ul,
-.VPHome .vp-doc ul {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
-  padding-left: 0;
-  list-style: none;
-}
-
-.home-page .common-tasks li {
-  margin: 0;
-}
-
-.home-page .common-tasks li a {
-  display: block;
-  min-height: 64px;
-  padding: 16px;
-  border: 1px solid var(--vp-c-brand-soft);
-  border-radius: var(--ldm-radius-md);
-  background: var(--vp-c-bg-soft);
-  color: var(--vp-c-text-1);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
-}
-
-.home-page .common-tasks li a:hover {
-  color: var(--vp-c-brand-1);
-  border-color: var(--vp-c-brand-1);
-  background: var(--vp-c-brand-soft);
-}
-
-.home-page .common-tasks h2 {
-  margin-top: 16px;
-  font-family: 'DM Sans', sans-serif;
-}
-
-@media (max-width: 960px) {
-  .home-page .common-tasks ul {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .home-page .common-tasks ul {
-    grid-template-columns: 1fr;
-  }
 }

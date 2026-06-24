@@ -32,19 +32,24 @@ function formatDate(dateStr: string): string {
 
 <style scoped>
 .debian-news {
-  margin: 2rem 0;
+  margin: 0 0 2rem;
 }
 
+/* Horizontal scroll strip: newest news on the left, scroll right for older. */
 .news-list {
   list-style: none;
-  padding: 0;
+  padding: 0 0 8px;
   margin: 0;
   display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  flex-direction: row;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
 }
 
 .news-item {
+  flex: 0 0 320px;
+  scroll-snap-align: start;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
   padding: 1rem 1.25rem;
@@ -80,7 +85,7 @@ function formatDate(dateStr: string): string {
   font-size: 0.9rem;
   color: var(--vp-c-text-1);
   line-height: 1.6;
-  /* Truncate dài quá */
+  /* Truncate overly long descriptions. */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;

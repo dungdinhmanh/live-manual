@@ -425,7 +425,9 @@ export function renderChapter(raw: string, slug: string): { title: string; conte
 
 export function buildHomeContent(): string {
   return `---
-layout: home
+layout: page
+sidebar: false
+
 title: Debian Live Manual
 hero:
   name: Debian Live Manual
@@ -459,13 +461,7 @@ features:
     link: /chapters/coding-style
 ---
 
-## Common tasks
-
-- [Install live-build](/chapters/installation)
-- [Create an ISO hybrid image](/chapters/the-basics)
-- [Customize package installation](/chapters/customizing-package-installation)
-- [Add files to the live system](/chapters/customizing-contents)
-- [Report a documentation issue](/chapters/bugs)
+<HomePage />
 `;
 }
 

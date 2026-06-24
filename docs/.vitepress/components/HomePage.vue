@@ -10,7 +10,7 @@ const { frontmatter } = useData()
 
 <template>
   <div class="home-page">
-    <!-- Hero section — full width -->
+    <!-- Hero — full width -->
     <VPHero
       v-if="frontmatter.hero"
       :name="frontmatter.hero.name"
@@ -20,25 +20,19 @@ const { frontmatter } = useData()
       :image="frontmatter.hero.image"
     />
 
-    <!-- 2 column layout: Features + News -->
-    <div class="home-body">
-      <div class="home-left">
-        <!-- Features -->
-        <VPFeatures
-          v-if="frontmatter.features"
-          :features="frontmatter.features"
-        />
-
-        <!-- Common tasks slot -->
-        <div class="common-tasks">
-          <slot />
-        </div>
-      </div>
-
-      <aside class="home-right">
-        <DebianNews />
-      </aside>
+    <!-- Features -->
+    <div class="home-features">
+      <VPFeatures
+        v-if="frontmatter.features"
+        :features="frontmatter.features"
+      />
     </div>
+
+    <!-- Debian News — full width under features, horizontal scroll (newest left → right) -->
+    <section class="home-news">
+      <h2 class="home-news-title">Debian News</h2>
+      <DebianNews />
+    </section>
   </div>
 </template>
 
@@ -47,34 +41,21 @@ const { frontmatter } = useData()
   padding-bottom: 4rem;
 }
 
-.home-body {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 2rem;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 24px;
+/* Debian News — full-width band under the features. */
+.home-news {
+  max-width: 1152px;
+  margin: 48px auto 0;
 }
 
-.home-right {
-  position: sticky;
-  top: calc(var(--vp-nav-height) + 1rem);
-  align-self: start;
-  max-height: calc(100vh - var(--vp-nav-height) - 2rem);
-  overflow-y: auto;
-  &::-webkit-scrollbar {
-        display: none;
-    }
+.home-news-title {
+  margin: 0 0 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
 }
 
-@media (max-width: 960px) {
-  .home-body {
-    grid-template-columns: 1fr;
-  }
-
-  .home-right {
-    position: static;
-    max-height: none;
-  }
+.home-features {
+  margin-top: 48px;
 }
 </style>
